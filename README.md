@@ -1,2 +1,3 @@
 # react-summercash
-A custodial SummerCash wallet built in react.
+
+A custodial SummerCash wallet written in react.
