@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import Signup from './Signup';
+import AuthForm from './AuthForm';
 import * as serviceWorker from './serviceWorker';
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
@@ -20,7 +20,8 @@ const routing = (
         <Router>
             <div>
                 <Route exact path="/" component={ App }/>
-                <Route path="/signup" component={ Signup }/>
+                <Route path="/signup" render={ ()=><AuthForm label="Sign Up"/> }/>
+                <Route path="/login" render={ ()=><AuthForm label="Log In"/> }/>
             </div>
         </Router>
     </Provider>
