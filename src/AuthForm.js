@@ -2,10 +2,40 @@ import React, { Component } from 'react'
 import { theme } from './SummerTechTheme'; // Import SummerTech theme
 import { Grommet, Box, Form, FormField, TextInput, Button } from 'grommet'; // Import grommet
 import Cookies from 'universal-cookie'; // Import cookies
+import { withRouter } from 'react-router-dom'; // Import router
+import { ToastContainer, toast } from 'react-toastify'; // Import toast
+import 'react-toastify/dist/ReactToastify.css'; // Import toast styling
 
-export default class AuthForm extends Component {
+class AuthForm extends Component {
+  errorAlert = (message) => toast.error(message); // Alert
+
   constructor (props) {
     super(props); // Super props
+
+    const cookies = new Cookies(); // Initialize cookies
+
+    if (cookies.get("username") !== undefined && cookies.get("username") !== "" && cookies.get("username") !== "not-signed-in") { // Check already signed in
+      fetch("/api/accounts/"+cookies.get("username")+"/authenticate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          password: cookies.get("password"),
+        })
+      }).then((response) => response.json())
+      .then(response => {
+        cookies.set('address', response.address); // Set address
+  
+        this.setState({
+          username: cookies.get('username') || 'not-signed-in', // Set username cookie
+          password: cookies.get('password') || 'not-signed-in', // Set password
+          address: cookies.get('address') || 'not-signed-in', // Set address
+        }) // Set state
+
+        this.props.history.push("/"); // Go to app
+      })
+    }
 
     this.onSubmit = this.onSubmit.bind(this); // Bind onSubmit
 
@@ -21,9 +51,10 @@ export default class AuthForm extends Component {
             <FormField ref="password_input" label="Password" required={ false } value="">
               <TextInput ref="password_text_input" type="password" name="password" label="Password" size="xxlarge"/>
             </FormField>
-            <Button type="submit" primary label={ this.props.label } margin={{top: "small"}} color="accent-2" size="large"/>
+            <Button type="submit" onClick={this.alert} primary label={ this.props.label } margin={{top: "small"}} color="accent-2" size="large"/>
           </Form>
         </Box>
+        <ToastContainer/>
       </Grommet>
     )
   }
@@ -54,17 +85,23 @@ export default class AuthForm extends Component {
       })
     }).then((response) => response.json())
     .then(response => {
-      const cookies = new Cookies(); // Initialize cookies
+      if (response.error) { // Check for errors
+        this.errorAlert(response.error); // Alert
+      } else {
+        const cookies = new Cookies(); // Initialize cookies
 
-      cookies.set('username', formData.name); // Set username
-      cookies.set('password', formData.password); // Set password
-      cookies.set('address', response.address); // Set address
+        cookies.set('username', formData.name); // Set username
+        cookies.set('password', formData.password); // Set password
+        cookies.set('address', response.address); // Set address
 
-      this.setState({
-        username: cookies.get('username') || 'not-signed-in', // Get username cookie
-        password: cookies.get('password') || 'not-signed-in', // Set password
-        address: cookies.get('address') || 'not-signed-in', // Get address
-      }) // Set state
+        this.setState({
+          username: cookies.get('username') || 'not-signed-in', // Get username cookie
+          password: cookies.get('password') || 'not-signed-in', // Set password
+          address: cookies.get('address') || 'not-signed-in', // Get address
+        }) // Set state
+
+        this.props.history.push("/"); // Go to app
+      }
     })
   }
 
@@ -91,6 +128,10 @@ export default class AuthForm extends Component {
         password: cookies.get('password') || 'not-signed-in', // Set password
         address: cookies.get('address') || 'not-signed-in', // Get address
       }) // Set state
+
+      this.props.history.push("/"); // Go to app
     })
   }
 }
+
+export default withRouter(AuthForm); // Force use router

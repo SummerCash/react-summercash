@@ -2,9 +2,42 @@ import React, { Component } from 'react';
 import './SignupLogin.css';
 import { Grommet, Heading, Button, Paragraph, Box, Grid } from 'grommet';
 import { theme } from './SummerTechTheme'; // Import SummerTech theme
+import Cookies from 'universal-cookie'; // Import cookies
 
 export default class SignupLogin extends Component {
+  // construct a new App component instance
+  constructor(props) {
+    super(props); // Super props
+
+    const cookies = new Cookies(); // Initialize cookies
+  
+    if (cookies.get("username") !== undefined && cookies.get("username") !== "" && cookies.get("username") !== "not-signed-in") { // Check already signed in
+      fetch("/api/accounts/"+cookies.get("username")+"/authenticate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          password: cookies.get("password"),
+        })
+      }).then((response) => response.json())
+      .then(response => {
+        cookies.set('address', response.address); // Set address
+  
+        this.setState({
+          username: cookies.get('username') || 'not-signed-in', // Set username cookie
+          password: cookies.get('password') || 'not-signed-in', // Set password
+          address: cookies.get('address') || 'not-signed-in', // Set address
+        }) // Set state
+      })
+    }
+  }
+
   render() {
+    if (this.state !== undefined && this.state !== null && this.state.username !== "" && this.state.username !== "not-signed-in" && this.state.address !== "" && this.address !== "not-signed-in") { // Check signed in
+      this.props.history.push("/"); // Go to app
+    }
+
     return (
       <Grommet theme={ theme }>
         <Box justify="center" align="center" fill={ true } basis="large">
