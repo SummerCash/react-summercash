@@ -117,6 +117,10 @@ class AuthForm extends Component {
       })
     }).then((response) => response.json())
     .then(response => {
+      if (response.error) { // Check for errors
+        this.errorAlert(response.error); // Alert with error
+      }
+
       const cookies = new Cookies(); // Initialize cookies
 
       cookies.set('username', formData.name); // Set username
