@@ -1,3 +1,7 @@
 body > #root > div {
   height: 98vh;
 }
+
+.blocky {
+  border-radius: 50%;
+}

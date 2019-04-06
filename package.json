@@ -7,6 +7,7 @@
     "grommet": "^2.6.5",
     "polished": "^3.2.0",
     "react": "^16.8.6",
+    "react-blockies": "^1.4.1",
     "react-dom": "^16.8.6",
     "react-redux": "^6.0.1",
     "react-router": "^5.0.0",

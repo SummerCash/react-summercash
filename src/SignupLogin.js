@@ -3,8 +3,9 @@ import './SignupLogin.css';
 import { Grommet, Heading, Button, Paragraph, Box, Grid } from 'grommet';
 import { theme } from './SummerTechTheme'; // Import SummerTech theme
 import Cookies from 'universal-cookie'; // Import cookies
+import { withRouter } from 'react-router-dom'; // Import router
 
-export default class SignupLogin extends Component {
+class SignupLogin extends Component {
   // construct a new App component instance
   constructor(props) {
     super(props); // Super props
@@ -31,6 +32,8 @@ export default class SignupLogin extends Component {
         }) // Set state
       })
     }
+
+    this.onClickLogin = this.onClickLogin.bind(this); // Bind this
   }
 
   render() {
@@ -50,11 +53,18 @@ export default class SignupLogin extends Component {
           </Paragraph>
           
           <Grid>
-            <Button responsive={ true } size="xlarge" label="Create New Wallet" href="signup"/>
-            <Button responsive={ true } size="xlarge" margin="small" label="Sign In"/>
+            <Button responsive={ true } size="xlarge" primary color="accent-2" label="Create New Wallet" href="signup"/>
+            <Button responsive={ true } size="xlarge" margin="small" label="Sign In" onClick={ this.onClickLogin }/>
           </Grid>
         </Box>
       </Grommet>
     );
   }
+
+  // onClickLogin handles the login event.
+  onClickLogin (event) {
+    this.props.history.push("/login"); // Go to login
+  }
 }
+
+export default withRouter(SignupLogin); // Force use router
