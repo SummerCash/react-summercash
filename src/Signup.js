@@ -42,8 +42,9 @@ export default class Signup extends Component {
       body: JSON.stringify({
         password: formData.password,
       })
-    }).then((response) => {
-      console.log(response);
+    }).then((response) => response.json())
+    .then(response => {
+      console.log(response); // Log response
     })
   }
 }
