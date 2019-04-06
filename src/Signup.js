@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { theme } from './SummerTechTheme'; // Import SummerTech theme
 import { Grommet, Box, Form, FormField, TextInput, Button } from 'grommet'; // Import grommet
+import Cookies from 'universal-cookie'; // Import cookies
 
 export default class Signup extends Component {
   constructor (props) {
@@ -44,7 +45,17 @@ export default class Signup extends Component {
       })
     }).then((response) => response.json())
     .then(response => {
-      console.log(response); // Log response
+      const cookies = new Cookies(); // Initialize cookies
+
+      cookies.set('username', formData.name); // Set username
+      cookies.set('password', formData.password); // Set password
+      cookies.set('address', response.address); // Set address
+
+      this.setState({
+        username: cookies.get('username') || 'not-signed-in', // Get username cookie
+        password: cookies.get('password') || 'not-signed-in', // Set password
+        address: cookies.get('address') || 'not-signed-in', // Get address
+      }) // Set state
     })
   }
 }
