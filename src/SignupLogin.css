@@ -5,6 +5,10 @@
   src: url("./fonts/SFPro/SF-Pro-Display-Black.otf");
 }
 
+body > #root > div > div {
+  height: 98vh;
+}
+
 /* Title Header Styling */
 .Title-header-left {
   margin-left: 2.5%;

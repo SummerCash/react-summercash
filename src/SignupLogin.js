@@ -8,17 +8,17 @@ export default class SignupLogin extends Component {
     return (
       <Grommet theme={ theme }>
         <Box justify="center" align="center" fill={ true } basis="large">
-          <Heading responsive="true" margin={{ top: "none", bottom: "small" }} size="large">
+          <Heading responsive={ true } margin={{ top: "none", bottom: "small" }} size="large">
             SummerCash
           </Heading>
 
-          <Paragraph responsive="true" size="xxlarge">
+          <Paragraph responsive={ true } size="xxlarge">
             Save, store, and send SummerCash.
           </Paragraph>
           
           <Grid>
-            <Button responsive="true" size="xlarge" label="Create New Wallet"/>
-            <Button responsive="true" size="xlarge" margin="small" label="Sign In"/>
+            <Button responsive={ true } size="xlarge" label="Create New Wallet" href="signup"/>
+            <Button responsive={ true } size="xlarge" margin="small" label="Sign In"/>
           </Grid>
         </Box>
       </Grommet>
