@@ -3,8 +3,9 @@ import './App.css';
 import Cookies from 'universal-cookie';
 import SignupLogin from './SignupLogin'; // Import signup login page
 import { theme } from './SummerTechTheme'; // Import SummerTech theme
-import { Grommet, Heading, Button, Paragraph, Box, Grid } from 'grommet';
+import { Grommet, Heading, Paragraph, Box } from 'grommet';
 import Blockies from 'react-blockies'; // Import identicons
+import TransactionView from './TransactionView'; // Import tx view
 
 class App extends Component {
   // construct a new App component instance
@@ -27,15 +28,21 @@ class App extends Component {
 
     return (
       <Grommet theme={ theme }>
-        <Box align="start" basis="large" margin={{ top: "small", left: "small" }}>
+        <Box margin={{ top: "medium", left: "medium" }} align="center" direction="row-responsive">
           <Blockies seed={ this.state.address } size={ 5 } scale={ 15 } className="blocky"/>
-          <Heading responsive={ true } size="medium" margin={{ top: "none", bottom: "none" }}>
-            { this.state.username }
-          </Heading>
-          <Paragraph responsive={ true } size="large" margin={{ top: "xsmall" }}>
-            { this.state.address }
-          </Paragraph>
+          <Box margin={{ left: "medium" }}>
+            <Heading responsive={ true } size="medium" margin="none">
+              { this.state.username }
+            </Heading>
+            <Paragraph responsive={ true } size="large" margin={{ top: "xsmall" }}>
+              { this.state.address }
+            </Paragraph>
+          </Box>
         </Box>
+        <Heading responsive={ true } size="medium" margin={{ left: "medium", top: "large"}}>
+          Transactions
+        </Heading>
+        <TransactionView margin="medium" gap="large" type="send" timestamp="3:10 PM" hash="0x123456" amount={ 1000000 }/>
       </Grommet>
     );
   }
