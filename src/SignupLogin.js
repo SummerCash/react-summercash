@@ -7,8 +7,8 @@ export default class SignupLogin extends Component {
   render() {
     return (
       <Grommet theme={ theme }>
-        <Box align="center" fill="vertical" basis="large">
-          <Heading responsive="true" margin={{ bottom: "small" }} size="large">
+        <Box justify="center" align="center" fill={ true } basis="large">
+          <Heading responsive="true" margin={{ top: "none", bottom: "small" }} size="large">
             SummerCash
           </Heading>
 
