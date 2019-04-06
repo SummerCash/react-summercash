@@ -1,25 +1,28 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Cookies from 'universal-cookie';
+import SignupLogin from './SignupLogin'; // Import signup login page
 
 class App extends Component {
+  // construct a new App component instance
+  constructor(props) {
+    super(props); // Super props
+
+    const cookies = new Cookies(); // Initialize cookies
+  
+    this.state = {
+      username: cookies.get('username') || 'not-signed-in' // Get username cookie
+    } // Set state
+  }
+
+  // render
   render() {
+    if (this.state.username === 'not-signed-in' || this.state.username === '') { // Check not signed in
+      return <SignupLogin /> // Render signup/login page
+    }
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className="App">        
       </div>
     );
   }

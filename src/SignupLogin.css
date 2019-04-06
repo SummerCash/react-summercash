@@ -1,0 +1,23 @@
+@font-face {
+  font-family: "SF Pro Black";
+  font-style: black;
+  font-weight: 400;
+  src: url("./fonts/SFPro/SF-Pro-Display-Black.otf");
+}
+
+/* Title Header Styling */
+.Title-header-left {
+  margin-left: 2.5%;
+  font-size: 200%;
+}
+
+/* Title Label Left Styling */
+.Title-label-left {
+  font-family: "SF Pro Black";
+}
+
+/* App Description Styling */
+.App-description {
+  margin-left: 2.5%;
+  font-size: 200%;
+}
