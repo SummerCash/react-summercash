@@ -124,12 +124,12 @@ class App extends Component {
         modal={ true }
         responsive={ false }
       >
-        <Box align="center" alignContent="center" direction="column">
+        <Box align="center" alignContent="center" direction="column" pad="medium">
           <Form onSubmit={ this.onSubmitTx }>
             <FormField name="amount" ref="amount_input" label="Amount" placeholder="1.23456" required={ true } size="xxlarge"/>
             <FormField name="recipient" ref="recipient_input" label="Recipient" placeholder="@username / 0x1234" required={ true } size="xxlarge"/>
           </Form>
-          <Box align="center" alignContent="start" alignSelf="start" direction="row-responsive">
+          <Box align="center" alignContent="center" alignSelf="center" direction="row-responsive">
             <Button label="Send"/>
             <Button margin={{ left: "small" }} label="Scan QR Code"/>
           </Box>
