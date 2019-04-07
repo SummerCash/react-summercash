@@ -3,11 +3,12 @@ import './App.css';
 import Cookies from 'universal-cookie';
 import SignupLogin from './SignupLogin'; // Import signup login page
 import { theme } from './SummerTechTheme'; // Import SummerTech theme
-import { Grommet, Heading, Paragraph, Box, Button } from 'grommet';
+import { Grommet, Heading, Paragraph, Box, Button, Layer } from 'grommet';
 import Blockies from 'react-blockies'; // Import identicons
 import { ToastContainer, toast } from 'react-toastify'; // Import toast
 import TransactionView from './TransactionView'; // Import tx view
 import { withRouter } from 'react-router-dom'; // Import router
+import QRCode from 'qrcode.react';
 
 class App extends Component {
   errorAlert = (message) => toast.error(message); // Alert
@@ -55,9 +56,23 @@ class App extends Component {
         </Box>
         <Box direction="row" margin={{ left: "medium" }} align="baseline" alignContent="start" alignSelf="start">
           <Button primary label="Send" margin={{ top: "small" }} color="accent-2" size="xlarge"/>
-          <Button label="Receive" margin={{ top: "small", left: "small" }} size="xlarge"/>
+          <Button label="Receive" onClick={ () => this.setState({ showAddressModal: true }) } margin={{ top: "small", left: "small" }} size="xlarge"/>
         </Box>
+        { this.state.showAddressModal ? this.showAddressModal() : null }
       </Grommet>
+    );
+  }
+
+  showAddressModal() {
+    return (
+      <Layer
+        onEsc={ () => this.setState({ showAddressModal: false }) }
+        onClickOutside={ () => this.setState({ showAddressModal: false }) }
+        modal={ true }
+        responsive={ true }
+      >
+        <QRCode value={ this.state.address } size={ 512 }/>
+      </Layer>
     );
   }
 
@@ -83,7 +98,11 @@ class App extends Component {
 
         this.errorAlert(response.error); // Alert
       } else if (!response.transactions) { // Check txs null
-        this.infoAlert("Need some SummerCash? Look out for redeemable airdrop QR codes to earn your first coins.")
+        if (!this.state.alreadyPoppedRedeemable) { // Check has not already popped
+          this.infoAlert("Need some SummerCash? Look out for redeemable airdrop QR codes to earn your first coins."); // Alert
+
+          this.setState({ alreadyPoppedRedeemable: true }); // Set state
+        }
       } else { // No errors
         var transactionViews = []; // Init tx views
 

@@ -52,7 +52,7 @@ class AuthForm extends Component {
             <FormField ref="password_input" label="Password" required={ false } value="">
               <TextInput ref="password_text_input" type="password" name="password" label="Password" size="xxlarge"/>
             </FormField>
-            <Button type="submit" onClick={this.alert} primary label={ this.props.label } margin={{ top: "small" }} color="accent-2" size="large"/>
+            <Button type="submit" onClick={ this.alert } primary label={ this.props.label } margin={{ top: "small" }} color="accent-2" size="large"/>
           </Form>
         </Box>
       </Grommet>
