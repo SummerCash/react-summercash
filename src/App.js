@@ -9,6 +9,8 @@ import { ToastContainer, toast } from 'react-toastify'; // Import toast
 import TransactionView from './TransactionView'; // Import tx view
 import { withRouter } from 'react-router-dom'; // Import router
 import QRCode from 'qrcode.react';
+import { Close } from 'grommet-icons'; // Import icons
+import {CopyToClipboard} from 'react-copy-to-clipboard'; // Import clipboard
 
 class App extends Component {
   errorAlert = (message) => toast.error(message); // Alert
@@ -71,9 +73,16 @@ class App extends Component {
         modal={ true }
         responsive={ false }
       >
+        <Box margin={{ right: "medium", top: "small", bottom: "small" }} alignContent="end" align="end">
+          <Close onClick={ () => this.setState({ showAddressModal: false}) } cursor="pointer"/>
+        </Box>
         <Box align="center" alignContent="center" direction="column">
           <QRCode value={ this.state.address } size={ 512 }/>
-          <Paragraph responsive={ true }>{ this.state.address }</Paragraph>
+          <CopyToClipboard text={ this.state.address }>
+            <Button>
+              <Paragraph responsive={ true }>{ this.state.address }</Paragraph>
+            </Button>
+          </CopyToClipboard>
         </Box>
       </Layer>
     );
