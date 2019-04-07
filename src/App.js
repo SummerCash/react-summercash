@@ -146,7 +146,7 @@ class App extends Component {
 
     var formData = event.value; // Get from data
 
-    formData.recipient.replace("@", ""); // Remove @ symbol
+    formData.recipient = formData.recipient.replace("@", ""); // Remove @ symbol
 
     fetch("/api/transactions/NewTransaction", {
       method: "POST",
