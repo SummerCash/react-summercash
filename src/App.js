@@ -7,6 +7,7 @@ import { Grommet, Heading, Paragraph, Box, Button } from 'grommet';
 import Blockies from 'react-blockies'; // Import identicons
 import { ToastContainer, toast } from 'react-toastify'; // Import toast
 import TransactionView from './TransactionView'; // Import tx view
+import { withRouter } from 'react-router-dom'; // Import router
 
 class App extends Component {
   errorAlert = (message) => toast.error(message); // Alert
@@ -72,6 +73,14 @@ class App extends Component {
     }).then((response) => response.json())
     .then(response => {
       if (response.error) { // Check for errors
+        if (response.error.includes("no account exists with the given username")) { // Check shouldn't be logged in
+          cookies.remove("username"); // Remove account details
+          cookies.remove("password"); // Remove account details
+          cookies.remove("address"); // Remove account details
+
+          this.props.history.push("/"); // Go to home
+        }
+
         this.errorAlert(response.error); // Alert
       } else if (!response.transactions) { // Check txs null
         this.infoAlert("Need some SummerCash? Look out for redeemable airdrop QR codes to earn your first coins.")
@@ -105,4 +114,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App); // Force use router
