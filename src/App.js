@@ -32,7 +32,44 @@ class App extends Component {
       username: cookies.get('username') || 'not-signed-in', // Get username cookie
       address: cookies.get('address') || 'not-signed-in', // Get address cookie
       password: cookies.get('password') || 'not-signed-in', // Get password cookie
+      showSendModal: false, // Set show send modal
+      showAddressModal: false, // Set show address modal
+      alreadyPoppedRedeemable: false, // Set already popped
+      balance: 0, // Set balance
+      transactions: [], // Set transactions
     } // Set state
+  }
+
+  componentDidMount() {
+    const cookies = new Cookies(); // Initialize cookies
+
+    fetch("/api/accounts/"+cookies.get("username")+"/transactions", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((response) => response.json())
+    .then(response => {
+      if (response.error) { // Check for errors
+        if (response.error.includes("no account exists with the given username")) { // Check shouldn't be logged in
+          cookies.remove("username"); // Remove account details
+          cookies.remove("password"); // Remove account details
+          cookies.remove("address"); // Remove account details
+
+          this.props.history.push("/"); // Go to home
+        }
+
+        this.errorAlert(response.error); // Alert
+      } else if (!response.transactions) { // Check txs null
+        if (!this.state.alreadyPoppedRedeemable) { // Check has not already popped
+          this.infoAlert("Need some SummerCash? Look out for redeemable airdrop QR codes to earn your first coins."); // Alert
+
+          this.setState({ alreadyPoppedRedeemable: true }); // Set state
+        }
+      } else {
+        this.setState({ transactions: response.transactions }); // Set state txs
+      }
+    });
   }
 
   // render
@@ -177,60 +214,41 @@ class App extends Component {
     })
   }
 
+  // fetchTransactions fetches all account txs.
+  fetchTransactions() {
+
+  }
+
   // renderTransactions renders the transaction views.
   renderTransactions() {
-    const cookies = new Cookies(); // Initialize cookies
+    var transactionViews = []; // Init tx views
 
-    fetch("/api/accounts/"+cookies.get("username")+"/transactions", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((response) => response.json())
-    .then(response => {
-      if (response.error) { // Check for errors
-        if (response.error.includes("no account exists with the given username")) { // Check shouldn't be logged in
-          cookies.remove("username"); // Remove account details
-          cookies.remove("password"); // Remove account details
-          cookies.remove("address"); // Remove account details
+    var x; // Init iterator
 
-          this.props.history.push("/"); // Go to home
+    for (x = 0; x < this.state.transactions.length; x++) { // Iterate through txs
+      var type = "send"; // Init type buffer
+
+      if (x > 0) { // Check not out of bounds
+        if (this.state.transactions[x-1].hash === this.state.transactions[x].hash && this.state.transactions[x].recipient === this.state.address && this.state.transactions[x].sender === this.state.address) { // Check is second of two recursive txs
+          type = "receive"; // Set type
         }
-
-        this.errorAlert(response.error); // Alert
-      } else if (!response.transactions) { // Check txs null
-        if (!this.state.alreadyPoppedRedeemable) { // Check has not already popped
-          this.infoAlert("Need some SummerCash? Look out for redeemable airdrop QR codes to earn your first coins."); // Alert
-
-          this.setState({ alreadyPoppedRedeemable: true }); // Set state
-        }
-      } else { // No errors
-        var transactionViews = []; // Init tx views
-
-        var x; // Init iterator
-
-        for (x = 0; x < response.transactions.length; x++) { // Iterate through txs
-          var type = "send"; // Init type buffer
-
-          if (response.transactions[x].sender !== cookies.get("address")) { // Check is sending
-            type = "receive"; // Set receive
-          }
-
-          transactionViews.push(
-            <TransactionView
-              margin="medium"
-              gap="large"
-              type={ type }
-              timestamp={ response.transactions[x].time }
-              hash={ response.transactions[x].hash }
-              amount={ response.transactions[x].amount }
-            />
-          ); // Push tx
-        }
-
-        return transactionViews;
+      } else if (this.state.transactions[x].recipient !== this.state.address) { // Check is sending
+        type = "receive"; // Set receive
       }
-    })
+
+      transactionViews.push(
+        <TransactionView
+          margin="none"
+          gap="large"
+          type={ type }
+          timestamp={ this.state.transactions[x].time }
+          hash={ this.state.transactions[x].hash }
+          amount={ this.state.transactions[x].amount }
+        />
+      ); // Push tx
+    }
+
+    return transactionViews; // Return tx views
   }
 }
 
