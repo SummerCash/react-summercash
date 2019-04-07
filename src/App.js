@@ -41,7 +41,7 @@ class App extends Component {
     return (
       <Grommet theme={ theme }>
         <ToastContainer/>
-        <Box margin={{ top: "medium", left: "medium" }} align="center" direction="row-responsive">
+        <Box margin={{ top: "large", left: "large" }} align="center" direction="row-responsive">
           <Box margin={{ right: "medium" }}>
             <Blockies seed={ this.state.address } size={ 5 } scale={ 15 } className="blocky"/>
           </Box>
@@ -57,13 +57,13 @@ class App extends Component {
             </Paragraph>
           </Box>
         </Box>
-        <Heading responsive={ true } size="medium" margin={{ left: "medium", top: "medium", bottom: "xsmall"}}>
+        <Heading responsive={ true } size="medium" margin={{ left: "large", top: "medium", bottom: "xsmall"}}>
           Transactions
         </Heading>
-        <Box overflow="scroll" margin={{ left: "medium" }}>
+        <Box overflow="scroll" margin={{ left: "large" }}>
           { this.renderTransactions() }
         </Box>
-        <Box direction="row" margin={{ left: "medium" }} align="baseline" alignContent="start" alignSelf="start">
+        <Box direction="row" margin={{ left: "large" }} align="baseline" alignContent="start" alignSelf="start">
           <Button primary label="Send" onClick={ () => this.setState({ showSendModal: true }) } margin={{ top: "small" }} color="accent-2" size="xlarge"/>
           <Button label="Receive" onClick={ () => this.setState({ showAddressModal: true }) } margin={{ top: "small", left: "small" }} size="xlarge"/>
         </Box>
