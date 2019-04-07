@@ -23,12 +23,14 @@ class App extends Component {
     const cookies = new Cookies(); // Initialize cookies
 
     this.fetchBalance = this.fetchBalance.bind(this); // Bind this
+    this.onSubmitTx = this.onSubmitTx.bind(this); // Bind this
 
     this.fetchBalance(cookies.get('username')); // Fetch balance
   
     this.state = {
       username: cookies.get('username') || 'not-signed-in', // Get username cookie
       address: cookies.get('address') || 'not-signed-in', // Get address cookie
+      password: cookies.get('password') || 'not-signed-in', // Get password cookie
     } // Set state
   }
 
@@ -128,14 +130,41 @@ class App extends Component {
           <Form onSubmit={ this.onSubmitTx }>
             <FormField name="amount" ref="amount_input" label="Amount" placeholder="1.23456" required={ true } size="xxlarge"/>
             <FormField name="recipient" ref="recipient_input" label="Recipient" placeholder="@username / 0x1234" required={ true } size="xxlarge"/>
+            <Box align="center" alignContent="center" alignSelf="center" direction="row-responsive">
+              <Button primary type="submit" label="Send" color="accent-2"/>
+              <Button margin={{ left: "small" }} label="Scan QR Code"/>
+            </Box>
           </Form>
-          <Box align="center" alignContent="center" alignSelf="center" direction="row-responsive">
-            <Button label="Send"/>
-            <Button margin={{ left: "small" }} label="Scan QR Code"/>
-          </Box>
         </Box>
       </Layer>
     )
+  }
+
+  // onSubmitTx handles the tx form submit event.
+  onSubmitTx (event) {
+    event.preventDefault(); // Prevent default
+
+    var formData = event.value; // Get from data
+
+    formData.recipient.replace("@", ""); // Remove @ symbol
+
+    fetch("/api/transactions/NewTransaction", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: this.state.username, // Set username
+        recipient: formData.recipient, // Set recipient
+        amount: parseFloat(formData.amount), // Set amount
+        password: this.state.password, // Set password
+      })
+    }).then((response) => response.json())
+    .then(response => {
+      if (response.error) { // Check for errors
+        this.errorAlert(response.error); // Alert
+      }
+    })
   }
 
   // renderTransactions renders the transaction views.
