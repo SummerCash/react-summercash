@@ -57,10 +57,11 @@ class App extends Component {
           { this.renderTransactions() }
         </Box>
         <Box direction="row" margin={{ left: "medium" }} align="baseline" alignContent="start" alignSelf="start">
-          <Button primary label="Send" margin={{ top: "small" }} color="accent-2" size="xlarge"/>
+          <Button primary label="Send" onClick={ () => this.setState({ showSendModal: true }) } margin={{ top: "small" }} color="accent-2" size="xlarge"/>
           <Button label="Receive" onClick={ () => this.setState({ showAddressModal: true }) } margin={{ top: "small", left: "small" }} size="xlarge"/>
         </Box>
         { this.state.showAddressModal ? this.showAddressModal() : null }
+        { this.state.showSendModal ? this.showSendModal() : null }
       </Grommet>
     );
   }
@@ -86,6 +87,24 @@ class App extends Component {
         </Box>
       </Layer>
     );
+  }
+
+  showSendModal() {
+    return (
+      <Layer
+        onEsc={ () => this.setState({ showSendModal: false }) }
+        onClickOutside={ () => this.setState({ showSendModal: false }) }
+        modal={ true }
+        responsive={ false }
+      >
+        <Box align="center" alignContent="center" direction="column">
+          <Box align="center" alignContent="center" alignSelf="center" direction="row-responsive">
+            <Button label="Send"/>
+            <Button margin={{ left: "small" }} label="Scan QR Code"/>
+          </Box>
+        </Box>
+      </Layer>
+    )
   }
 
   // renderTransactions renders the transaction views.
