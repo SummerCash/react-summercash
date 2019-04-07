@@ -15,6 +15,7 @@ import {CopyToClipboard} from 'react-copy-to-clipboard'; // Import clipboard
 class App extends Component {
   errorAlert = (message) => toast.error(message); // Alert
   infoAlert = (message) => toast.info(message); // Alert
+  successAlert = (message) => toast.success(message); // Alert
 
   // construct a new App component instance
   constructor(props) {
@@ -166,6 +167,8 @@ class App extends Component {
     .then(response => {
       if (response.error) { // Check for errors
         this.errorAlert(response.error); // Alert
+      } else {
+        this.successAlert("Transaction sent successfully!"); // Alert success
       }
 
       this.setState({
