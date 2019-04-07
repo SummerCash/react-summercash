@@ -73,7 +73,7 @@ class App extends Component {
       >
         <Box align="center" alignContent="center" direction="column">
           <QRCode value={ this.state.address } size={ 512 }/>
-          <Paragraph>{ this.state.address }</Paragraph>
+          <Paragraph responsive={ true }>{ this.state.address }</Paragraph>
         </Box>
       </Layer>
     );
