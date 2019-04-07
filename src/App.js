@@ -104,7 +104,7 @@ class App extends Component {
         responsive={ false }
       >
         <Box margin={{ right: "medium", top: "small", bottom: "small" }} alignContent="end" align="end">
-          <Close onClick={ () => this.setState({ showAddressModal: false}) } cursor="pointer"/>
+          <Close onClick={ () => this.setState({ showAddressModal: false }) } cursor="pointer"/>
         </Box>
         <Box align="center" alignContent="center" direction="column">
           <QRCode value={ this.state.address } size={ 512 }/>
@@ -126,6 +126,9 @@ class App extends Component {
         modal={ true }
         responsive={ false }
       >
+        <Box margin={{ right: "medium", top: "small", bottom: "none" }} alignContent="end" align="end">
+          <Close onClick={ () => this.setState({ showSendModal: false }) } cursor="pointer"/>
+        </Box>
         <Box align="center" alignContent="center" direction="column" pad="medium">
           <Form onSubmit={ this.onSubmitTx }>
             <FormField name="amount" ref="amount_input" label="Amount" placeholder="1.23456" required={ true } size="xxlarge"/>
@@ -144,7 +147,7 @@ class App extends Component {
   onSubmitTx (event) {
     event.preventDefault(); // Prevent default
 
-    var formData = event.value; // Get from data
+    var formData = JSON.parse(JSON.stringify(event.value)); // Get from data
 
     formData.recipient = formData.recipient.replace("@", ""); // Remove @ symbol
 
@@ -164,6 +167,10 @@ class App extends Component {
       if (response.error) { // Check for errors
         this.errorAlert(response.error); // Alert
       }
+
+      this.setState({
+        showSendModal: false
+      }); // Set state
     })
   }
 
