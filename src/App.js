@@ -69,9 +69,12 @@ class App extends Component {
         onEsc={ () => this.setState({ showAddressModal: false }) }
         onClickOutside={ () => this.setState({ showAddressModal: false }) }
         modal={ true }
-        responsive={ true }
+        responsive={ false }
       >
-        <QRCode value={ this.state.address } size={ 512 }/>
+        <Box align="center" alignContent="center" direction="column">
+          <QRCode value={ this.state.address } size={ 512 }/>
+          <Paragraph>{ this.state.address }</Paragraph>
+        </Box>
       </Layer>
     );
   }
