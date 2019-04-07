@@ -3,7 +3,7 @@ import './App.css';
 import Cookies from 'universal-cookie';
 import SignupLogin from './SignupLogin'; // Import signup login page
 import { theme } from './SummerTechTheme'; // Import SummerTech theme
-import { Grommet, Heading, Paragraph, Box, Button, Layer } from 'grommet';
+import { Grommet, Heading, Paragraph, Box, Button, Layer, Form, FormField } from 'grommet';
 import Blockies from 'react-blockies'; // Import identicons
 import { ToastContainer, toast } from 'react-toastify'; // Import toast
 import TransactionView from './TransactionView'; // Import tx view
@@ -21,6 +21,10 @@ class App extends Component {
     super(props); // Super props
 
     const cookies = new Cookies(); // Initialize cookies
+
+    this.fetchBalance = this.fetchBalance.bind(this); // Bind this
+
+    this.fetchBalance(cookies.get('username')); // Fetch balance
   
     this.state = {
       username: cookies.get('username') || 'not-signed-in', // Get username cookie
@@ -45,8 +49,11 @@ class App extends Component {
             <Heading responsive={ true } size="medium" margin="none">
               { this.state.username }
             </Heading>
-            <Paragraph responsive={ true } size="large" margin={{ top: "xsmall" }}>
+            <Paragraph responsive={ true } size="large" margin={{ top: "xsmall", bottom: "none" }}>
               { this.state.address }
+            </Paragraph>
+            <Paragraph responsive={ true } size="medium" margin={{ top: "xsmall" }}>
+              Balance: { this.state.balance } SMC
             </Paragraph>
           </Box>
         </Box>
@@ -64,6 +71,26 @@ class App extends Component {
         { this.state.showSendModal ? this.showSendModal() : null }
       </Grommet>
     );
+  }
+
+  fetchBalance(username) {
+    fetch("/api/accounts/"+username+"/balance", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((response) => response.json())
+    .then(response => {
+      var balance = 0; // Init balance buffer
+
+      if (response.error) { // Check for errors
+        this.errorAlert(response.error); // Error
+      } else {
+        balance = response.balance; // Set balance
+      }
+
+      this.setState({ balance: balance }); // Set state
+    });
   }
 
   showAddressModal() {
@@ -98,7 +125,11 @@ class App extends Component {
         responsive={ false }
       >
         <Box align="center" alignContent="center" direction="column">
-          <Box align="center" alignContent="center" alignSelf="center" direction="row-responsive">
+          <Form onSubmit={ this.onSubmitTx }>
+            <FormField name="amount" ref="amount_input" label="Amount" placeholder="1.23456" required={ true } size="xxlarge"/>
+            <FormField name="recipient" ref="recipient_input" label="Recipient" placeholder="@username / 0x1234" required={ true } size="xxlarge"/>
+          </Form>
+          <Box align="center" alignContent="start" alignSelf="start" direction="row-responsive">
             <Button label="Send"/>
             <Button margin={{ left: "small" }} label="Scan QR Code"/>
           </Box>
