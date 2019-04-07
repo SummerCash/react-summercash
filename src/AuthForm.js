@@ -45,16 +45,16 @@ class AuthForm extends Component {
   render() {
     return (
       <Grommet theme={ theme }>
+        <ToastContainer/>
         <Box justify="center" align="center" fill={ true } basis="large">
           <Form onSubmit={ this.onSubmit }>
             <FormField name="name" label="Name" required={ true } size="xxlarge"/>
             <FormField ref="password_input" label="Password" required={ false } value="">
               <TextInput ref="password_text_input" type="password" name="password" label="Password" size="xxlarge"/>
             </FormField>
-            <Button type="submit" onClick={this.alert} primary label={ this.props.label } margin={{top: "small"}} color="accent-2" size="large"/>
+            <Button type="submit" onClick={this.alert} primary label={ this.props.label } margin={{ top: "small" }} color="accent-2" size="large"/>
           </Form>
         </Box>
-        <ToastContainer/>
       </Grommet>
     )
   }
@@ -119,21 +119,21 @@ class AuthForm extends Component {
     .then(response => {
       if (response.error) { // Check for errors
         this.errorAlert(response.error); // Alert with error
+      } else {
+        const cookies = new Cookies(); // Initialize cookies
+
+        cookies.set('username', formData.name); // Set username
+        cookies.set('password', formData.password); // Set password
+        cookies.set('address', response.address); // Set address
+
+        this.setState({
+          username: cookies.get('username') || 'not-signed-in', // Get username cookie
+          password: cookies.get('password') || 'not-signed-in', // Set password
+          address: cookies.get('address') || 'not-signed-in', // Get address
+        }) // Set state
+
+        this.props.history.push("/"); // Go to app
       }
-
-      const cookies = new Cookies(); // Initialize cookies
-
-      cookies.set('username', formData.name); // Set username
-      cookies.set('password', formData.password); // Set password
-      cookies.set('address', response.address); // Set address
-
-      this.setState({
-        username: cookies.get('username') || 'not-signed-in', // Get username cookie
-        password: cookies.get('password') || 'not-signed-in', // Set password
-        address: cookies.get('address') || 'not-signed-in', // Get address
-      }) // Set state
-
-      this.props.history.push("/"); // Go to app
     })
   }
 }
