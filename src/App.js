@@ -28,6 +28,8 @@ class App extends Component {
     this.onSubmitTx = this.onSubmitTx.bind(this); // Bind this
     this.handleScan = this.handleScan.bind(this); // Bind this
 
+    this.recipient_input = React.createRef(); // Create ref
+
     this.fetchBalance(cookies.get('username')); // Fetch balance
   
     this.state = {
@@ -172,8 +174,8 @@ class App extends Component {
         </Box>
         <Box align="center" alignContent="center" direction="column" pad="medium">
           <Form onSubmit={ this.onSubmitTx }>
-            <FormField name="amount" ref="amount_input" label="Amount" placeholder="1.23456" required={ true } size="xxlarge"/>
-            <FormField name="recipient" ref="recipient_input" label="Recipient" placeholder="@username / 0x1234" required={ true } size="xxlarge"/>
+            <FormField name="amount" ref={"amount_input"} label="Amount" placeholder="1.23456" required={ true } size="xxlarge"/>
+            <FormField name="recipient" ref={ this.recipient_input } label="Recipient" placeholder="@username / 0x1234" required={ true } size="xxlarge"/>
             <Box align="center" alignContent="center" alignSelf="center" direction="row-responsive">
               <Button primary type="submit" label="Send" color="accent-2"/>
               <Button margin={{ left: "small" }} label="Scan QR Code" onClick={ () => this.setState({ showQRReader: true }) }/>
@@ -195,9 +197,11 @@ class App extends Component {
     if (scan) { // Check scanned
       if (!scan.includes("@") && !scan.includes("0x")) { // Check is not tx
         this.errorAlert("Invalid QR code (must be @username or 0x1234 address)"); // Alert
-      }
+      } else {
+        this.setState({ showQRReader: false }); // Hide reader
 
-      this.setState({ showQRReader: false }); // Hide reader
+        this.refs.recipient_input.value = scan; // Set value
+      }
     }
   }
 
