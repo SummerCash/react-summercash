@@ -168,7 +168,7 @@ class App extends Component {
         responsive={ false }
       >
         <Box margin={{ right: "medium", top: "small", bottom: "none" }} alignContent="end" align="end">
-          <Close onClick={ () => this.setState({ showSendModal: false }) } cursor="pointer"/>
+          <Close onClick={ () => this.setState({ showSendModal: false, showQRReader: false }) } cursor="pointer"/>
         </Box>
         <Box align="center" alignContent="center" direction="column" pad="medium">
           <Form onSubmit={ this.onSubmitTx }>
@@ -233,7 +233,8 @@ class App extends Component {
       }
 
       this.setState({
-        showSendModal: false
+        showSendModal: false,
+        showQRReader: false,
       }); // Set state
 
       this.forceUpdate(); // Force update
