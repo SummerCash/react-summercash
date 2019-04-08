@@ -200,7 +200,7 @@ class App extends Component {
       } else {
         this.setState({ showQRReader: false }); // Hide reader
 
-        this.refs.recipient_input.value = scan; // Set value
+        this.recipient_input.value = scan; // Set value
       }
     }
   }
