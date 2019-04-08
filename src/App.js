@@ -232,23 +232,50 @@ class App extends Component {
         this.successAlert("Transaction sent successfully!"); // Alert success
       }
 
+      this.fetchTransactions(); // Fetch transactions
+
       this.setState({
         showSendModal: false,
         showQRReader: false,
       }); // Set state
-
-      this.forceUpdate(); // Force update
     })
   }
 
   // fetchTransactions fetches all account txs.
   fetchTransactions() {
+    const cookies = new Cookies(); // Initialize cookies
 
+    fetch("/api/accounts/"+cookies.get("username")+"/transactions", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((response) => response.json())
+    .then(response => {
+      if (response.error) { // Check for errors
+        if (response.error.includes("no account exists with the given username")) { // Check shouldn't be logged in
+          cookies.remove("username"); // Remove account details
+          cookies.remove("password"); // Remove account details
+          cookies.remove("address"); // Remove account details
+
+          this.props.history.push("/"); // Go to home
+        }
+
+        this.errorAlert(response.error); // Alert
+      } else if (!response.transactions) { // Check txs null
+        if (!this.state.alreadyPoppedRedeemable) { // Check has not already popped
+          this.infoAlert("Need some SummerCash? Look out for redeemable airdrop QR codes to earn your first coins."); // Alert
+
+          this.setState({ alreadyPoppedRedeemable: true }); // Set state
+        }
+      } else {
+        this.setState({ transactions: response.transactions }); // Set state txs
+      }
+    });
   }
 
   // renderTransactions renders the transaction views.
   renderTransactions() {
-    console.log("test");
     var transactionViews = []; // Init tx views
 
     var x; // Init iterator
