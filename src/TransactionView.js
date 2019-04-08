@@ -16,7 +16,7 @@ export default class TransactionView extends Component {
             <Paragraph responsive={ true }>
               Sent { this.props.amount } SMC
             </Paragraph>
-            <Paragraph responsive={ true }>
+            <Paragraph responsive={ true } alignSelf="end" textAlign="end">
               { this.props.hash }
             </Paragraph>
           </Box>
@@ -33,7 +33,7 @@ export default class TransactionView extends Component {
             <Paragraph responsive={ true }>
               Received { this.props.amount } SMC
             </Paragraph>
-            <Paragraph responsive={ true }>
+            <Paragraph responsive={ true } alignSelf="end" textAlign="end">
               { this.props.hash }
             </Paragraph>
           </Box>

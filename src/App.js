@@ -11,6 +11,7 @@ import { withRouter } from 'react-router-dom'; // Import router
 import QRCode from 'qrcode.react';
 import { Close } from 'grommet-icons'; // Import icons
 import {CopyToClipboard} from 'react-copy-to-clipboard'; // Import clipboard
+import QrReader from 'react-qr-reader'; // Import qr code reader
 
 class App extends Component {
   errorAlert = (message) => toast.error(message); // Alert
@@ -25,6 +26,7 @@ class App extends Component {
 
     this.fetchBalance = this.fetchBalance.bind(this); // Bind this
     this.onSubmitTx = this.onSubmitTx.bind(this); // Bind this
+    this.handleScan = this.handleScan.bind(this); // Bind this
 
     this.fetchBalance(cookies.get('username')); // Fetch balance
   
@@ -34,6 +36,7 @@ class App extends Component {
       password: cookies.get('password') || 'not-signed-in', // Get password cookie
       showSendModal: false, // Set show send modal
       showAddressModal: false, // Set show address modal
+      showQRReader: false, // Set show qr modal
       alreadyPoppedRedeemable: false, // Set already popped
       balance: 0, // Set balance
       transactions: [], // Set transactions
@@ -100,7 +103,7 @@ class App extends Component {
         <Heading responsive={ true } size="medium" margin={{ left: "large", top: "medium", bottom: "xsmall"}}>
           Transactions
         </Heading>
-        <Box overflow="scroll" margin={{ left: "large" }}>
+        <Box overflow="scroll" margin={{ left: "large" }} height="50%">
           { this.renderTransactions() }
         </Box>
         <Box direction="row" margin={{ left: "large" }} align="baseline" alignContent="start" alignSelf="start">
@@ -173,12 +176,33 @@ class App extends Component {
             <FormField name="recipient" ref="recipient_input" label="Recipient" placeholder="@username / 0x1234" required={ true } size="xxlarge"/>
             <Box align="center" alignContent="center" alignSelf="center" direction="row-responsive">
               <Button primary type="submit" label="Send" color="accent-2"/>
-              <Button margin={{ left: "small" }} label="Scan QR Code"/>
+              <Button margin={{ left: "small" }} label="Scan QR Code" onClick={ () => this.setState({ showQRReader: true }) }/>
             </Box>
           </Form>
         </Box>
+        { this.state.showQRReader ? this.showQRReader() : null }
       </Layer>
     )
+  }
+
+  showQRReader() {
+    return (
+      <QrReader facingMode="environment" onScan={ this.handleScan } onError={ this.handleScanError }/>
+    )
+  }
+
+  handleScan (scan) {
+    if (scan) { // Check scanned
+      if (!scan.includes("@") && !scan.includes("0x")) { // Check is not tx
+        this.errorAlert("Invalid QR code (must be @username or 0x1234 address)"); // Alert
+      }
+
+      this.setState({ showQRReader: false }); // Hide reader
+    }
+  }
+
+  handleScanError (err) {
+    this.errorAlert(err); // Alert
   }
 
   // onSubmitTx handles the tx form submit event.
@@ -211,6 +235,8 @@ class App extends Component {
       this.setState({
         showSendModal: false
       }); // Set state
+
+      this.forceUpdate(); // Force update
     })
   }
 
@@ -221,6 +247,7 @@ class App extends Component {
 
   // renderTransactions renders the transaction views.
   renderTransactions() {
+    console.log("test");
     var transactionViews = []; // Init tx views
 
     var x; // Init iterator
@@ -238,6 +265,7 @@ class App extends Component {
 
       transactionViews.push(
         <TransactionView
+          key={ x }
           margin="none"
           gap="large"
           type={ type }
