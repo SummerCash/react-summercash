@@ -30,7 +30,9 @@ class App extends Component {
 
     this.recipient_input = React.createRef(); // Create ref
 
-    this.fetchBalance(cookies.get('username')); // Fetch balance
+    if (cookies.get("username") !== "" && cookies.get("username") !== "not-signed-in") { // Check signed in
+      this.fetchBalance(cookies.get('username')); // Fetch balance
+    }
   
     this.state = {
       username: cookies.get('username') || 'not-signed-in', // Get username cookie
