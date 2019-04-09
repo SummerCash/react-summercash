@@ -27,6 +27,7 @@ class App extends Component {
     this.fetchBalance = this.fetchBalance.bind(this); // Bind this
     this.onSubmitTx = this.onSubmitTx.bind(this); // Bind this
     this.handleScan = this.handleScan.bind(this); // Bind this
+    this.handleScanError = this.handleScanError.bind(this); // Bind this
 
     this.recipient_input = React.createRef(); // Create ref
 
