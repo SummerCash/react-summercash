@@ -42,6 +42,7 @@ class App extends Component {
       alreadyPoppedRedeemable: false, // Set already popped
       balance: 0, // Set balance
       transactions: [], // Set transactions
+      sendAddressValue: "", // Set send addr
     } // Set state
   }
 
@@ -178,7 +179,7 @@ class App extends Component {
             <FormField name="recipient" ref={ this.recipient_input } label="Recipient" placeholder="@username / 0x1234" required={ true } size="xxlarge"/>
             <Box align="center" alignContent="center" alignSelf="center" direction="row-responsive">
               <Button primary type="submit" label="Send" color="accent-2"/>
-              <Button margin={{ left: "small" }} label="Scan QR Code" onClick={ () => this.setState({ showQRReader: true }) }/>
+              <Button ref={ this.recipient_input } margin={{ left: "small" }} label="Scan QR Code" onClick={ () => this.setState({ showQRReader: true }) }/>
             </Box>
           </Form>
         </Box>
@@ -200,7 +201,7 @@ class App extends Component {
       } else {
         this.setState({ showQRReader: false }); // Hide reader
 
-        this.recipient_input.value = scan; // Set value
+        this.recipient_input.current.value = scan.toString(); // Set value
       }
     }
   }
