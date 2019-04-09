@@ -241,6 +241,7 @@ class App extends Component {
         recipient: formData.recipient, // Set recipient
         amount: parseFloat(formData.amount), // Set amount
         password: this.state.password, // Set password
+        // TODO: Payloads
       })
     }).then((response) => response.json())
     .then(response => {
