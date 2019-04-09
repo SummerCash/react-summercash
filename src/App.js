@@ -46,6 +46,7 @@ class App extends Component {
       balance: 0, // Set balance
       transactions: [], // Set transactions
       sendAddressValue: "", // Set send addr
+      shouldMakeRedeemable: false, // Set should make redeemable
     } // Set state
   }
 
@@ -111,12 +112,13 @@ class App extends Component {
         <Heading responsive={ true } size="medium" margin={{ left: "large", top: "medium", bottom: "xsmall"}}>
           Transactions
         </Heading>
-        <Box overflow="scroll" margin={{ left: "large" }} height="50%">
+        <Box overflow={{ "vertical": "scroll" }} margin={{ left: "large" }} height="50%">
           { this.renderTransactions() }
         </Box>
         <Box direction="row" margin={{ left: "large" }} align="baseline" alignContent="start" alignSelf="start">
           <Button primary label="Send" onClick={ () => this.setState({ showSendModal: true }) } margin={{ top: "small" }} color="accent-2" size="xlarge"/>
           <Button label="Receive" onClick={ () => this.setState({ showAddressModal: true }) } margin={{ top: "small", left: "small" }} size="xlarge"/>
+          <Button label="Redeem" onClick={ () => this.setState({ showAddressModal: true }) } margin={{ top: "small", left: "small" }} size="xlarge"/> {/* TODO: Write */}
         </Box>
         { this.state.showAddressModal ? this.showAddressModal() : null }
         { this.state.showSendModal ? this.showSendModal() : null }
@@ -184,6 +186,7 @@ class App extends Component {
             <FormField name="recipient" label="Recipient" required={ false } size="xxlarge">
               <TextInput ref="recipient_input" value={ this.state.sendAddressValue } onChange={ event => this.setState({ sendAddressValue: event.target.value }) } placeholder="@username / 0x1234" size="xxlarge"/>
             </FormField>
+            <FormField name="message" label="Message" placeholder="Say something nice!" required={ false } size="xxlarge"/>
             <Box align="center" alignContent="center" alignSelf="center" direction="row-responsive">
               <Button primary type="submit" label="Send" color="accent-2"/>
               <Button primary margin={{ left: "small" }} type="submit" label="Make Redeemable" color="accent-2"/>
