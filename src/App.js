@@ -27,10 +27,13 @@ class App extends Component {
     this.fetchBalance = this.fetchBalance.bind(this); // Bind this
     this.onSubmitTx = this.onSubmitTx.bind(this); // Bind this
     this.handleScan = this.handleScan.bind(this); // Bind this
+    this.handleScanError = this.handleScanError.bind(this); // Bind this
 
     this.recipient_input = React.createRef(); // Create ref
 
-    this.fetchBalance(cookies.get('username')); // Fetch balance
+    if (cookies.get("username") !== "" && cookies.get("username") !== "not-signed-in" && cookies.get("username") !== undefined) { // Check signed in
+      this.fetchBalance(cookies.get('username')); // Fetch balance
+    }
   
     this.state = {
       username: cookies.get('username') || 'not-signed-in', // Get username cookie
@@ -49,33 +52,35 @@ class App extends Component {
   componentDidMount() {
     const cookies = new Cookies(); // Initialize cookies
 
-    fetch("/api/accounts/"+cookies.get("username")+"/transactions", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((response) => response.json())
-    .then(response => {
-      if (response.error) { // Check for errors
-        if (response.error.includes("no account exists with the given username")) { // Check shouldn't be logged in
-          cookies.remove("username"); // Remove account details
-          cookies.remove("password"); // Remove account details
-          cookies.remove("address"); // Remove account details
+    if (cookies.get("username") !== "" && cookies.get("username") !== "not-signed-in" && cookies.get("username") !== undefined) { // Check signed in
+      fetch("/api/accounts/"+cookies.get("username")+"/transactions", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => response.json())
+      .then(response => {
+        if (response.error) { // Check for errors
+          if (response.error.includes("no account exists with the given username")) { // Check shouldn't be logged in
+            cookies.remove("username"); // Remove account details
+            cookies.remove("password"); // Remove account details
+            cookies.remove("address"); // Remove account details
 
-          this.props.history.push("/"); // Go to home
+            this.props.history.push("/"); // Go to home
+          }
+
+          this.errorAlert(response.error); // Alert
+        } else if (!response.transactions) { // Check txs null
+          if (!this.state.alreadyPoppedRedeemable) { // Check has not already popped
+            this.infoAlert("Need some SummerCash? Look out for redeemable airdrop QR codes to earn your first coins."); // Alert
+
+            this.setState({ alreadyPoppedRedeemable: true }); // Set state
+          }
+        } else {
+          this.setState({ transactions: response.transactions }); // Set state txs
         }
-
-        this.errorAlert(response.error); // Alert
-      } else if (!response.transactions) { // Check txs null
-        if (!this.state.alreadyPoppedRedeemable) { // Check has not already popped
-          this.infoAlert("Need some SummerCash? Look out for redeemable airdrop QR codes to earn your first coins."); // Alert
-
-          this.setState({ alreadyPoppedRedeemable: true }); // Set state
-        }
-      } else {
-        this.setState({ transactions: response.transactions }); // Set state txs
-      }
-    });
+      });
+    }
   }
 
   // render
@@ -250,33 +255,35 @@ class App extends Component {
   fetchTransactions() {
     const cookies = new Cookies(); // Initialize cookies
 
-    fetch("/api/accounts/"+cookies.get("username")+"/transactions", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((response) => response.json())
-    .then(response => {
-      if (response.error) { // Check for errors
-        if (response.error.includes("no account exists with the given username")) { // Check shouldn't be logged in
-          cookies.remove("username"); // Remove account details
-          cookies.remove("password"); // Remove account details
-          cookies.remove("address"); // Remove account details
-
-          this.props.history.push("/"); // Go to home
+    if (cookies.get("username") !== "" && cookies.get("username") !== "not-signed-in" && cookies.get("username") !== undefined) { // Check signed in
+      fetch("/api/accounts/"+cookies.get("username")+"/transactions", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => response.json())
+      .then(response => {
+        if (response.error) { // Check for errors
+          if (response.error.includes("no account exists with the given username")) { // Check shouldn't be logged in
+            cookies.remove("username"); // Remove account details
+            cookies.remove("password"); // Remove account details
+            cookies.remove("address"); // Remove account details
+  
+            this.props.history.push("/"); // Go to home
+          }
+  
+          this.errorAlert(response.error); // Alert
+        } else if (!response.transactions) { // Check txs null
+          if (!this.state.alreadyPoppedRedeemable) { // Check has not already popped
+            this.infoAlert("Need some SummerCash? Look out for redeemable airdrop QR codes to earn your first coins."); // Alert
+  
+            this.setState({ alreadyPoppedRedeemable: true }); // Set state
+          }
+        } else {
+          this.setState({ transactions: response.transactions }); // Set state txs
         }
-
-        this.errorAlert(response.error); // Alert
-      } else if (!response.transactions) { // Check txs null
-        if (!this.state.alreadyPoppedRedeemable) { // Check has not already popped
-          this.infoAlert("Need some SummerCash? Look out for redeemable airdrop QR codes to earn your first coins."); // Alert
-
-          this.setState({ alreadyPoppedRedeemable: true }); // Set state
-        }
-      } else {
-        this.setState({ transactions: response.transactions }); // Set state txs
-      }
-    });
+      });
+    }
   }
 
   // renderTransactions renders the transaction views.
