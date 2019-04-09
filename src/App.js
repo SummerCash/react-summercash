@@ -181,7 +181,7 @@ class App extends Component {
         <Box align="center" alignContent="center" direction="column" pad="medium">
           <Form onSubmit={ this.onSubmitTx }>
             <FormField name="amount" ref={"amount_input"} label="Amount" placeholder="1.23456" required={ true } size="xxlarge"/>
-            <FormField name="recipient" ref={ this.recipient_input } label="Recipient" placeholder="@username / 0x1234" required={ true } size="xxlarge"/>
+            <FormField name="recipient" ref={ this.recipient_input } label="Recipient" placeholder="@username / 0x1234" required={ true } size="xxlarge" value={ this.state.sendAddressValue }/>
             <Box align="center" alignContent="center" alignSelf="center" direction="row-responsive">
               <Button primary type="submit" label="Send" color="accent-2"/>
               <Button ref={ this.recipient_input } margin={{ left: "small" }} label="Scan QR Code" onClick={ () => this.setState({ showQRReader: true }) }/>
@@ -204,9 +204,7 @@ class App extends Component {
       if (!scan.includes("@") && !scan.includes("0x")) { // Check is not tx
         this.errorAlert("Invalid QR code (must be @username or 0x1234 address)"); // Alert
       } else {
-        this.setState({ showQRReader: false }); // Hide reader
-
-        this.recipient_input.current.value = scan.toString(); // Set value
+        this.setState({ showQRReader: false, sendAddressValue: scan }); // Hide reader
       }
     }
   }
@@ -247,6 +245,7 @@ class App extends Component {
       this.setState({
         showSendModal: false,
         showQRReader: false,
+        sendAddressValue: "",
       }); // Set state
     })
   }
