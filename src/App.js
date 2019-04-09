@@ -3,7 +3,7 @@ import './App.css';
 import Cookies from 'universal-cookie';
 import SignupLogin from './SignupLogin'; // Import signup login page
 import { theme } from './SummerTechTheme'; // Import SummerTech theme
-import { Grommet, Heading, Paragraph, Box, Button, Layer, Form, FormField } from 'grommet';
+import { Grommet, Heading, Paragraph, Box, Button, Layer, Form, FormField, TextInput } from 'grommet';
 import Blockies from 'react-blockies'; // Import identicons
 import { ToastContainer, toast } from 'react-toastify'; // Import toast
 import TransactionView from './TransactionView'; // Import tx view
@@ -181,7 +181,9 @@ class App extends Component {
         <Box align="center" alignContent="center" direction="column" pad="medium">
           <Form onSubmit={ this.onSubmitTx }>
             <FormField name="amount" ref={"amount_input"} label="Amount" placeholder="1.23456" required={ true } size="xxlarge"/>
-            <FormField name="recipient" ref={ this.recipient_input } label="Recipient" placeholder="@username / 0x1234" required={ true } size="xxlarge" value={ this.state.sendAddressValue }/>
+            <FormField name="recipient" label="Recipient" placeholder="@username / 0x1234" required={ false } size="xxlarge">
+              <TextInput ref="recipient_input" value={ this.state.sendAddressValue } placeholder="@username / 0x1234" size="xxlarge"/>
+            </FormField>
             <Box align="center" alignContent="center" alignSelf="center" direction="row-responsive">
               <Button primary type="submit" label="Send" color="accent-2"/>
               <Button ref={ this.recipient_input } margin={{ left: "small" }} label="Scan QR Code" onClick={ () => this.setState({ showQRReader: true }) }/>
@@ -218,6 +220,10 @@ class App extends Component {
     event.preventDefault(); // Prevent default
 
     var formData = JSON.parse(JSON.stringify(event.value)); // Get from data
+
+    if (!formData.recipient) { // Check needs manual set
+      formData.recipient = this.refs.recipient_input.value; // Get address
+    }
 
     formData.recipient = formData.recipient.replace("@", ""); // Remove @ symbol
 
