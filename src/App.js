@@ -181,11 +181,12 @@ class App extends Component {
         <Box align="center" alignContent="center" direction="column" pad="medium">
           <Form onSubmit={ this.onSubmitTx }>
             <FormField name="amount" ref={"amount_input"} label="Amount" placeholder="1.23456" required={ true } size="xxlarge"/>
-            <FormField name="recipient" label="Recipient" placeholder="@username / 0x1234" required={ false } size="xxlarge">
-              <TextInput ref="recipient_input" value={ this.state.sendAddressValue } placeholder="@username / 0x1234" size="xxlarge"/>
+            <FormField name="recipient" label="Recipient" required={ false } size="xxlarge">
+              <TextInput ref="recipient_input" value={ this.state.sendAddressValue } onChange={ event => this.setState({ sendAddressValue: event.target.value }) } placeholder="@username / 0x1234" size="xxlarge"/>
             </FormField>
             <Box align="center" alignContent="center" alignSelf="center" direction="row-responsive">
               <Button primary type="submit" label="Send" color="accent-2"/>
+              <Button primary margin={{ left: "small" }} type="submit" label="Make Redeemable" color="accent-2"/>
               <Button ref={ this.recipient_input } margin={{ left: "small" }} label="Scan QR Code" onClick={ () => this.setState({ showQRReader: true }) }/>
             </Box>
           </Form>
