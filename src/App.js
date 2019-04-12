@@ -241,7 +241,7 @@ class App extends Component {
         recipient: formData.recipient, // Set recipient
         amount: parseFloat(formData.amount), // Set amount
         password: this.state.password, // Set password
-        // TODO: Payloads
+        payload: new Buffer(formData.message).toString('base64'),
       })
     }).then((response) => response.json())
     .then(response => {
