@@ -231,6 +231,10 @@ class App extends Component {
 
     formData.recipient = formData.recipient.replace("@", ""); // Remove @ symbol
 
+    if (!formData.message) { // Check no message
+      formData.message = ""; // Prevent undefined
+    } 
+
     fetch("/api/transactions/NewTransaction", {
       method: "POST",
       headers: {
