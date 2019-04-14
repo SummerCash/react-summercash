@@ -12,6 +12,8 @@ import QRCode from 'qrcode.react';
 import { Close } from 'grommet-icons'; // Import icons
 import {CopyToClipboard} from 'react-copy-to-clipboard'; // Import clipboard
 import QrReader from 'react-qr-reader'; // Import qr code reader
+import { sha3_512 } from 'js-sha3'; // Import sha3
+import ReactToPrint from 'react-to-print'; // Import print
 
 class App extends Component {
   errorAlert = (message) => toast.error(message); // Alert
@@ -28,8 +30,11 @@ class App extends Component {
     this.onSubmitTx = this.onSubmitTx.bind(this); // Bind this
     this.handleScan = this.handleScan.bind(this); // Bind this
     this.handleScanError = this.handleScanError.bind(this); // Bind this
+    this.makeRedeemableAccount = this.makeRedeemableAccount.bind(this); // Bind this
+    this.showRedeemable = this.showRedeemable.bind(this); // Bind this
 
     this.recipient_input = React.createRef(); // Create ref
+    this.printTriggerRef = React.createRef(); // Create ref
 
     if (cookies.get("username") !== "" && cookies.get("username") !== "not-signed-in" && cookies.get("username") !== undefined) { // Check signed in
       this.fetchBalance(cookies.get('username')); // Fetch balance
@@ -47,6 +52,9 @@ class App extends Component {
       transactions: [], // Set transactions
       sendAddressValue: "", // Set send addr
       shouldMakeRedeemable: false, // Set should make redeemable
+      redeemableAccount: null, // Set redeemable account
+      lastPayload: "", // Set last payload
+      showRedeemableModal: false, // Set show redeemable modal
     } // Set state
   }
 
@@ -118,10 +126,11 @@ class App extends Component {
         <Box direction="row" margin={{ left: "large" }} align="baseline" alignContent="start" alignSelf="start">
           <Button primary label="Send" onClick={ () => this.setState({ showSendModal: true }) } margin={{ top: "small" }} color="accent-2" size="xlarge"/>
           <Button label="Receive" onClick={ () => this.setState({ showAddressModal: true }) } margin={{ top: "small", left: "small" }} size="xlarge"/>
-          <Button label="Redeem" onClick={ () => this.setState({ showAddressModal: true }) } margin={{ top: "small", left: "small" }} size="xlarge"/> {/* TODO: Write */}
+          <Button label="Redeem" margin={{ top: "small", left: "small" }} size="xlarge"/> {/* TODO: Write */}
         </Box>
         { this.state.showAddressModal ? this.showAddressModal() : null }
         { this.state.showSendModal ? this.showSendModal() : null }
+        { this.state.showRedeemableModal ? this.showRedeemable() : null }
       </Grommet>
     );
   }
@@ -186,7 +195,7 @@ class App extends Component {
             <FormField name="message" label="Message" placeholder="Say something nice!" required={ false } size="xxlarge"/>
             <Box align="center" alignContent="center" alignSelf="center" direction="row-responsive">
               <Button primary type="submit" label="Send" color="accent-2"/>
-              <Button primary margin={{ left: "small" }} type="submit" label="Make Redeemable" color="accent-2"/>
+              <Button primary margin={{ left: "small" }} type="submit" label="Make Redeemable" onClick={ () => this.setState({ shouldMakeRedeemable: true }) } color="accent-2"/>
               <Button ref={ this.recipient_input } margin={{ left: "small" }} label="Scan QR Code" onClick={ () => this.setState({ showQRReader: true }) }/>
             </Box>
           </Form>
@@ -196,9 +205,64 @@ class App extends Component {
     )
   }
 
+  makeRedeemableAccount() {
+    this.setState({
+      redeemableAccount: null, // Reset redeemable account
+    });
+
+    var redeemableUsername = this.state.username+"_"+Math.random().toString(36).substring(7); // Generate redeemable username
+    var redeemablePassword = sha3_512(Math.random().toString(36).substring(7)); // Generate redeemable password
+
+    return fetch("/api/accounts/"+redeemableUsername, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        password: redeemablePassword, // Set password
+      })
+    }).then((response) => response.json())
+    .then(response => {
+      if (response.error) { // Check for errors
+        this.errorAlert(response.error); // Alert
+      } else {
+        this.setState({
+          redeemableAccount: {
+            username: redeemableUsername, // Set user
+            password: redeemablePassword, // Set pass
+          } // Set redeemable account
+        }) // Update state
+      }
+    });
+  }
+
   showQRReader() {
     return (
       <QrReader facingMode="environment" onScan={ this.handleScan } onError={ this.handleScanError }/>
+    )
+  }
+
+  showRedeemable() {
+    return (
+      <Layer
+        onEsc={ () => this.setState({ showRedeemableModal: false, showSendModal: false, showQRReader: false, sendAddressValue: "", shouldMakeRedeemable: false, lastPayload: "" }) }
+        onClickOutside={ () => this.setState({ showRedeemableModal: false, showSendModal: false, showQRReader: false, sendAddressValue: "", shouldMakeRedeemable: false, lastPayload: "" }) }
+        modal={ true }
+        responsive={ false }
+      >
+        {/* <ReactToPrint trigger={ () => this.printTriggerRef } content={ () => this.printContentRef }> */}
+          <Box ref={ el => (this.printContentRef = el) }>
+            <Box margin={{ right: "medium", top: "small", bottom: "small" }} alignContent="end" align="end">
+              <Close onClick={ () => this.setState({ showAddressModal: false }) } cursor="pointer"/>
+            </Box>
+            <Box align="center" alignContent="center" direction="column">
+              <QRCode value={ this.state.redeemableAccount.username+"_"+this.state.redeemableAccount.password } size={ 512 }/>
+              <Paragraph responsive={ true }>{ this.state.lastPayload }</Paragraph>
+            </Box>
+            <Button primary ref={ this.printTriggerRef } label="Print" margin={{ top: "small" }} color="accent-2" size="xlarge"/>
+          </Box>
+        {/* </ReactToPrint> */}
+      </Layer>
     )
   }
 
@@ -221,6 +285,44 @@ class App extends Component {
     event.preventDefault(); // Prevent default
 
     var formData = JSON.parse(JSON.stringify(event.value)); // Get from data
+
+    if (this.state.shouldMakeRedeemable) { // Check is processing elsewhere
+      this.setState({ shouldMakeRedeemable: false, lastPayload: formData.message }); // Reset
+
+      this.makeRedeemableAccount()
+      .then(() => fetch("/api/transactions/NewTransaction", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: this.state.username, // Set username
+          recipient: this.state.redeemableAccount.username, // Set recipient
+          amount: parseFloat(formData.amount), // Set amount
+          password: this.state.password, // Set password
+          payload: formData.message, // Set message
+        })
+      }))
+      .then((response) => response.json())
+      .then(response => {
+        if (response.error) { // Check for errors
+          this.errorAlert(response.error); // Alert
+  
+          return; // Return
+        }
+
+        this.fetchTransactions(); // Fetch transactions
+
+        this.setState({
+          showSendModal: false,
+          showQRReader: false,
+          sendAddressValue: "",
+          showRedeemableModal: true,
+        }); // Set show redeemable modal
+      }); // Make redeemable
+
+      return; // Return
+    }
 
     if (!formData.recipient) { // Check needs manual set
       formData.recipient = this.refs.recipient_input.value; // Get address
