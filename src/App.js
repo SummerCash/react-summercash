@@ -317,7 +317,48 @@ class App extends Component {
       } else if (scan.includes("@") || scan.includes("0x")) {
         this.setState({ showQRReader: false, sendAddressValue: scan }); // Hide reader
       } else if (scan.includes("_")) {
-        this.setState({ showRedeemModal: false, showQRReader: false, redeemableAccount: { username: scan.split("_")[0], password: scan.split("_")[1] }}); // Set redeemable account
+        var redeemableAccount = {
+          username: scan.split("_")[0],
+          password: scan.split("_")[1],
+        } // Get acc
+
+        fetch("/api/accounts/"+redeemableAccount.username+"/authenticate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            password: redeemableAccount.password,
+          })
+        }).then((response) => response.json())
+        .then(response => {
+          if (response.error) { // Check for errors
+            this.errorAlert(response.error); // Log error
+          } else {
+            fetch("/api/transactions/NewTransaction", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                username: redeemableAccount.username, // Set username
+                password: redeemableAccount.password, // Set password
+                recipient: this.state.address, // Set username
+              })
+            })
+            .then((response) => response.json())
+            .then(response => {
+              if (response.error) { // Check for errors
+                this.errorAlert(response.error); // Log error
+              } else {
+                this.fetchBalance(); // Check balance
+                this.fetchTransactions(); // Check txs
+
+                this.setState({ showRedeemModal: false, showQRReader: false}); // Close modal
+              }
+            })
+          }
+        })
       }
     }
   }
