@@ -13,7 +13,8 @@ import { Close } from 'grommet-icons'; // Import icons
 import {CopyToClipboard} from 'react-copy-to-clipboard'; // Import clipboard
 import QrReader from 'react-qr-reader'; // Import qr code reader
 import { sha3_512 } from 'js-sha3'; // Import sha3
-import ReactToPrint from 'react-to-print'; // Import print
+import domtoimage from 'dom-to-image'; // Import print
+import print from 'print-js'; // Import print
 
 class App extends Component {
   errorAlert = (message) => toast.error(message); // Alert
@@ -250,20 +251,30 @@ class App extends Component {
         modal={ true }
         responsive={ false }
       >
-        {/* <ReactToPrint trigger={ () => this.printTriggerRef } content={ () => this.printContentRef }> */}
-          <Box ref={ el => (this.printContentRef = el) }>
-            <Box margin={{ right: "medium", top: "small", bottom: "small" }} alignContent="end" align="end">
-              <Close onClick={ () => this.setState({ showAddressModal: false }) } cursor="pointer"/>
-            </Box>
-            <Box align="center" alignContent="center" direction="column">
-              <QRCode value={ this.state.redeemableAccount.username+"_"+this.state.redeemableAccount.password } size={ 512 }/>
-              <Paragraph responsive={ true }>{ this.state.lastPayload }</Paragraph>
-            </Box>
-            <Button primary ref={ this.printTriggerRef } label="Print" margin={{ top: "none", bottom: "small", left: "small", right: "small" }} color="accent-2" size="xlarge"/>
+        <Box margin={{ right: "medium", top: "small", bottom: "small" }} alignContent="end" align="end">
+          <Close onClick={ () => this.setState({ showAddressModal: false }) } cursor="pointer"/>
+        </Box>
+        <div id="print-contents">
+          <Box align="center" alignContent="center" direction="column">
+            <QRCode value={ this.state.redeemableAccount.username+"_"+this.state.redeemableAccount.password } size={ 512 }/>
+            <Paragraph responsive={ true }>{ this.state.lastPayload }</Paragraph>
           </Box>
-        {/* </ReactToPrint> */}
+        </div>
+        <Button primary onClick={ () => this.printContents() } label="Print" margin={{ top: "none", bottom: "small", left: "small", right: "small" }} color="accent-2" size="xlarge"/>
       </Layer>
     )
+  }
+
+  printContents() {
+    const node = document.getElementById("print-contents"); // Get node
+
+    domtoimage.toJpeg(node, { bgcolor: "white" }) // Generate PNG image
+    .then((dataUrl) => {
+        print({ printable: dataUrl, type: "image", imageStyle: "width:70%; height:70%;transform:rotate(-90deg);margin-top:-2%;"}); // Print
+    })
+    .catch(function (error) {
+        console.error('oops, something went wrong!', error); // Log error
+    });
   }
 
   handleScan (scan) {
