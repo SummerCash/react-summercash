@@ -259,7 +259,7 @@ class App extends Component {
               <QRCode value={ this.state.redeemableAccount.username+"_"+this.state.redeemableAccount.password } size={ 512 }/>
               <Paragraph responsive={ true }>{ this.state.lastPayload }</Paragraph>
             </Box>
-            <Button primary ref={ this.printTriggerRef } label="Print" margin={{ top: "small" }} color="accent-2" size="xlarge"/>
+            <Button primary ref={ this.printTriggerRef } label="Print" margin={{ top: "none", bottom: "small", left: "small", right: "small" }} color="accent-2" size="xlarge"/>
           </Box>
         {/* </ReactToPrint> */}
       </Layer>
