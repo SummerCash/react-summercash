@@ -262,7 +262,7 @@ class App extends Component {
         responsive={ false }
       >
         <Box margin={{ right: "medium", top: "small", bottom: "small" }} alignContent="end" align="end">
-          <Close onClick={ () => this.setState({ showAddressModal: false }) } cursor="pointer"/>
+          <Close onClick={ () => this.setState({ showRedeemableModal: false, showSendModal: false, showQRReader: false, sendAddressValue: "", shouldMakeRedeemable: false, lastPayload: "" }) } cursor="pointer"/>
         </Box>
         <div id="print-contents">
           <Box align="center" alignContent="center" direction="column">
