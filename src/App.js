@@ -88,6 +88,16 @@ class App extends Component {
           }
         } else {
           this.setState({ transactions: response.transactions }); // Set state txs
+
+          window.setInterval(() => {
+            var oldBalance = JSON.parse(JSON.stringify(this.state.balance)); // Get old balance
+
+            this.fetchBalance(this.state.username); // Refresh balance
+
+            if (this.state.balance !== oldBalance) { // Check did change
+              this.fetchTransactions(); // Fetch transactions
+            }
+          }, 1000); // Sync every 2 seconds
         }
       });
     }
