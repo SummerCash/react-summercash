@@ -176,11 +176,11 @@ class App extends Component {
         modal={ true }
         responsive={ false }
       >
-        <Box margin={{ right: "medium", top: "small", bottom: "small" }} alignContent="end" align="end">
+        <Box margin={{ right: "medium", top: "small", bottom: "none" }} alignContent="end" align="end">
           <Close onClick={ () => this.setState({ showRedeemModal: false }) } cursor="pointer"/>
         </Box>
         <Box align="center" alignContent="center" direction="column">
-          <Heading margin={{ left: "xlarge", right: "xlarge" }}>
+          <Heading margin={{ left: "xlarge", right: "xlarge", top: "none" }} responsive={ true }>
             Scan a code!
           </Heading>
         </Box>
@@ -312,10 +312,12 @@ class App extends Component {
 
   handleScan (scan) {
     if (scan) { // Check scanned
-      if (!scan.includes("@") && !scan.includes("0x")) { // Check is not tx
+      if (!scan.includes("@") && !scan.includes("0x") && !scan.includes("_")) { // Check is not tx
         this.errorAlert("Invalid QR code (must be @username or 0x1234 address)"); // Alert
-      } else {
+      } else if (scan.includes("@") || scan.includes("0x")) {
         this.setState({ showQRReader: false, sendAddressValue: scan }); // Hide reader
+      } else if (scan.includes("_")) {
+        this.setState({ showRedeemModal: false, showQRReader: false, redeemableAccount: { username: scan.split("_")[0], password: scan.split("_")[1] }}); // Set redeemable account
       }
     }
   }
