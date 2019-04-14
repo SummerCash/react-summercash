@@ -56,6 +56,7 @@ class App extends Component {
       redeemableAccount: null, // Set redeemable account
       lastPayload: "", // Set last payload
       showRedeemableModal: false, // Set show redeemable modal
+      showRedeemModal: false, // Set show redeem modal
     } // Set state
   }
 
@@ -137,11 +138,12 @@ class App extends Component {
         <Box direction="row" margin={{ left: "large" }} align="baseline" alignContent="start" alignSelf="start">
           <Button primary label="Send" onClick={ () => this.setState({ showSendModal: true }) } margin={{ top: "small" }} color="accent-2" size="xlarge"/>
           <Button label="Receive" onClick={ () => this.setState({ showAddressModal: true }) } margin={{ top: "small", left: "small" }} size="xlarge"/>
-          <Button label="Redeem" margin={{ top: "small", left: "small" }} size="xlarge"/> {/* TODO: Write */}
+          <Button label="Redeem" onClick={ () => this.setState({ showRedeemModal: true }) } margin={{ top: "small", left: "small" }} size="xlarge"/> {/* TODO: Write */}
         </Box>
         { this.state.showAddressModal ? this.showAddressModal() : null }
         { this.state.showSendModal ? this.showSendModal() : null }
         { this.state.showRedeemableModal ? this.showRedeemable() : null }
+        { this.state.showRedeemModal ? this.showRedeem() : null }
       </Grommet>
     );
   }
@@ -164,6 +166,27 @@ class App extends Component {
 
       this.setState({ balance: balance }); // Set state
     });
+  }
+
+  showRedeem() {
+    return (
+      <Layer
+        onEsc={ () => this.setState({ showRedeemModal: false }) }
+        onClickOutside={ () => this.setState({ showRedeemModal: false }) }
+        modal={ true }
+        responsive={ false }
+      >
+        <Box margin={{ right: "medium", top: "small", bottom: "small" }} alignContent="end" align="end">
+          <Close onClick={ () => this.setState({ showRedeemModal: false }) } cursor="pointer"/>
+        </Box>
+        <Box align="center" alignContent="center" direction="column">
+          <Heading margin={{ left: "xlarge", right: "xlarge" }}>
+            Scan a code!
+          </Heading>
+        </Box>
+        <QrReader facingMode="environment" onScan={ this.handleScan } onError={ this.handleScanError }/>
+      </Layer>
+    );
   }
 
   showAddressModal() {
