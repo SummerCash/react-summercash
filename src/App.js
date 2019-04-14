@@ -148,6 +148,26 @@ class App extends Component {
     );
   }
 
+  fetchBalancePure(username) {
+    return fetch("/api/accounts/"+username+"/balance", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((response) => response.json())
+    .then(response => {
+      var balance = 0; // Init balance buffer
+
+      if (response.error) { // Check for errors
+        this.errorAlert(response.error); // Error
+      } else {
+        balance = response.balance; // Set balance
+      }
+
+      return balance; // Return balance
+    });
+  }
+
   fetchBalance(username) {
     fetch("/api/accounts/"+username+"/balance", {
       method: "GET",
@@ -318,8 +338,8 @@ class App extends Component {
         this.setState({ showQRReader: false, sendAddressValue: scan }); // Hide reader
       } else if (scan.includes("_")) {
         var redeemableAccount = {
-          username: scan.split("_")[0],
-          password: scan.split("_")[1],
+          username: scan.split("_")[0]+"_"+scan.split("_")[1],
+          password: scan.split("_")[2],
         } // Get acc
 
         fetch("/api/accounts/"+redeemableAccount.username+"/authenticate", {
@@ -335,28 +355,38 @@ class App extends Component {
           if (response.error) { // Check for errors
             this.errorAlert(response.error); // Log error
           } else {
-            fetch("/api/transactions/NewTransaction", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                username: redeemableAccount.username, // Set username
-                password: redeemableAccount.password, // Set password
-                recipient: this.state.address, // Set username
-              })
-            })
-            .then((response) => response.json())
-            .then(response => {
-              if (response.error) { // Check for errors
-                this.errorAlert(response.error); // Log error
-              } else {
-                this.fetchBalance(); // Check balance
-                this.fetchTransactions(); // Check txs
+            var redeemableBalance = 0; // Init buffer
 
-                this.setState({ showRedeemModal: false, showQRReader: false}); // Close modal
-              }
-            })
+            this.fetchBalancePure(redeemableAccount.username)
+            .then((balance) => {
+              redeemableBalance = balance; // Set redeemable balance
+
+              fetch("/api/transactions/NewTransaction", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  username: redeemableAccount.username, // Set username
+                  password: redeemableAccount.password, // Set password
+                  recipient: this.state.address, // Set username
+                  amount: redeemableBalance, // Send entire balance
+                })
+              })
+              .then((response) => response.json())
+              .then(response => {
+                if (response.error) { // Check for errors
+                  this.errorAlert(response.error); // Log error
+                } else {
+                  this.fetchBalance(this.state.username); // Check balance
+                  this.fetchTransactions(); // Check txs
+
+                  console.log(this.state.transactions);
+  
+                  this.setState({ showRedeemModal: false, showQRReader: false}); // Close modal
+                }
+              })
+            });
           }
         })
       }
@@ -491,11 +521,11 @@ class App extends Component {
     for (x = 0; x < this.state.transactions.length; x++) { // Iterate through txs
       var type = "send"; // Init type buffer
 
-      if (x > 0) { // Check not out of bounds
-        if (this.state.transactions[x-1].hash === this.state.transactions[x].hash && this.state.transactions[x].recipient === this.state.address && this.state.transactions[x].sender === this.state.address) { // Check is second of two recursive txs
-          type = "receive"; // Set type
-        }
+      if (x > 0 && this.state.transactions[x-1].hash === this.state.transactions[x].hash && this.state.transactions[x].recipient === this.state.address && this.state.transactions[x].sender === this.state.address) { // Check not out of bounds
+        type = "receive"; // Set type
       } else if (this.state.transactions[x].recipient !== this.state.address) { // Check is sending
+        type = "send"; // Set send
+      } else if (this.state.transactions[x].recipient === this.state.address) { // Check is receiving
         type = "receive"; // Set receive
       }
 
