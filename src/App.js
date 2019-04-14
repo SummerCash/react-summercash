@@ -380,10 +380,25 @@ class App extends Component {
                 } else {
                   this.fetchBalance(this.state.username); // Check balance
                   this.fetchTransactions(); // Check txs
-
-                  console.log(this.state.transactions);
   
                   this.setState({ showRedeemModal: false, showQRReader: false}); // Close modal
+
+                  fetch("/api/accounts/"+redeemableAccount.username, {
+                    method: "DELETE",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      username: redeemableAccount.username, // Set username
+                      password: redeemableAccount.password, // Set password
+                    })
+                  })
+                  .then((response) => response.json())
+                  .then(response => {
+                    if (response.error) {
+                      this.errorAlert(response.error); // Alert
+                    }
+                  })
                 }
               })
             });
