@@ -15,6 +15,7 @@ import QrReader from 'react-qr-reader'; // Import qr code reader
 import { sha3_512 } from 'js-sha3'; // Import sha3
 import domtoimage from 'dom-to-image'; // Import print
 import print from 'print-js'; // Import print
+import Media from 'react-media';
 
 class App extends Component {
   errorAlert = (message) => toast.error(message); // Alert
@@ -113,7 +114,7 @@ class App extends Component {
     return (
       <Grommet theme={ theme }>
         <ToastContainer/>
-        <Box margin={{ top: "large", left: "large" }} align="center" direction="row-responsive">
+        <Box margin={{ top: "large", left: "large" }} align="center" direction="row">
           <Box margin={{ right: "medium" }}>
             <Blockies seed={ this.state.address } size={ 5 } scale={ 15 } className="blocky"/>
           </Box>
@@ -121,9 +122,11 @@ class App extends Component {
             <Heading responsive={ true } size="medium" margin="none">
               { this.state.username }
             </Heading>
-            <Paragraph responsive={ true } size="large" margin={{ top: "xsmall", bottom: "none" }}>
-              { this.state.address }
-            </Paragraph>
+            <Media query="(min-width:770px)">
+              <Paragraph responsive={ true } size="large" margin={{ top: "xsmall", bottom: "none" }}>
+                { this.state.address }
+              </Paragraph>
+            </Media>
             <Paragraph responsive={ true } size="medium" margin={{ top: "xsmall" }}>
               Balance: { this.state.balance } SMC
             </Paragraph>
