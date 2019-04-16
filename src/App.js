@@ -114,7 +114,7 @@ class App extends Component {
     return (
       <Grommet theme={ theme }>
         <ToastContainer/>
-        <Box margin={{ top: "large", left: "large" }} align="center" direction="row">
+        <Box margin={{ top: "large", left: "large", right: "large" }} align="center" direction="row">
           <Box margin={{ right: "medium" }}>
             <Blockies seed={ this.state.address } size={ 5 } scale={ 15 } className="blocky"/>
           </Box>
@@ -126,6 +126,13 @@ class App extends Component {
               <Paragraph responsive={ true } size="large" margin={{ top: "xsmall", bottom: "none" }}>
                 { this.state.address }
               </Paragraph>
+            </Media>
+            <Media query="(max-width:779px)">
+              <Media query="(min-width: 440px)">
+                <Paragraph responsive={ true } size="small" margin={{ top: "xsmall", bottom: "none" }}>
+                  { this.state.address }
+                </Paragraph>
+              </Media>
             </Media>
             <Paragraph responsive={ true } size="medium" margin={{ top: "xsmall" }}>
               Balance: { this.state.balance } SMC
