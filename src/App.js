@@ -547,17 +547,38 @@ class App extends Component {
         type = "receive"; // Set receive
       }
 
-      transactionViews.push(
-        <TransactionView
-          key={ x }
-          margin="none"
-          gap="large"
-          type={ type }
-          timestamp={ this.state.transactions[x].time }
-          hash={ this.state.transactions[x].hash }
-          amount={ this.state.transactions[x].amount }
-        />
-      ); // Push tx
+      switch (type) {
+        case "send":
+          transactionViews.push(
+            <TransactionView
+              key={ x }
+              margin="none"
+              gap="large"
+              type={ type }
+              timestamp={ this.state.transactions[x].time }
+              recipient={ this.state.transactions[x].recipient.toString() }
+              amount={ this.state.transactions[x].amount }
+            />
+          ); // Push tx
+
+          break;
+        case "receive":
+          transactionViews.push(
+            <TransactionView
+              key={ x }
+              margin="none"
+              gap="large"
+              type={ type }
+              timestamp={ this.state.transactions[x].time }
+              sender={ this.state.transactions[x].sender.toString() }
+              amount={ this.state.transactions[x].amount }
+            />
+          ); // Push tx
+
+          break;
+        default:
+          break;
+      }
     }
 
     return transactionViews; // Return tx views

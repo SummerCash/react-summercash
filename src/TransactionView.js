@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { theme } from './SummerTechTheme'; // Import SummerTech theme
 import { Grommet, Paragraph, Box } from 'grommet';
 import { SubtractCircle, AddCircle } from 'grommet-icons'; // Import grommet icons
+import Media from "react-media";
 
 export default class TransactionView extends Component {
   render() {
@@ -16,9 +17,11 @@ export default class TransactionView extends Component {
             <Paragraph responsive={ true }>
               Sent { this.props.amount } SMC
             </Paragraph>
-            <Paragraph responsive={ true } alignSelf="end" textAlign="end">
-              { this.props.hash }
-            </Paragraph>
+            <Media query="(min-width:770px)">
+              <Paragraph responsive={ true } alignSelf="end" textAlign="end">
+                to { this.props.recipient }
+              </Paragraph>
+            </Media>
           </Box>
         </Grommet>
       );
@@ -33,9 +36,11 @@ export default class TransactionView extends Component {
             <Paragraph responsive={ true }>
               Received { this.props.amount } SMC
             </Paragraph>
-            <Paragraph responsive={ true } alignSelf="end" textAlign="end">
-              { this.props.hash }
-            </Paragraph>
+            <Media query="(min-width:770px)">
+              <Paragraph responsive={ true } alignSelf="end" textAlign="end">
+                from { this.props.sender }
+              </Paragraph>
+            </Media>
           </Box>
         </Grommet>
       );
