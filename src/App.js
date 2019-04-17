@@ -560,7 +560,7 @@ class App extends Component {
             <TransactionView
               key={ x }
               margin="none"
-              gap="large"
+              gap="small"
               type={ type }
               timestamp={ this.state.transactions[x].time }
               recipient={ this.state.transactions[x].recipient.toString() }
@@ -574,7 +574,7 @@ class App extends Component {
             <TransactionView
               key={ x }
               margin="none"
-              gap="large"
+              gap="small"
               type={ type }
               timestamp={ this.state.transactions[x].time }
               sender={ this.state.transactions[x].sender.toString() }
