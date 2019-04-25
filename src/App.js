@@ -628,6 +628,12 @@ class App extends Component {
         payload = atob(this.state.transactions[x].payload); // Decode payload
       }
 
+      var max = 12; // Get max substring
+
+      if (window.innerWidth < 424) { // Check width less than 424px
+        max = 7; // Set max substring
+      }
+
       switch (type) {
         case "send":
           transactionViews.push(
@@ -638,7 +644,7 @@ class App extends Component {
               type={ type }
               timestamp={ this.state.transactions[x].time }
               shortTimestamp={ this.state.transactions[x].time.toString().split(" ")[0] }
-              recipient={ this.state.transactions[x].recipient.toString().substring(0, 12) }
+              recipient={ this.state.transactions[x].recipient.toString().substring(0, max) }
               amount={ this.state.transactions[x].amount }
               message={ payload }
             />
@@ -654,7 +660,7 @@ class App extends Component {
               type={ type }
               timestamp={ this.state.transactions[x].time }
               shortTimestamp={ this.state.transactions[x].time.toString().split(" ")[0] }
-              sender={ this.state.transactions[x].sender.toString().substring(0, 12) }
+              sender={ this.state.transactions[x].sender.toString().substring(0, max) }
               amount={ this.state.transactions[x].amount }
               message={ payload }
             />
