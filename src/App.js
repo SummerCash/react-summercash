@@ -1,3 +1,4 @@
+/* eslint-disable no-loop-func */
 import React, { Component } from 'react';
 import './App.css';
 import Cookies from 'universal-cookie';
@@ -58,6 +59,7 @@ class App extends Component {
       lastPayload: "", // Set last payload
       showRedeemableModal: false, // Set show redeemable modal
       showRedeemModal: false, // Set show redeem modal
+      lastTxHash: "", // Set last tx hash
     } // Set state
   }
 
@@ -92,11 +94,11 @@ class App extends Component {
           this.setState({ transactions: response.transactions }); // Set state txs
 
           window.setInterval(() => {
-            var oldBalance = JSON.parse(JSON.stringify(this.state.balance)); // Get old balance
+            var oldTxHash = JSON.parse(JSON.stringify(this.state.lastTxHash)); // Get old tx hash
 
-            this.fetchBalance(this.state.username); // Refresh balance
+            this.fetchLastTxHash(this.state.username); // Refresh last tx hash
 
-            if (this.state.balance !== oldBalance) { // Check did change
+            if (this.state.lastTxHash !== oldTxHash) { // Check did change
               this.fetchTransactions(); // Fetch transactions
             }
           }, 1000); // Sync every 2 seconds
@@ -188,6 +190,20 @@ class App extends Component {
 
       return balance; // Return balance
     });
+  }
+
+  fetchLastTxHash(username) {
+    fetch("/api/accounts/"+username+"/lastHash", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((response) => response.json())
+    .then(response => {
+      if (!response.error) {
+        this.setState({ lastTxHash: response.hash }); // Set hash
+      }
+    })
   }
 
   fetchBalance(username) {
@@ -599,6 +615,38 @@ class App extends Component {
             this.setState({ alreadyPoppedRedeemable: true }); // Set state
           }
         } else {
+          var i; // Init iterator
+
+          for (i = 0; i < response.transactions.length; i++) { // Iterate through txs
+            switch (response.transactions[i].sender) {
+              case this.state.address:
+                fetch("/api/addresses/resolve/"+response.transactions[i].recipient, {
+                  method: "GET",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                }).then((addrResponse) => addrResponse.json())
+                .then(addrResponse => {
+                  if (!addrResponse.error) { // Check no errors
+                    response.transactions[i].sender = addrResponse.username; // Set resolved username
+                  }
+                })
+
+                break; // Break
+              default:
+                fetch("/api/addresses/resolve/"+response.transactions[i].sender, {
+                  method: "GET",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                }).then((addrResponse) => addrResponse.json())
+                .then(addrResponse => {
+                  if (!addrResponse.error) { // Check no errors
+                    response.transactions[i].sender = addrResponse.username; // Set username
+                  }
+                })
+            }
+          }
           this.setState({ transactions: response.transactions }); // Set state txs
         }
       });
