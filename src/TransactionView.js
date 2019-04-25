@@ -8,16 +8,16 @@ export default class TransactionView extends Component {
     if (this.props.type === "send") { // Check is send
       return (
         <Grommet theme={ theme }>
-          <Grid rows={["xxsmall"]} columns={[ "xxsmall", "19%", "small", "small" ]} align="center">
+          <Grid rows={["xxsmall"]} columns={[ "xxsmall", "16%", "medium", "medium" ]} align="center">
             <SubtractCircle/>
-            <Paragraph responsive={ true } textAlign="start" margin={{ right: this.props.gap }}>
+            <Paragraph responsive={ true } textAlign="start">
               { this.props.timestamp }
             </Paragraph>
-            <Paragraph responsive={ true } textAlign="end">
-              Sent { this.props.amount } SMC
+            <Paragraph responsive={ true } textAlign="center" margin={{ right: this.props.gap }}>
+              Sent { this.props.amount } SMC to { this.props.recipient }
             </Paragraph>
-            <Paragraph responsive={ true }>
-              to { this.props.recipient }
+            <Paragraph responsive={ true } textAlign="start">
+              { this.props.message }
             </Paragraph>
           </Grid>
         </Grommet>
@@ -25,18 +25,18 @@ export default class TransactionView extends Component {
     } else {
       return (
         <Grommet theme={ theme }>
-          <Box direction="row-responsive" align="center" margin={{ left: this.props.margin, top: "none" }} gap={ this.props.gap }>
+          <Grid rows={["xxsmall"]} columns={[ "xxsmall", "16%", "medium", "medium" ]} align="center">
             <AddCircle/>
-            <Paragraph responsive={ true }>
+            <Paragraph responsive={ true } textAlign="start">
               { this.props.timestamp }
             </Paragraph>
-            <Paragraph responsive={ true }>
-              Received { this.props.amount } SMC
+            <Paragraph responsive={ true } textAlign="center" margin={{ right: this.props.gap }}>
+              Received { this.props.amount } SMC from { this.props.sender }
             </Paragraph>
-            <Paragraph responsive={ true } alignSelf="end" textAlign="end">
-              from { this.props.sender }
+            <Paragraph responsive={ true } textAlign="start">
+              { this.props.message }
             </Paragraph>
-          </Box>
+          </Grid>
         </Grommet>
       );
     }
