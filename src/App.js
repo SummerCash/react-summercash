@@ -99,6 +99,7 @@ class App extends Component {
             this.fetchLastTxHash(this.state.username); // Refresh last tx hash
 
             if (this.state.lastTxHash.trim() !== oldTxHash) { // Check did change
+              alert("test");
               this.fetchTransactions(); // Fetch transactions
             }
           }, 1000); // Sync every 2 seconds
@@ -512,6 +513,12 @@ class App extends Component {
 
     var formData = JSON.parse(JSON.stringify(event.value)); // Get from data
 
+    if (formData.amount < 0) { // Check negative number
+      this.errorAlert("Invalid transaction amount; cannot send negative amounts of SummerCash."); // Alert
+
+      return; // Return
+    }
+
     if (this.state.shouldMakeRedeemable) { // Check is processing elsewhere
       this.setState({ shouldMakeRedeemable: false, lastPayload: formData.message }); // Reset
 
@@ -627,7 +634,7 @@ class App extends Component {
                   },
                 }).then((addrResponse) => addrResponse.json())
                 .then(addrResponse => {
-                  if (!addrResponse.error) { // Check no errors
+                  if (!addrResponse.error && response.transactions[i] !== undefined) { // Check no errors
                     response.transactions[i].sender = addrResponse.username; // Set resolved username
                   }
                 })
@@ -641,7 +648,7 @@ class App extends Component {
                   },
                 }).then((addrResponse) => addrResponse.json())
                 .then(addrResponse => {
-                  if (!addrResponse.error) { // Check no errors
+                  if (!addrResponse.error && response.transactions[i] !== undefined) { // Check no errors
                     response.transactions[i].sender = addrResponse.username; // Set username
                   }
                 })
