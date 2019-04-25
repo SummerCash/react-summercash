@@ -595,6 +595,8 @@ class App extends Component {
 
   // fetchTransactions fetches all account txs.
   fetchTransactions() {
+    this.fetchBalance(this.state.username); // Fetch balance
+
     const cookies = new Cookies(); // Initialize cookies
 
     if (cookies.get("username") !== "" && cookies.get("username") !== "not-signed-in" && cookies.get("username") !== undefined) { // Check signed in
