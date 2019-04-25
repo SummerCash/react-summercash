@@ -563,6 +563,7 @@ class App extends Component {
               gap="small"
               type={ type }
               timestamp={ this.state.transactions[x].time }
+              shortTimestamp={ this.state.transactions[x].time.toString().split(" ")[0] }
               recipient={ this.state.transactions[x].recipient.toString().substring(0, 12) }
               amount={ this.state.transactions[x].amount }
               message={ atob(this.state.transactions[x].payload) }
@@ -578,8 +579,10 @@ class App extends Component {
               gap="small"
               type={ type }
               timestamp={ this.state.transactions[x].time }
+              shortTimestamp={ this.state.transactions[x].time.toString().split(" ")[0] }
               sender={ this.state.transactions[x].sender.toString() }
               amount={ this.state.transactions[x].amount }
+              message={ atob(this.state.transactions[x].payload) }
             />
           ); // Push tx
 
