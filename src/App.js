@@ -96,12 +96,12 @@ class App extends Component {
           window.setInterval(() => {
             var oldTxHash = JSON.parse(JSON.stringify(this.state.lastTxHash)); // Get old tx hash
 
-            this.fetchLastTxHash(this.state.username); // Refresh last tx hash
-
-            if (this.state.lastTxHash.trim() !== oldTxHash) { // Check did change
-              alert("test");
-              this.fetchTransactions(); // Fetch transactions
-            }
+            this.fetchLastTxHash(this.state.username)
+            .then(() => {
+              if (this.state.lastTxHash !== oldTxHash) { // Check did change
+                this.fetchTransactions(); // Fetch transactions
+              }
+            }) // Refresh last tx hash
           }, 1000); // Sync every 2 seconds
         }
       });
@@ -194,7 +194,7 @@ class App extends Component {
   }
 
   fetchLastTxHash(username) {
-    fetch("/api/accounts/"+username+"/lastHash", {
+    return fetch("/api/accounts/"+username+"/lastHash", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -204,7 +204,7 @@ class App extends Component {
       if (!response.error) {
         this.setState({ lastTxHash: response.hash }); // Set hash
       }
-    })
+    });
   }
 
   fetchBalance(username) {
