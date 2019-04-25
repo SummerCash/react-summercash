@@ -98,7 +98,7 @@ class App extends Component {
 
             this.fetchLastTxHash(this.state.username); // Refresh last tx hash
 
-            if (this.state.lastTxHash !== oldTxHash) { // Check did change
+            if (this.state.lastTxHash.trim() !== oldTxHash) { // Check did change
               this.fetchTransactions(); // Fetch transactions
             }
           }, 1000); // Sync every 2 seconds
