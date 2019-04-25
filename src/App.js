@@ -112,7 +112,7 @@ class App extends Component {
     }
 
     return (
-      <Grommet theme={ theme }>
+      <Grommet theme={ theme } full>
         <ToastContainer/>
         <Box margin={{ top: "large", left: "large", right: "large" }} align="center" direction="row">
           <Box margin={{ right: "medium" }}>
@@ -145,11 +145,23 @@ class App extends Component {
         <Box overflow={{ "vertical": "scroll" }} margin={{ left: "large" }} height="50%">
           { this.renderTransactions() }
         </Box>
-        <Box direction="row" margin={{ left: "large" }} align="baseline" alignContent="start" alignSelf="start">
-          <Button primary label="Send" onClick={ () => this.setState({ showSendModal: true }) } margin={{ top: "small" }} color="accent-2" size="xlarge"/>
-          <Button label="Receive" onClick={ () => this.setState({ showAddressModal: true }) } margin={{ top: "small", left: "small" }} size="xlarge"/>
-          <Button label="Redeem" onClick={ () => this.setState({ showRedeemModal: true }) } margin={{ top: "small", left: "small" }} size="xlarge"/> {/* TODO: Write */}
-        </Box>
+        <Media query="(min-width:605px)">
+          { matches =>
+            matches ? (
+              <Box direction="row" margin={{ left: "large" }} align="baseline" alignContent="start" alignSelf="start">
+                <Button primary label="Send" onClick={ () => this.setState({ showSendModal: true }) } margin={{ top: "small" }} color="accent-2" size="xlarge"/>
+                <Button label="Receive" onClick={ () => this.setState({ showAddressModal: true }) } margin={{ top: "small", left: "small" }} size="xlarge"/>
+                <Button label="Redeem" onClick={ () => this.setState({ showRedeemModal: true }) } margin={{ top: "small", left: "small" }} size="xlarge"/>
+              </Box>
+            ) : (
+              <Box flex={ false } direction="column" fill="vertical" responsive={ true } margin={{ left: "medium", right: "medium" }} tag="footer">
+                <Button primary label="Send" onClick={ () => this.setState({ showSendModal: true }) } margin={{ top: "small" }} color="accent-2"/>
+                <Button label="Receive" onClick={ () => this.setState({ showAddressModal: true }) } margin={{ top: "small" }}/>
+                <Button label="Redeem" onClick={ () => this.setState({ showRedeemModal: true }) } margin={{ top: "small" }}/>
+              </Box>
+            )
+          }
+        </Media>
         { this.state.showAddressModal ? this.showAddressModal() : null }
         { this.state.showSendModal ? this.showSendModal() : null }
         { this.state.showRedeemableModal ? this.showRedeemable() : null }
@@ -554,19 +566,25 @@ class App extends Component {
         type = "receive"; // Set receive
       }
 
+      var payload = "";
+
+      if (this.state.transactions[x].payload) { // Check has payload
+        payload = atob(this.state.transactions[x].payload); // Decode payload
+      }
+
       switch (type) {
         case "send":
           transactionViews.push(
             <TransactionView
               key={ x }
-              margin="none"
+              margin="small"
               gap="small"
               type={ type }
               timestamp={ this.state.transactions[x].time }
               shortTimestamp={ this.state.transactions[x].time.toString().split(" ")[0] }
               recipient={ this.state.transactions[x].recipient.toString().substring(0, 12) }
               amount={ this.state.transactions[x].amount }
-              message={ atob(this.state.transactions[x].payload) }
+              message={ payload }
             />
           ); // Push tx
 
@@ -575,14 +593,14 @@ class App extends Component {
           transactionViews.push(
             <TransactionView
               key={ x }
-              margin="none"
+              margin="small"
               gap="small"
               type={ type }
               timestamp={ this.state.transactions[x].time }
               shortTimestamp={ this.state.transactions[x].time.toString().split(" ")[0] }
-              sender={ this.state.transactions[x].sender.toString() }
+              sender={ this.state.transactions[x].sender.toString().substring(0, 12) }
               amount={ this.state.transactions[x].amount }
-              message={ atob(this.state.transactions[x].payload) }
+              message={ payload }
             />
           ); // Push tx
 

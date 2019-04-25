@@ -1,5 +1,6 @@
 body > #root > div {
   height: 98vh;
+  margin-left: 0;
 }
 
 .blocky {

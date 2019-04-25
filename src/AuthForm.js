@@ -44,7 +44,7 @@ class AuthForm extends Component {
 
   render() {
     return (
-      <Grommet theme={ theme }>
+      <Grommet theme={ theme } full={ true }>
         <ToastContainer/>
         <Box justify="center" align="center" fill={ true } basis="large">
           <Form onSubmit={ this.onSubmit }>

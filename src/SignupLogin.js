@@ -42,7 +42,7 @@ class SignupLogin extends Component {
     }
 
     return (
-      <Grommet theme={ theme }>
+      <Grommet theme={ theme } full={ true }>
         <Box justify="center" align="center" fill={ true } basis="large">
           <Heading responsive={ true } margin={{ top: "none", bottom: "none" }} size="large">
             SummerCash
