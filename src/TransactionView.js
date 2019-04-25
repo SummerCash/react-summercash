@@ -30,9 +30,19 @@ export default class TransactionView extends Component {
                   <Paragraph responsive={ true } textAlign="start">
                     { this.props.shortTimestamp }
                   </Paragraph>
-                  <Paragraph responsive={ true } textAlign="center">
-                    { this.props.amount } SMC to { this.props.recipient }
-                  </Paragraph>
+                  <Media query="(min-width:432px)">
+                    { matches =>
+                      matches ? (
+                        <Paragraph responsive={ true } textAlign="center">
+                          { this.props.amount } SMC to { this.props.recipient }
+                        </Paragraph>
+                      ) : (
+                        <Paragraph responsive={ true } textAlign="center" margin={{ left: "-5%" }}>
+                          { this.props.amount } SMC to { this.props.recipient }
+                        </Paragraph>
+                      )
+                    }
+                  </Media>
                   <Media query="(min-width:530px)">
                     <Paragraph responsive={ true } textAlign="start" margin={{ left: "-20%" }}>
                       { this.props.message }
@@ -68,9 +78,19 @@ export default class TransactionView extends Component {
                   <Paragraph responsive={ true } textAlign="start">
                     { this.props.shortTimestamp }
                   </Paragraph>
-                  <Paragraph responsive={ true } textAlign="center">
-                    { this.props.amount } SMC from { this.props.sender }
-                  </Paragraph>
+                  <Media query="(min-width:432px)">
+                    { matches =>
+                      matches ? (
+                        <Paragraph responsive={ true } textAlign="center">
+                          { this.props.amount } SMC from { this.props.sender }
+                        </Paragraph>
+                      ) : (
+                        <Paragraph responsive={ true } textAlign="center" margin={{ left: "-5%" }}>
+                          { this.props.amount } SMC from { this.props.sender }
+                        </Paragraph>
+                      )
+                    }
+                  </Media>
                   <Media query="(min-width:530px)">
                     <Paragraph responsive={ true } textAlign="start" margin={{ left: "-20%" }}>
                       { this.props.message }

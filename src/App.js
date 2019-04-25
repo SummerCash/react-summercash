@@ -256,28 +256,84 @@ class App extends Component {
 
   showSendModal() {
     return (
-      <Layer
-        onEsc={ () => this.setState({ showSendModal: false }) }
-        onClickOutside={ () => this.setState({ showSendModal: false }) }
-        modal={ true }
-        responsive={ false }
-      >
-        <Box align="center" alignContent="center" direction="column" pad="medium">
-          <Form onSubmit={ this.onSubmitTx }>
-            <FormField name="amount" ref={"amount_input"} label="Amount" placeholder="1.23456" required={ true } size="xxlarge"/>
-            <FormField name="recipient" label="Recipient" required={ false } size="xxlarge">
-              <TextInput ref="recipient_input" value={ this.state.sendAddressValue } onChange={ event => this.setState({ sendAddressValue: event.target.value }) } placeholder="@username / 0x1234" size="xxlarge"/>
-            </FormField>
-            <FormField name="message" label="Message" placeholder="Say something nice!" required={ false } size="xxlarge"/>
-            <Box align="center" alignContent="center" alignSelf="center" direction="row-responsive">
-              <Button primary type="submit" label="Send" color="accent-2"/>
-              <Button primary margin={{ left: "small" }} type="submit" label="Make Redeemable" onClick={ () => this.setState({ shouldMakeRedeemable: true }) } color="accent-2"/>
-              <Button ref={ this.recipient_input } margin={{ left: "small" }} label="Scan QR Code" onClick={ () => this.setState({ showQRReader: true }) }/>
-            </Box>
-          </Form>
-        </Box>
-        { this.state.showQRReader ? this.showQRReader() : null }
-      </Layer>
+      <Media query="(min-width:427px)">
+        { matches =>
+          matches ? (
+            <Layer
+              onEsc={ () => this.setState({ showSendModal: false }) }
+              onClickOutside={ () => this.setState({ showSendModal: false }) }
+              modal={ true }
+              responsive={ false }
+            >
+              <Box align="center" alignContent="center" direction="column" pad="medium">
+                <Form onSubmit={ this.onSubmitTx }>
+                  <FormField name="amount" ref={"amount_input"} label="Amount" placeholder="1.23456" required={ true } size="xxlarge"/>
+                  <FormField name="recipient" label="Recipient" required={ false } size="xxlarge">
+                    <TextInput ref="recipient_input" value={ this.state.sendAddressValue } onChange={ event => this.setState({ sendAddressValue: event.target.value }) } placeholder="@username / 0x1234" size="xxlarge"/>
+                  </FormField>
+                  <FormField name="message" label="Message" placeholder="Say something nice!" required={ false } size="xxlarge"/>
+                  <Media query="(min-width: 1066px)">
+                    { matches =>
+                      matches ? (
+                        <Box align="center" alignContent="center" alignSelf="center" direction="row">
+                          <Button primary type="submit" label="Send" color="accent-2"/>
+                          <Button primary margin={{ left: "small" }} type="submit" label="Make Redeemable" onClick={ () => this.setState({ shouldMakeRedeemable: true }) } color="accent-2"/>
+                          <Button ref={ this.recipient_input } margin={{ left: "small" }} label="Scan QR Code" onClick={ () => this.setState({ showQRReader: true }) }/>
+                        </Box>
+                      ) : (
+                        <Box align="center" alignContent="center" alignSelf="center" direction="row">
+                          <Button primary type="submit" label="Send" color="accent-2"/>
+                          <Button primary margin={{ left: "small" }} type="submit" label="Redeemable" onClick={ () => this.setState({ shouldMakeRedeemable: true }) } color="accent-2"/>
+                          <Button ref={ this.recipient_input } margin={{ left: "small" }} label="Scan" onClick={ () => this.setState({ showQRReader: true }) }/>
+                        </Box>
+                      )
+                    }
+                  </Media>
+                </Form>
+              </Box>
+              { this.state.showQRReader ? this.showQRReader() : null }
+            </Layer>
+          ) : (
+            <Layer
+              onEsc={ () => this.setState({ showSendModal: false }) }
+              onClickOutside={ () => this.setState({ showSendModal: false }) }
+              modal={ true }
+              responsive={ true }
+            >
+              <Box align="end" margin={{ right: "large", top: "large" }}>
+                <Close onClick={ () => this.setState({ showSendModal: false }) } cursor="pointer"/>
+              </Box>
+              <Box align="center" alignContent="center" direction="column" pad="medium">
+                <Form onSubmit={ this.onSubmitTx }>
+                  <FormField name="amount" ref={"amount_input"} label="Amount" placeholder="1.23456" required={ true } size="xxlarge"/>
+                  <FormField name="recipient" label="Recipient" required={ false } size="xxlarge">
+                    <TextInput ref="recipient_input" value={ this.state.sendAddressValue } onChange={ event => this.setState({ sendAddressValue: event.target.value }) } placeholder="@username / 0x1234" size="xxlarge"/>
+                  </FormField>
+                  <FormField name="message" label="Message" placeholder="Say something nice!" required={ false } size="xxlarge"/>
+                  <Media query="(min-width: 1066px)">
+                    { matches =>
+                      matches ? (
+                        <Box align="center" alignContent="center" alignSelf="center" direction="row">
+                          <Button primary type="submit" label="Send" color="accent-2"/>
+                          <Button primary margin={{ left: "small" }} type="submit" label="Make Redeemable" onClick={ () => this.setState({ shouldMakeRedeemable: true }) } color="accent-2"/>
+                          <Button ref={ this.recipient_input } margin={{ left: "small" }} label="Scan QR Code" onClick={ () => this.setState({ showQRReader: true }) }/>
+                        </Box>
+                      ) : (
+                        <Box align="center" alignContent="center" alignSelf="center" direction="row">
+                          <Button primary type="submit" label="Send" color="accent-2"/>
+                          <Button primary margin={{ left: "small" }} type="submit" label="Redeemable" onClick={ () => this.setState({ shouldMakeRedeemable: true }) } color="accent-2"/>
+                          <Button ref={ this.recipient_input } margin={{ left: "small" }} label="Scan" onClick={ () => this.setState({ showQRReader: true }) }/>
+                        </Box>
+                      )
+                    }
+                  </Media>
+                </Form>
+              </Box>
+              { this.state.showQRReader ? this.showQRReader() : null }
+            </Layer>
+          )
+        }
+      </Media>
     )
   }
 
@@ -562,7 +618,7 @@ class App extends Component {
         type = "receive"; // Set type
       } else if (this.state.transactions[x].recipient !== this.state.address) { // Check is sending
         type = "send"; // Set send
-      } else if (this.state.transactions[x].recipient === this.state.address) { // Check is receiving
+      } else if (this.state.transactions[x].recipient === this.state.address && this.state.transactions[x].sender !== this.state.address) { // Check is receiving
         type = "receive"; // Set receive
       }
 
