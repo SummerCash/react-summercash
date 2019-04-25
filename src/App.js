@@ -300,7 +300,7 @@ class App extends Component {
               modal={ true }
               responsive={ true }
             >
-              <Box align="end" margin={{ right: "large", top: "large" }}>
+              <Box align="end" margin={{ right: "large", top: "medium" }}>
                 <Close onClick={ () => this.setState({ showSendModal: false }) } cursor="pointer"/>
               </Box>
               <Box align="center" alignContent="center" direction="column" pad="medium">
@@ -535,7 +535,7 @@ class App extends Component {
     }
 
     if (!formData.recipient) { // Check needs manual set
-      formData.recipient = this.refs.recipient_input.value; // Get address
+      formData.recipient = this.state.sendAddressValue; // Get address
     }
 
     formData.recipient = formData.recipient.replace("@", ""); // Remove @ symbol
