@@ -594,7 +594,7 @@ class App extends Component {
   }
 
   // fetchTransactions fetches all account txs.
-  fetchTransactions() {
+  async fetchTransactions() {
     this.fetchBalance(this.state.username); // Fetch balance
 
     const cookies = new Cookies(); // Initialize cookies
@@ -606,7 +606,7 @@ class App extends Component {
           "Content-Type": "application/json",
         },
       }).then((response) => response.json())
-      .then(response => {
+      .then(async response => {
         if (response.error) { // Check for errors
           if (response.error.includes("no account exists with the given username")) { // Check shouldn't be logged in
             cookies.remove("username"); // Remove account details
@@ -626,36 +626,31 @@ class App extends Component {
         } else {
           var i; // Init iterator
 
-          for (i = 0; i < response.transactions.length; i++) { // Iterate through txs
-            switch (response.transactions[i].sender) {
-              case this.state.address:
-                fetch("/api/addresses/resolve/"+response.transactions[i].recipient, {
-                  method: "GET",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                }).then((addrResponse) => addrResponse.json())
-                .then(addrResponse => {
-                  if (!addrResponse.error && response.transactions[i] !== undefined) { // Check no errors
-                    response.transactions[i].sender = addrResponse.username; // Set resolved username
-                  }
-                })
-
-                break; // Break
-              default:
-                fetch("/api/addresses/resolve/"+response.transactions[i].sender, {
-                  method: "GET",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                }).then((addrResponse) => addrResponse.json())
-                .then(addrResponse => {
-                  if (!addrResponse.error && response.transactions[i] !== undefined) { // Check no errors
-                    response.transactions[i].sender = addrResponse.username; // Set username
-                  }
-                })
-            }
+          for (i = 0; i < response.transactions.length - 1; i++) { // Iterate through txs
+            await fetch("/api/addresses/resolve/"+response.transactions[i].recipient, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }).then((addrResponse) => addrResponse.json())
+            .then(addrResponse => {
+              if (!addrResponse.error === undefined && response.transactions[i] !== undefined) { // Check no errors
+                response.transactions[i].recipient = addrResponse.username; // Set resolved username
+              }
+            })
+            .then(fetch("/api/addresses/resolve/"+response.transactions[i].sender, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }).then((addrResponse) => addrResponse.json())
+            .then(addrResponse => {
+              if (addrResponse.error === undefined && response.transactions[i] !== undefined) { // Check no errors
+                response.transactions[i].sender = addrResponse.username; // Set username
+              }
+            }));
           }
+
           this.setState({ transactions: response.transactions }); // Set state txs
         }
       });
