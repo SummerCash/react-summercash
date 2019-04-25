@@ -680,7 +680,7 @@ class App extends Component {
         payload = atob(this.state.transactions[x].payload); // Decode payload
       }
 
-      var max = 12; // Get max substring
+      var max = 13; // Get max substring
 
       if (window.innerWidth < 424) { // Check width less than 424px
         max = 7; // Set max substring
