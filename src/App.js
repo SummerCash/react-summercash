@@ -406,6 +406,7 @@ class App extends Component {
         </Box>
         <div id="print-contents">
           <Box align="center" alignContent="center" direction="column">
+            <Heading size="small" margin={{ top: "none" }}>Scan in SummerCash Wallet</Heading>
             <QRCode value={ this.state.redeemableAccount.username+"_"+this.state.redeemableAccount.password } size={ 512 }/>
             <Paragraph responsive={ true }>{ this.state.lastPayload }</Paragraph>
           </Box>
@@ -420,7 +421,7 @@ class App extends Component {
 
     domtoimage.toJpeg(node, { bgcolor: "white" }) // Generate PNG image
     .then((dataUrl) => {
-        print({ printable: dataUrl, type: "image", imageStyle: "width:70%; height:70%;transform:rotate(-90deg);margin-top:-2%;"}); // Print
+        print({ printable: dataUrl, type: "image", imageStyle: "width:70%; height:70%;transform:rotate(-90deg);margin-top:-5%;margin-left: 10%;"}); // Print
     })
     .catch(function (error) {
         console.error('oops, something went wrong!', error); // Log error
