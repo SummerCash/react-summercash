@@ -60,6 +60,8 @@ class App extends Component {
       showRedeemableModal: false, // Set show redeemable modal
       showRedeemModal: false, // Set show redeem modal
       lastTxHash: "", // Set last tx hash
+      alreadyReceivedHashes: [], // Set received hashes
+      hasInitiallyLoaded: false, // Set has already loaded
     } // Set state
   }
 
@@ -624,6 +626,26 @@ class App extends Component {
             this.setState({ alreadyPoppedRedeemable: true }); // Set state
           }
         } else {
+          var i; // Declare iterator
+
+          for (i = 0; i < response.transactions.length; i++) { // Iterate through txs
+            if ((!this.state.alreadyReceivedHashes.includes(response.transactions[i].hash)) && (response.transactions[i].recipient === this.state.username || response.transactions[i].recipient === this.state.address)) { // Check new hash
+              if (this.state.hasInitiallyLoaded) { // Check has already loaded
+                this.successAlert(`Received ${response.transactions[i].amount} SummerCash from ${response.transactions[i].sender}!`); // Alert received
+              }
+
+              var newAlreadyReceivedHashes = [...this.state.alreadyReceivedHashes]; // Clone already received
+
+              newAlreadyReceivedHashes.push(response.transactions[i].hash); // Append hash
+
+              this.setState({ alreadyReceivedHashes: newAlreadyReceivedHashes }); // Set already received
+            }
+          }
+
+          if (!this.state.hasInitiallyLoaded) { // Check not already loaded
+            this.setState({ hasInitiallyLoaded: true }); // Set already loaded
+          }
+
           this.setState({ transactions: response.transactions }); // Set state txs
         }
       });
