@@ -1,7 +1,18 @@
 body > #root > div {
   height: 98vh;
+  margin-left: 0;
 }
 
 .blocky {
   border-radius: 50%;
+}
+
+.mobile-qr {
+  overflow: none;
+  margin-top: -10%;
+  z-index: -1;
+}
+
+.mobile-qr section {
+  height: 120%;
 }

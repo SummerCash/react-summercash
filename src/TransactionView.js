@@ -1,42 +1,105 @@
 import React, { Component } from "react";
 import { theme } from './SummerTechTheme'; // Import SummerTech theme
-import { Grommet, Paragraph, Box } from 'grommet';
+import { Grommet, Paragraph, Grid } from 'grommet';
 import { SubtractCircle, AddCircle } from 'grommet-icons'; // Import grommet icons
+import Media from "react-media";
 
 export default class TransactionView extends Component {
   render() {
     if (this.props.type === "send") { // Check is send
       return (
         <Grommet theme={ theme }>
-          <Box direction="row-responsive" align="center" margin={{ left: this.props.margin, top: "none" }} gap={ this.props.gap }>
-            <SubtractCircle/>
-            <Paragraph responsive={ true }>
-              { this.props.timestamp }
-            </Paragraph>
-            <Paragraph responsive={ true }>
-              Sent { this.props.amount } SMC
-            </Paragraph>
-            <Paragraph responsive={ true } alignSelf="end" textAlign="end">
-              { this.props.hash }
-            </Paragraph>
-          </Box>
+          <Media query="(min-width:626px)">
+            { matches => 
+              matches ? (
+                <Grid rows={["xxsmall"]} columns={[ "xxsmall", "16%", "medium", "medium" ]} align="center" margin={{ top: this.props.margin }}>
+                  <SubtractCircle/>
+                  <Paragraph responsive={ true } textAlign="start">
+                    { this.props.timestamp }
+                  </Paragraph>
+                  <Paragraph responsive={ true } textAlign="start" margin={{ right: this.props.gap }}>
+                    Sent { this.props.amount } SMC to { this.props.recipient }
+                  </Paragraph>
+                  <Paragraph responsive={ true } textAlign="start">
+                    { this.props.message }
+                  </Paragraph>
+                </Grid>
+              ) : (
+                <Grid rows={["xxsmall"]} columns={[ "xxsmall", "10%", "medium", "small" ]} align="center" fill="horizontal" margin={{ top: this.props.margin }}>
+                  <SubtractCircle/>
+                  <Paragraph responsive={ true } textAlign="start">
+                    { this.props.shortTimestamp }
+                  </Paragraph>
+                  <Media query="(min-width:432px)">
+                    { matches =>
+                      matches ? (
+                        <Paragraph responsive={ true } textAlign="center">
+                          { this.props.amount } SMC to { this.props.recipient }
+                        </Paragraph>
+                      ) : (
+                        <Paragraph responsive={ true } textAlign="center" margin={{ left: "-5%" }}>
+                          { this.props.amount } SMC to { this.props.recipient }
+                        </Paragraph>
+                      )
+                    }
+                  </Media>
+                  <Media query="(min-width:530px)">
+                    <Paragraph responsive={ true } textAlign="start" margin={{ left: "-20%" }}>
+                      { this.props.message }
+                    </Paragraph>
+                  </Media>
+                </Grid>
+              )
+            }
+          </Media>
         </Grommet>
       );
     } else {
       return (
         <Grommet theme={ theme }>
-          <Box direction="row-responsive" align="center" margin={{ left: this.props.margin, top: "none" }} gap={ this.props.gap }>
-            <AddCircle/>
-            <Paragraph responsive={ true }>
-              { this.props.timestamp }
-            </Paragraph>
-            <Paragraph responsive={ true }>
-              Received { this.props.amount } SMC
-            </Paragraph>
-            <Paragraph responsive={ true } alignSelf="end" textAlign="end">
-              { this.props.hash }
-            </Paragraph>
-          </Box>
+          <Media query="(min-width:626px)">
+            { matches => 
+              matches ? (
+                <Grid rows={["xxsmall"]} columns={[ "xxsmall", "16%", "medium", "medium" ]} align="center" margin={{ top: this.props.margin }}>
+                  <AddCircle/>
+                  <Paragraph responsive={ true } textAlign="start">
+                    { this.props.timestamp }
+                  </Paragraph>
+                  <Paragraph responsive={ true } textAlign="start" margin={{ right: this.props.gap }}>
+                    Received { this.props.amount } SMC from { this.props.sender }
+                  </Paragraph>
+                  <Paragraph responsive={ true } textAlign="start">
+                    { this.props.message }
+                  </Paragraph>
+                </Grid>
+              ) : (
+                <Grid rows={["xxsmall"]} columns={[ "xxsmall", "10%", "medium", "small" ]} align="center" fill="horizontal" margin={{ top: this.props.margin }}>
+                  <AddCircle/>
+                  <Paragraph responsive={ true } textAlign="start">
+                    { this.props.shortTimestamp }
+                  </Paragraph>
+                  <Media query="(min-width:432px)">
+                    { matches =>
+                      matches ? (
+                        <Paragraph responsive={ true } textAlign="center">
+                          { this.props.amount } SMC from { this.props.sender }
+                        </Paragraph>
+                      ) : (
+                        <Paragraph responsive={ true } textAlign="center" margin={{ left: "-5%" }}>
+                          { this.props.amount } SMC from { this.props.sender }
+                        </Paragraph>
+                      )
+                    }
+                  </Media>
+                  <Media query="(min-width:530px)">
+                    <Paragraph responsive={ true } textAlign="start" margin={{ left: "-20%" }}>
+                      { this.props.message }
+                    </Paragraph>
+                  </Media>
+                </Grid>
+              )
+            }
+          </Media>
         </Grommet>
       );
     }
