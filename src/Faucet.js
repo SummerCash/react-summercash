@@ -35,12 +35,13 @@ export default class Faucet extends Component {
           <Heading margin={{ bottom: "none" }}>Faucet</Heading>
           <Heading size="xlarge" margin={{ top: "small", bottom: "none" }}>{ this.state.timeUntilClaim }</Heading>
           <Paragraph size="large" margin={{ top: "small" }}>Time Until Next Claim</Paragraph>
-          <Button responsive={ true } size="xlarge" primary color="accent-2" label={ this.getClaimLabelText() }/>
+          <Button responsive={ true } size="xlarge" primary color="accent-2" label={ this.getClaimLabelText() } onClick={ () => this.makeClaim() }/>
         </Box>
       </Grommet>
     )
   }
 
+  // getTimeUntilClaim gets the amount of time until the next available claim.
   async getTimeUntilClaim() {
     const cookies = new Cookies(); // Initialize cookies
 
@@ -62,6 +63,7 @@ export default class Faucet extends Component {
     });
   }
 
+  // getClaimAmount updates the local state with the latest claim amount.
   async getClaimAmount() {
     const cookies = new Cookies(); // Initialize cookies
 
@@ -81,6 +83,35 @@ export default class Faucet extends Component {
 
       this.setState({ nextClaimAmount: response.amount }); // Set claim amount
     });
+  }
+
+  // makeClaim makes a new claim.
+  async makeClaim() {
+    const cookies = new Cookies(); // Initialize cookies
+
+    await fetch("/api/faucet/Claim", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: cookies.get("username"), // Set username
+        amount: this.state.nextClaimAmount.toString(), // Set amount
+      }), // Set body
+    })
+    .then((response) => response.json())
+    .then(response => {
+      if (response.error) { // Check for errors
+        this.errorAlert(response.error); // Alert
+
+        return; // Return
+      }
+
+      this.successAlert(`Claimed ${ this.state.nextClaimAmount } SummerCash!`); // Alert successful claim
+
+      this.getClaimAmount(); // Refresh claim amount
+      this.getTimeUntilClaim(); // Refresh time until claim
+    })
   }
 
   // getClaimLabel gets the claim label text.
