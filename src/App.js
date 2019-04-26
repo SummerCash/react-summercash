@@ -170,7 +170,7 @@ class App extends Component {
         </Media>
         { this.state.showAddressModal ? this.showAddressModal() : null }
         { this.state.showSendModal ? this.showSendModal() : null }
-        { this.state.showRedeemableModal ? this.showRedeemable() : null }
+        { this.state.showRedeemableModal ? this.showRedeemable(512, 535, true) : null }
         { this.state.showRedeemModal ? this.showRedeem() : null }
       </Grommet>
     );
@@ -457,12 +457,12 @@ class App extends Component {
     )
   }
 
-  showRedeemable() {
+  showRedeemable(startingSize, startingMediaSize, isStart) {
     return (
       <Layer
         onEsc={ () => this.setState({ showRedeemableModal: false, showSendModal: false, showQRReader: false, sendAddressValue: "", shouldMakeRedeemable: false, lastPayload: "" }) }
         onClickOutside={ () => this.setState({ showRedeemableModal: false, showSendModal: false, showQRReader: false, sendAddressValue: "", shouldMakeRedeemable: false, lastPayload: "" }) }
-        modal={ true }
+        modal={ isStart }
         responsive={ false }
       >
         <Box margin={{ right: "medium", top: "small", bottom: "small" }} alignContent="end" align="end">
@@ -471,13 +471,25 @@ class App extends Component {
         <div id="print-contents">
           <Box align="center" alignContent="center" direction="column">
             <Heading size="small" margin={{ top: "none" }}>Scan in SummerCash Wallet</Heading>
-            <QRCode value={ this.state.redeemableAccount.username+"_"+this.state.redeemableAccount.password } size={ 512 }/>
+            <Media query={this.getQuery(startingMediaSize)}>
+              { matches =>
+                matches ? (
+                  <QRCode value={ this.state.redeemableAccount.username+"_"+this.state.redeemableAccount.password } size={ startingSize }/>
+                ) : (
+                  this.showRedeemable(startingSize - 32, startingMediaSize - 32, false)
+                )
+              }
+            </Media>
             <Paragraph responsive={ true }>{ this.state.lastPayload }</Paragraph>
           </Box>
         </div>
         <Button primary onClick={ () => this.printContents() } label="Print" margin={{ top: "none", bottom: "small", left: "small", right: "small" }} color="accent-2" size="xlarge"/>
       </Layer>
     )
+  }
+
+  getQuery(size) {
+    return `(min-width:${size}px)`;
   }
 
   printContents() {
