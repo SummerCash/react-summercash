@@ -13,6 +13,12 @@ export default class Faucet extends Component {
   constructor(props) {
     super(props); // Super
 
+    const cookies = new Cookies(); // Initialize cookies
+
+    if (cookies.get("username") === undefined || cookies.get("username") === "not-signed-in") { // Check not signed in
+      this.props.history.push("/"); // Go to home
+    }
+
     this.state = {
       timeUntilClaim: "", // Set time until claim
       nextClaimAmount: 0, // Set claim amount
