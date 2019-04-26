@@ -639,7 +639,7 @@ class App extends Component {
     for (x = 0; x < this.state.transactions.length; x++) { // Iterate through txs
       var type = "send"; // Init type buffer
 
-      if (x > 0 && this.state.transactions[x-1].hash === this.state.transactions[x].hash && this.state.transactions[x].recipient === this.state.address && this.state.transactions[x].sender === this.state.address) { // Check not out of bounds
+      if (x > 0 && this.state.transactions[x-1].hash === this.state.transactions[x].hash && (this.state.transactions[x].recipient === this.state.address || this.state.transactions[x].recipient === this.state.username) && (this.state.transactions[x].sender === this.state.address || this.state.transactions[x].sender === this.state.username)) { // Check not out of bounds
         type = "receive"; // Set type
       } else if (this.state.transactions[x].recipient !== this.state.address && this.state.transactions[x].recipient !== this.state.username) { // Check is sending
         type = "send"; // Set send
