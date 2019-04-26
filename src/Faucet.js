@@ -4,20 +4,15 @@ import { Grommet, Box, Heading, Paragraph, Button } from 'grommet'; // Import gr
 import { theme } from './SummerTechTheme'; // Import SummerTech theme
 import { ToastContainer, toast } from 'react-toastify'; // Import toast notification
 import Cookies from 'universal-cookie'; // Import cookies
+import { withRouter } from 'react-router-dom'; // Import router
 
-export default class Faucet extends Component {
+class Faucet extends Component {
   errorAlert = (message) => toast.error(message); // Alert
   infoAlert = (message) => toast.info(message); // Alert
   successAlert = (message) => toast.success(message); // Alert
 
   constructor(props) {
     super(props); // Super
-
-    const cookies = new Cookies(); // Initialize cookies
-
-    if (cookies.get("username") === undefined || cookies.get("username") === "not-signed-in") { // Check not signed in
-      this.props.history.push("/"); // Go to home
-    }
 
     this.state = {
       timeUntilClaim: "", // Set time until claim
@@ -26,6 +21,12 @@ export default class Faucet extends Component {
   }
 
   componentDidMount() {
+    const cookies = new Cookies(); // Initialize cookies
+
+    if (cookies.get("username") === undefined || cookies.get("username") === "not-signed-in") { // Check not signed in
+      this.props.history.push("/"); // Go to home
+    }
+
     this.getClaimAmount(); // Get claim amount
 
     window.setInterval(() => {
@@ -125,3 +126,5 @@ export default class Faucet extends Component {
     return `Claim ${ this.state.nextClaimAmount } SummerCash`; // Return text
   }
 }
+
+export default withRouter(Faucet); // Force use router
