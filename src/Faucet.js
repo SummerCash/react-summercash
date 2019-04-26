@@ -37,7 +37,9 @@ class Faucet extends Component {
     this.getClaimAmount(); // Get claim amount
 
     window.setInterval(() => {
-      this.getTimeUntilClaim(); // Refresh claim time
+      if (this.state.username !== undefined) { // Check username defined
+        this.getTimeUntilClaim(); // Refresh claim time
+      }
     }, 1000); // Sync every second
   }
 
