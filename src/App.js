@@ -38,6 +38,7 @@ class App extends Component {
 
     this.recipient_input = React.createRef(); // Create ref
     this.printTriggerRef = React.createRef(); // Create ref
+    this.qrRef = React.createRef(); // Create ref
 
     if (cookies.get("username") !== "" && cookies.get("username") !== "not-signed-in" && cookies.get("username") !== undefined) { // Check signed in
       this.fetchBalance(cookies.get('username')); // Fetch balance
@@ -104,7 +105,7 @@ class App extends Component {
                 this.fetchTransactions(); // Fetch transactions
               }
             }) // Refresh last tx hash
-          }, 1000); // Sync every 2 seconds
+          }, 500); // Sync every 500 milliseconds
         }
       });
     }
@@ -231,45 +232,108 @@ class App extends Component {
 
   showRedeem() {
     return (
-      <Layer
-        onEsc={ () => this.setState({ showRedeemModal: false }) }
-        onClickOutside={ () => this.setState({ showRedeemModal: false }) }
-        modal={ true }
-        responsive={ false }
-      >
-        <Box margin={{ right: "medium", top: "small", bottom: "none" }} alignContent="end" align="end">
-          <Close onClick={ () => this.setState({ showRedeemModal: false }) } cursor="pointer"/>
-        </Box>
-        <Box align="center" alignContent="center" direction="column">
-          <Heading margin={{ left: "xlarge", right: "xlarge", top: "none" }} responsive={ true }>
-            Scan a code!
-          </Heading>
-        </Box>
-        <QrReader facingMode="environment" onScan={ this.handleScan } onError={ this.handleScanError }/>
-      </Layer>
+      <Media query="(min-width:588px)">
+        { matches =>
+          matches ? (
+            <Layer
+              onEsc={ () => this.setState({ showRedeemModal: false }) }
+              onClickOutside={ () => this.setState({ showRedeemModal: false }) }
+              modal={ true }
+              responsive={ false }
+            >
+              <Box margin={{ right: "medium", top: "small", bottom: "none" }} alignContent="end" align="end" responsive={ false }>
+                <Close onClick={ () => this.setState({ showRedeemModal: false }) } cursor="pointer"/>
+              </Box>
+              <Box align="center" alignContent="center" direction="column" responsive={ false }>
+                <Heading margin={{ left: "xlarge", right: "xlarge", top: "none" }} responsive={ true }>
+                  Scan a code!
+                </Heading>
+              </Box>
+              <QrReader facingMode="environment" onScan={ this.handleScan } onError={ this.handleScanError }/>
+            </Layer>
+          ) : (
+            <Layer
+              onEsc={ () => this.setState({ showRedeemModal: false }) }
+              onClickOutside={ () => this.setState({ showRedeemModal: false }) }
+              modal={ true }
+              responsive={ true }
+            >
+              <Box alignContent="end" align="end" margin={{ top: "medium", right: "medium" }} overflow={{ vertical: "hidden" }}>
+                <Close color="white" onClick={ () => this.setState({ showRedeemModal: false }) } cursor="pointer" overflow={{ vertical: "hidden" }}/>
+              </Box>
+              <QrReader facingMode="environment" onScan={ this.handleScan } onError={ this.handleScanError } showViewFinder={ false } className="mobile-qr"/>
+            </Layer>
+          )
+        }
+      </Media>
     );
   }
 
   showAddressModal() {
     return (
-      <Layer
-        onEsc={ () => this.setState({ showAddressModal: false }) }
-        onClickOutside={ () => this.setState({ showAddressModal: false }) }
-        modal={ true }
-        responsive={ false }
-      >
-        <Box margin={{ right: "medium", top: "small", bottom: "small" }} alignContent="end" align="end">
-          <Close onClick={ () => this.setState({ showAddressModal: false }) } cursor="pointer"/>
-        </Box>
-        <Box align="center" alignContent="center" direction="column">
-          <QRCode value={ this.state.address } size={ 512 }/>
-          <CopyToClipboard text={ this.state.address }>
-            <Button>
-              <Paragraph responsive={ true }>{ this.state.address }</Paragraph>
-            </Button>
-          </CopyToClipboard>
-        </Box>
-      </Layer>
+      <Media query="(min-width:544px)">
+        { matches =>
+          matches ? (
+            <Layer
+              onEsc={ () => this.setState({ showAddressModal: false }) }
+              onClickOutside={ () => this.setState({ showAddressModal: false }) }
+              modal={ true }
+              responsive={ false }
+            >
+              <Box margin={{ right: "medium", top: "small", bottom: "small" }} alignContent="end" align="end">
+                <Close onClick={ () => this.setState({ showAddressModal: false }) } cursor="pointer"/>
+              </Box>
+              <Box align="center" alignContent="center" direction="column">
+                <QRCode value={ this.state.address } size={ 512 }/>
+                <CopyToClipboard text={ this.state.address }>
+                  <Button>
+                    <Paragraph responsive={ true }>{ this.state.address }</Paragraph>
+                  </Button>
+                </CopyToClipboard>
+              </Box>
+            </Layer>
+          ) : (
+            <Media query="(min-width:355px)">
+              { matches =>
+                matches ? (
+                  <Layer
+                    onEsc={ () => this.setState({ showAddressModal: false }) }
+                    onClickOutside={ () => this.setState({ showAddressModal: false }) }
+                    modal={ true }
+                    responsive={ false }
+                  >
+                    <Box margin={{ right: "medium", top: "medium", bottom: "medium" }} alignContent="end" align="end">
+                      <Close onClick={ () => this.setState({ showAddressModal: false }) } cursor="pointer"/>
+                    </Box>
+                    <Box align="center" alignContent="center" direction="column">
+                      <QRCode value={ this.state.address } size={ 320 }/>
+                      <CopyToClipboard text={ this.state.address }>
+                        <Button>
+                          <Paragraph size="small" responsive={ true }>{ this.state.address }</Paragraph>
+                        </Button>
+                      </CopyToClipboard>
+                    </Box>
+                  </Layer>
+                ) : (
+                  <Layer
+                    onEsc={ () => this.setState({ showAddressModal: false }) }
+                    onClickOutside={ () => this.setState({ showAddressModal: false }) }
+                    modal={ true }
+                    responsive={ false }
+                  >
+                    <Box margin={{ right: "medium", top: "medium", bottom: "medium" }} alignContent="end" align="end">
+                      <Close onClick={ () => this.setState({ showAddressModal: false }) } cursor="pointer"/>
+                    </Box>
+                    <Box align="center" alignContent="center" direction="column" pad={{ bottom: "xlarge" }}>
+                      <QRCode value={ this.state.address } size={ 256 }/>
+                    </Box>
+                  </Layer>
+                )
+              }
+            </Media>
+          )
+        }
+      </Media>
     );
   }
 
