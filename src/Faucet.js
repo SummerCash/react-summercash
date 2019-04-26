@@ -14,10 +14,17 @@ class Faucet extends Component {
   constructor(props) {
     super(props); // Super
 
+    const cookies = new Cookies(); // Initialize cookies
+
     this.state = {
       timeUntilClaim: "", // Set time until claim
       nextClaimAmount: 0, // Set claim amount
+      username: cookies.get("username"), // Set username
     }; // Set state
+
+    this.getTimeUntilClaim = this.getTimeUntilClaim.bind(this); // Bind this
+    this.getClaimAmount = this.getClaimAmount.bind(this); // Bind this
+    this.makeClaim = this.makeClaim.bind(this); // Bind this
   }
 
   componentDidMount() {
@@ -42,7 +49,7 @@ class Faucet extends Component {
           <Heading margin={{ bottom: "none" }}>Faucet</Heading>
           <Heading size="xlarge" margin={{ top: "small", bottom: "none" }}>{ this.state.timeUntilClaim }</Heading>
           <Paragraph size="large" margin={{ top: "small" }}>Time Until Next Claim</Paragraph>
-          <Button responsive={ true } size="xlarge" primary color="accent-2" label={ this.getClaimLabelText() } onClick={ () => this.makeClaim() }/>
+          <Button responsive={ true } size="xlarge" primary color="accent-2" label={ this.getClaimLabelText() } onClick={ this.makeClaim }/>
         </Box>
       </Grommet>
     )
@@ -52,7 +59,7 @@ class Faucet extends Component {
   async getTimeUntilClaim() {
     const cookies = new Cookies(); // Initialize cookies
 
-    await fetch("/api/faucet/"+cookies.get("username")+"/NextClaimTime", {
+    await fetch("/api/faucet/"+this.state.username+"/NextClaimTime", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -72,9 +79,7 @@ class Faucet extends Component {
 
   // getClaimAmount updates the local state with the latest claim amount.
   async getClaimAmount() {
-    const cookies = new Cookies(); // Initialize cookies
-
-    await fetch("/api/faucet/"+cookies.get("username")+"/NextClaimAmount", {
+    await fetch("/api/faucet/"+this.state.username+"/NextClaimAmount", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -94,15 +99,13 @@ class Faucet extends Component {
 
   // makeClaim makes a new claim.
   async makeClaim() {
-    const cookies = new Cookies(); // Initialize cookies
-
     await fetch("/api/faucet/Claim", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: cookies.get("username"), // Set username
+        username: this.state.username, // Set username
         amount: this.state.nextClaimAmount.toString(), // Set amount
       }), // Set body
     })
