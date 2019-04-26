@@ -624,33 +624,6 @@ class App extends Component {
             this.setState({ alreadyPoppedRedeemable: true }); // Set state
           }
         } else {
-          var i; // Init iterator
-
-          for (i = 0; i < response.transactions.length - 1; i++) { // Iterate through txs
-            await fetch("/api/addresses/resolve/"+response.transactions[i].recipient, {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }).then((addrResponse) => addrResponse.json())
-            .then(addrResponse => {
-              if (!addrResponse.error === undefined && response.transactions[i] !== undefined) { // Check no errors
-                response.transactions[i].recipient = addrResponse.username; // Set resolved username
-              }
-            })
-            .then(fetch("/api/addresses/resolve/"+response.transactions[i].sender, {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }).then((addrResponse) => addrResponse.json())
-            .then(addrResponse => {
-              if (addrResponse.error === undefined && response.transactions[i] !== undefined) { // Check no errors
-                response.transactions[i].sender = addrResponse.username; // Set username
-              }
-            }));
-          }
-
           this.setState({ transactions: response.transactions }); // Set state txs
         }
       });
