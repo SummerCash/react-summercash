@@ -57,8 +57,6 @@ class Faucet extends Component {
 
   // getTimeUntilClaim gets the amount of time until the next available claim.
   async getTimeUntilClaim() {
-    const cookies = new Cookies(); // Initialize cookies
-
     await fetch("/api/faucet/"+this.state.username+"/NextClaimTime", {
       method: "GET",
       headers: {
