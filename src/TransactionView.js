@@ -85,7 +85,7 @@ export default class TransactionView extends Component {
                           { this.props.amount } SMC from { this.props.sender }
                         </Paragraph>
                       ) : (
-                        <Paragraph responsive={ true } textAlign="center" margin={{ left: "-5%" }}>
+                        <Paragraph responsive={ true } textAlign="center" margin={{ left: "-15%" }}>
                           { this.props.amount } SMC from { this.props.sender }
                         </Paragraph>
                       )

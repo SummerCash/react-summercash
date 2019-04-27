@@ -48,7 +48,7 @@ class SignupLogin extends Component {
             SummerCash
           </Heading>
 
-          <Paragraph responsive={ true } size="xxlarge">
+          <Paragraph responsive={ true } size="xxlarge" textAlign="center">
             Save, store, and send SummerCash.
           </Paragraph>
           
