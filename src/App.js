@@ -124,7 +124,7 @@ class App extends Component {
           <Box margin={{ right: "medium" }}>
             <Blockies seed={ this.state.address } size={ 5 } scale={ 15 } className="blocky"/>
           </Box>
-          <Box margin={{ left: "none" }}>
+          <Box margin={{ left: "small" }}>
             <Heading responsive={ true } size="medium" margin="none">
               { this.state.username }
             </Heading>
