@@ -5,6 +5,7 @@ import Cookies from 'universal-cookie'; // Import cookies
 import { withRouter } from 'react-router-dom'; // Import router
 import { ToastContainer, toast } from 'react-toastify'; // Import toast
 import 'react-toastify/dist/ReactToastify.css'; // Import toast styling
+import Media from 'react-media';
 
 class AuthForm extends Component {
   errorAlert = (message) => toast.error(message); // Alert
@@ -46,13 +47,29 @@ class AuthForm extends Component {
     return (
       <Grommet theme={ theme } full={ true }>
         <ToastContainer/>
-        <Box justify="center" align="center" fill={ true } basis="large">
+        <Box justify="center" align="center" fill={ true } responsive={ true }>
           <Form onSubmit={ this.onSubmit }>
-            <FormField name="name" label="Name" required={ true } size="xxlarge"/>
-            <FormField ref="password_input" label="Password" required={ false } value="">
-              <TextInput ref="password_text_input" type="password" name="password" label="Password" size="xxlarge"/>
-            </FormField>
-            <Button type="submit" onClick={ this.alert } primary label={ this.props.label } margin={{ top: "small" }} color="accent-2" size="large"/>
+            <Media query="(min-width:441px)">
+              { matches =>
+                matches ? (
+                  <Box>
+                    <FormField name="name" label="Name" required={ true } size="xxlarge" pad={ true }/>
+                    <FormField ref="password_input" label="Password" required={ false } value="" pad={ true }>
+                      <TextInput ref="password_text_input" type="password" name="password" label="Password" size="xxlarge"/>
+                    </FormField>
+                    <Button type="submit" onClick={ this.alert } primary label={ this.props.label } margin={{ top: "small" }} color="accent-2" size="large"/>
+                  </Box>
+                ) : (
+                  <Box>
+                    <FormField name="name" label="Name" required={ true } size="xlarge" pad={ true }/>
+                    <FormField ref="password_input" label="Password" required={ false } value="" pad={ true }>
+                      <TextInput ref="password_text_input" type="password" name="password" label="Password" size="xlarge"/>
+                    </FormField>
+                    <Button type="submit" onClick={ this.alert } primary label={ this.props.label } margin={{ top: "small" }} color="accent-2" size="large"/>
+                  </Box>
+                )
+              }
+            </Media>
           </Form>
         </Box>
       </Grommet>
