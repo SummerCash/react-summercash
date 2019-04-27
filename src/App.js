@@ -98,18 +98,18 @@ class App extends Component {
           }
         } else {
           this.setState({ transactions: response.transactions }); // Set state txs
-
-          window.setInterval(() => {
-            var oldTxHash = JSON.parse(JSON.stringify(this.state.lastTxHash)); // Get old tx hash
-
-            this.fetchLastTxHash(this.state.username)
-            .then(() => {
-              if (this.state.lastTxHash !== oldTxHash) { // Check did change
-                this.fetchTransactions(); // Fetch transactions
-              }
-            }) // Refresh last tx hash
-          }, 500); // Sync every 500 milliseconds
         }
+
+        window.setInterval(() => {
+          var oldTxHash = JSON.parse(JSON.stringify(this.state.lastTxHash)); // Get old tx hash
+
+          this.fetchLastTxHash(this.state.username)
+          .then(() => {
+            if (this.state.lastTxHash !== oldTxHash) { // Check did change
+              this.fetchTransactions(); // Fetch transactions
+            }
+          }) // Refresh last tx hash
+        }, 500); // Sync every 500 milliseconds
       });
     }
   }
