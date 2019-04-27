@@ -55,7 +55,7 @@ class AuthForm extends Component {
       <Grommet theme={ theme } full={ true }>
         <ToastContainer/>
         <Box justify="center" align="center" fill="vertical" responsive={ true }>
-          <Form onSubmit={ this.onSubmit } responsive={ true }>
+          <Form onSubmit={ this.onSubmit }>
             <FormField name="name" label="Name" required={ true } size={ size } pad={ true }/>
             <FormField ref="password_input" label="Password" required={ false } value="" pad={ true }>
               <TextInput ref="password_text_input" type="password" name="password" label="Password" size={ size }/>
