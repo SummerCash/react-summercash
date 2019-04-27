@@ -63,6 +63,7 @@ class App extends Component {
       lastTxHash: "", // Set last tx hash
       alreadyReceivedHashes: [], // Set received hashes
       hasInitiallyLoaded: false, // Set has already loaded
+      hasAlreadyScanned: false, // Set has already scanned
     } // Set state
   }
 
@@ -512,7 +513,9 @@ class App extends Component {
   }
 
   handleScan (scan) {
-    if (scan) { // Check scanned
+    if (scan && !this.state.hasAlreadyScanned) { // Check scanned
+      this.setState({ hasAlreadyScanned: true }); // Has already scanned
+
       if (!scan.includes("@") && !scan.includes("0x") && !scan.includes("_")) { // Check is not tx
         this.errorAlert("Invalid QR code (must be @username or 0x1234 address)"); // Alert
       } else if (scan.includes("@") || scan.includes("0x")) {
