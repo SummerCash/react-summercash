@@ -518,10 +518,19 @@ class App extends Component {
       } else if (scan.includes("@") || scan.includes("0x")) {
         this.setState({ showQRReader: false, sendAddressValue: scan }); // Hide reader
       } else if (scan.includes("_")) {
-        var redeemableAccount = {
-          username: scan.split("_")[0]+"_"+scan.split("_")[1],
-          password: scan.split("_")[2],
-        } // Get acc
+        var redeemableAccount; // Init buffer
+
+        if (scan.includes("_burnrate")) { // Check has burn rate
+          redeemableAccount = {
+            username: scan.split("_burnrate:")[0]+"_burnrate:",
+            password: scan.split("_")[scan.split("_").length - 1],
+          } // Set acc
+        } else {
+          redeemableAccount = {
+            username: scan.split("_")[0]+"_"+scan.split("_")[1],
+            password: scan.split("_")[2],
+          } // Get acc
+        }
 
         fetch("/api/accounts/"+redeemableAccount.username+"/authenticate", {
           method: "POST",
