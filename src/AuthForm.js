@@ -43,14 +43,22 @@ class AuthForm extends Component {
   }
 
   render() {
+    var size = "xxlarge"; // Init size
+
+    if (window.innerWidth < 432) { // Check too small
+      size = "large"; // Set size
+    } else if (window.innerWidth < 402) { // Check even smaller
+      size = "medium"; // Set size
+    }
+    
     return (
       <Grommet theme={ theme } full={ true }>
         <ToastContainer/>
-        <Box justify="center" align="center" fill={ true } responsive={ true }>
+        <Box justify="center" align="center" fill="vertical" responsive={ true }>
           <Form onSubmit={ this.onSubmit } responsive={ true }>
-            <FormField name="name" label="Name" required={ true } size="xxlarge" pad={ true }/>
+            <FormField name="name" label="Name" required={ true } size={ size } pad={ true }/>
             <FormField ref="password_input" label="Password" required={ false } value="" pad={ true }>
-              <TextInput ref="password_text_input" type="password" name="password" label="Password" size="xxlarge"/>
+              <TextInput ref="password_text_input" type="password" name="password" label="Password" size={ size }/>
             </FormField>
             <Button type="submit" onClick={ this.alert } primary label={ this.props.label } margin={{ top: "small" }} color="accent-2" size="large"/>
           </Form>
