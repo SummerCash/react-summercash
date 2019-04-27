@@ -522,7 +522,7 @@ class App extends Component {
 
         if (scan.includes("_burnrate")) { // Check has burn rate
           redeemableAccount = {
-            username: scan.split("_burnrate:")[0]+"_burnrate:",
+            username: scan.split("_burnrate:")[0]+"_burnrate:"+scan.split("_burnrate:")[1].split("_")[0],
             password: scan.split("_")[scan.split("_").length - 1],
           } // Set acc
         } else {
