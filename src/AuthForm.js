@@ -5,7 +5,6 @@ import Cookies from 'universal-cookie'; // Import cookies
 import { withRouter } from 'react-router-dom'; // Import router
 import { ToastContainer, toast } from 'react-toastify'; // Import toast
 import 'react-toastify/dist/ReactToastify.css'; // Import toast styling
-import Media from 'react-media';
 
 class AuthForm extends Component {
   errorAlert = (message) => toast.error(message); // Alert
@@ -48,27 +47,13 @@ class AuthForm extends Component {
       <Grommet theme={ theme } full={ true }>
         <ToastContainer/>
         <Box justify="center" align="center" fill={ true } responsive={ true }>
-          <Media query="(min-width:441px)">
-            { matches =>
-              matches ? (
-                <Form onSubmit={ this.onSubmit }>
-                  <FormField name="name" label="Name" required={ true } size="xxlarge" pad={ true }/>
-                  <FormField ref="password_input" label="Password" required={ false } value="" pad={ true }>
-                    <TextInput ref="password_text_input" type="password" name="password" label="Password" size="xxlarge"/>
-                  </FormField>
-                  <Button type="submit" onClick={ this.alert } primary label={ this.props.label } margin={{ top: "small" }} color="accent-2" size="large"/>
-                </Form>
-              ) : (
-                <Form onSubmit={ this.onSubmit }>
-                  <FormField name="name" label="Name" required={ true } size="xlarge" pad={ true }/>
-                  <FormField ref="password_input" label="Password" required={ false } value="" pad={ true }>
-                    <TextInput ref="password_text_input" type="password" name="password" label="Password" size="xlarge"/>
-                  </FormField>
-                  <Button type="submit" onClick={ this.alert } primary label={ this.props.label } margin={{ top: "small" }} color="accent-2" size="large"/>
-                </Form>
-              )
-            }
-          </Media>
+          <Form onSubmit={ this.onSubmit } responsive={ true }>
+            <FormField name="name" label="Name" required={ true } size="xxlarge" pad={ true }/>
+            <FormField ref="password_input" label="Password" required={ false } value="" pad={ true }>
+              <TextInput ref="password_text_input" type="password" name="password" label="Password" size="xxlarge"/>
+            </FormField>
+            <Button type="submit" onClick={ this.alert } primary label={ this.props.label } margin={{ top: "small" }} color="accent-2" size="large"/>
+          </Form>
         </Box>
       </Grommet>
     )

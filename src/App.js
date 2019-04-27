@@ -134,8 +134,8 @@ class App extends Component {
 
     return (
       <Grommet theme={ theme } full>
-        { cookieBanner }
         <ToastContainer/>
+        { cookieBanner }
         <Box margin={{ top: "large", left: "large", right: "large" }} align="center" direction="row">
           <Box margin={{ right: "medium" }}>
             <Blockies seed={ this.state.address } size={ 5 } scale={ 15 } className="blocky"/>
