@@ -17,6 +17,7 @@ import { sha3_512 } from 'js-sha3'; // Import sha3
 import domtoimage from 'dom-to-image'; // Import print
 import print from 'print-js'; // Import print
 import Media from 'react-media';
+import CookieBanner from 'react-cookie-banner'; // Import cookie banner
 
 class App extends Component {
   errorAlert = (message) => toast.error(message); // Alert
@@ -64,6 +65,7 @@ class App extends Component {
       alreadyReceivedHashes: [], // Set received hashes
       hasInitiallyLoaded: false, // Set has already loaded
       hasAlreadyScanned: false, // Set has already scanned
+      hasCookie: cookies.get("has-cookie-accept"), // Set has cookie
     } // Set state
   }
 
@@ -118,8 +120,21 @@ class App extends Component {
       return <SignupLogin /> // Render signup/login page
     }
 
+    let cookieBanner; // Init buffer
+
+    var userAgent = navigator.userAgent.toLowerCase(); // Get user agent
+
+    if (!this.state.hasCookie && userAgent.indexOf(' electron/') > -1) { // Has not accepted cookie
+      cookieBanner = <CookieBanner
+        message="We uses cookies to ensure you get the best experience on our website."
+        onAccept={() => {}}
+        cookie="has-cookie-accept"
+      />; // Set cookie banner
+    }
+
     return (
       <Grommet theme={ theme } full>
+        { cookieBanner }
         <ToastContainer/>
         <Box margin={{ top: "large", left: "large", right: "large" }} align="center" direction="row">
           <Box margin={{ right: "medium" }}>
