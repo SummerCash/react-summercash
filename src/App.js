@@ -351,6 +351,7 @@ class App extends Component {
               <Box align="center" alignContent="center" direction="column" pad="medium">
                 <Form onSubmit={ this.onSubmitTx }>
                   <FormField name="amount" ref={"amount_input"} label="Amount" placeholder="1.23456" required={ true } size="xxlarge"/>
+                  <FormField name="burn_rate" ref={"burn_input"} label="Burn Rate" placeholder="0.123456" required={ false } size="xxlarge"/>
                   <FormField name="recipient" label="Recipient" required={ false } size="xxlarge">
                     <TextInput ref="recipient_input" value={ this.state.sendAddressValue } onChange={ event => this.setState({ sendAddressValue: event.target.value }) } placeholder="@username / 0x1234" size="xxlarge"/>
                   </FormField>
@@ -420,12 +421,17 @@ class App extends Component {
     )
   }
 
-  makeRedeemableAccount() {
+  makeRedeemableAccount(burn_rate) {
     this.setState({
       redeemableAccount: null, // Reset redeemable account
     });
 
     var redeemableUsername = this.state.username+"_"+Math.random().toString(36).substring(7); // Generate redeemable username
+
+    if (burn_rate !== undefined && burn_rate && burn_rate !== 0) { // Check has burn rate
+      redeemableUsername = redeemableUsername+"_burnrate:"+burn_rate.toString(); // Add burn rate
+    }
+
     var redeemablePassword = sha3_512(Math.random().toString(36).substring(7)); // Generate redeemable password
 
     return fetch("/api/accounts/"+redeemableUsername, {
@@ -535,6 +541,10 @@ class App extends Component {
             .then((balance) => {
               redeemableBalance = balance; // Set redeemable balance
 
+              if (redeemableAccount.username.contains("_burnrate:")) { // Check has burn rate
+                redeemableBalance = parseFloat(redeemableAccount.username.split("_burnrate:")[1]); // Set redeemable balance
+              }
+
               fetch("/api/transactions/NewTransaction", {
                 method: "POST",
                 headers: {
@@ -601,7 +611,7 @@ class App extends Component {
     if (this.state.shouldMakeRedeemable) { // Check is processing elsewhere
       this.setState({ shouldMakeRedeemable: false, lastPayload: formData.message }); // Reset
 
-      this.makeRedeemableAccount()
+      this.makeRedeemableAccount(formData.burn_rate)
       .then(() => fetch("/api/transactions/NewTransaction", {
         method: "POST",
         headers: {
