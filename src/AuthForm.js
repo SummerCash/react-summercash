@@ -48,29 +48,27 @@ class AuthForm extends Component {
       <Grommet theme={ theme } full={ true }>
         <ToastContainer/>
         <Box justify="center" align="center" fill={ true } responsive={ true }>
-          <Form onSubmit={ this.onSubmit }>
-            <Media query="(min-width:441px)">
-              { matches =>
-                matches ? (
-                  <Box>
-                    <FormField name="name" label="Name" required={ true } size="xxlarge" pad={ true }/>
-                    <FormField ref="password_input" label="Password" required={ false } value="" pad={ true }>
-                      <TextInput ref="password_text_input" type="password" name="password" label="Password" size="xxlarge"/>
-                    </FormField>
-                    <Button type="submit" onClick={ this.alert } primary label={ this.props.label } margin={{ top: "small" }} color="accent-2" size="large"/>
-                  </Box>
-                ) : (
-                  <Box>
-                    <FormField name="name" label="Name" required={ true } size="xlarge" pad={ true }/>
-                    <FormField ref="password_input" label="Password" required={ false } value="" pad={ true }>
-                      <TextInput ref="password_text_input" type="password" name="password" label="Password" size="xlarge"/>
-                    </FormField>
-                    <Button type="submit" onClick={ this.alert } primary label={ this.props.label } margin={{ top: "small" }} color="accent-2" size="large"/>
-                  </Box>
-                )
-              }
-            </Media>
-          </Form>
+          <Media query="(min-width:441px)">
+            { matches =>
+              matches ? (
+                <Form onSubmit={ this.onSubmit }>
+                  <FormField name="name" label="Name" required={ true } size="xxlarge" pad={ true }/>
+                  <FormField ref="password_input" label="Password" required={ false } value="" pad={ true }>
+                    <TextInput ref="password_text_input" type="password" name="password" label="Password" size="xxlarge"/>
+                  </FormField>
+                  <Button type="submit" onClick={ this.alert } primary label={ this.props.label } margin={{ top: "small" }} color="accent-2" size="large"/>
+                </Form>
+              ) : (
+                <Form onSubmit={ this.onSubmit }>
+                  <FormField name="name" label="Name" required={ true } size="xlarge" pad={ true }/>
+                  <FormField ref="password_input" label="Password" required={ false } value="" pad={ true }>
+                    <TextInput ref="password_text_input" type="password" name="password" label="Password" size="xlarge"/>
+                  </FormField>
+                  <Button type="submit" onClick={ this.alert } primary label={ this.props.label } margin={{ top: "small" }} color="accent-2" size="large"/>
+                </Form>
+              )
+            }
+          </Media>
         </Box>
       </Grommet>
     )
