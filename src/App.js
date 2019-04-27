@@ -518,8 +518,10 @@ class App extends Component {
 
       if (!scan.includes("@") && !scan.includes("0x") && !scan.includes("_")) { // Check is not tx
         this.errorAlert("Invalid QR code (must be @username or 0x1234 address)"); // Alert
+
+        this.setState({ hasAlreadyScanned: false }); // Reset has already scanned
       } else if (scan.includes("@") || scan.includes("0x")) {
-        this.setState({ showQRReader: false, sendAddressValue: scan }); // Hide reader
+        this.setState({ showQRReader: false, sendAddressValue: scan, hasAlreadyScanned: false }); // Hide reader
       } else if (scan.includes("_")) {
         var redeemableAccount; // Init buffer
 
@@ -583,6 +585,8 @@ class App extends Component {
               })
             });
           }
+
+          this.setState({ hasAlreadyScanned: false }); // Reset has already scanned
         })
       }
     }
