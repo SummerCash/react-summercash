@@ -430,7 +430,7 @@ class App extends Component {
     var redeemableUsername = this.state.username+"_"+Math.random().toString(36).substring(7); // Generate redeemable username
 
     if (burn_rate !== undefined && burn_rate && burn_rate !== 0) { // Check has burn rate
-      redeemableUsername = this.state.username+"_burnrate:"+Math.random().toString(36).substring(7); // Add burn rate
+      redeemableUsername = this.state.username+"_"+Math.random().toString(36).substring(7)+"_burnrate:"+burn_rate; // Add burn rate
     }
 
     var redeemablePassword = sha3_512(Math.random().toString(36).substring(7)); // Generate redeemable password
