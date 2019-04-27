@@ -124,7 +124,7 @@ class App extends Component {
 
     var userAgent = navigator.userAgent.toLowerCase(); // Get user agent
 
-    if (!this.state.hasCookie && userAgent.indexOf(' electron/') > -1) { // Has not accepted cookie
+    if (!this.state.hasCookie && userAgent.indexOf(' electron/') === -1) { // Has not accepted cookie
       cookieBanner = <CookieBanner
         message="We uses cookies to ensure you get the best experience on our website."
         onAccept={() => {}}
