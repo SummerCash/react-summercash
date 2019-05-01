@@ -1,0 +1,13 @@
+localhost:443   # Your site's address
+
+root ./build
+
+rewrite {
+  regexp (^.*$)
+  to {uri} /index.html?{query}
+}
+
+ext .html   # Clean URLs
+
+# API load balancer
+proxy /api localhost:5001 localhost:5002
