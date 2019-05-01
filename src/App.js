@@ -27,6 +27,7 @@ import domtoimage from "dom-to-image"; // Import print
 import print from "print-js"; // Import print
 import Media from "react-media";
 import CookieBanner from "react-cookie-banner"; // Import cookie banner
+import https from "https"; // Import https
 
 class App extends Component {
   errorAlert = message => toast.error(message); // Alert
@@ -79,7 +80,10 @@ class App extends Component {
       alreadyReceivedHashes: [], // Set received hashes
       hasInitiallyLoaded: false, // Set has already loaded
       hasAlreadyScanned: false, // Set has already scanned
-      hasCookie: cookies.get("has-cookie-accept") // Set has cookie
+      hasCookie: cookies.get("has-cookie-accept"), // Set has cookie
+      apiAgent: new https.Agent({
+        rejectUnauthorized: false // Accept self-signed cert
+      })
     }; // Set state
   }
 
