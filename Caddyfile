@@ -1,10 +1,9 @@
-localhost:4040
+0.0.0.0:443
 
 root ./build
 
 rewrite {
-  regexp (^.*$)
-  to {uri} /index.html?{query}
+  to {path} index.html
 }
 
 ext .html
