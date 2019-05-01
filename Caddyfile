@@ -1,6 +1,8 @@
 # Listen on all interfaces
 0.0.0.0:443
 
+tls off
+
 # Build
 root ./build
 
