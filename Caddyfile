@@ -1,4 +1,4 @@
-localhost:443   # Your site's address
+localhost:443
 
 root ./build
 
@@ -7,7 +7,7 @@ rewrite {
   to {uri} /index.html?{query}
 }
 
-ext .html   # Clean URLs
+ext .html
 
 # API load balancer
-proxy /api localhost:5001 localhost:5002
+proxy /api https://localhost:3033/api
