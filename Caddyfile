@@ -1,12 +1,8 @@
+# Listen on all interfaces
 0.0.0.0:443
 
+# Build
 root ./build
 
-rewrite {
-  to {path} index.html
-}
-
-ext .html
-
-# API load balancer
+# API Proxy
 proxy /api https://localhost:3033/api
