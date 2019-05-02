@@ -1,9 +1,5 @@
 summer.cash
 
-tls {
-  dns cloudflare
-}
-
 # Build
 root ./build
 
