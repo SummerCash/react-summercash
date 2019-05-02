@@ -92,12 +92,17 @@ class App extends Component {
       cookies.get("username") !== undefined
     ) {
       // Check signed in
-      fetch("/api/accounts/" + cookies.get("username") + "/transactions", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
+      fetch(
+        "https://localhost:3033/api/accounts/" +
+          cookies.get("username") +
+          "/transactions",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
+          }
         }
-      })
+      )
         .then(response => response.json())
         .then(response => {
           if (response.error) {
@@ -302,12 +307,15 @@ class App extends Component {
   }
 
   fetchBalancePure(username) {
-    return fetch("/api/accounts/" + username + "/balance", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
+    return fetch(
+      "https://localhost:3033/api/accounts/" + username + "/balance",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
       }
-    })
+    )
       .then(response => response.json())
       .then(response => {
         var balance = 0; // Init balance buffer
@@ -324,12 +332,15 @@ class App extends Component {
   }
 
   fetchLastTxHash(username) {
-    return fetch("/api/accounts/" + username + "/lastHash", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
+    return fetch(
+      "https://localhost:3033/api/accounts/" + username + "/lastHash",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
       }
-    })
+    )
       .then(response => response.json())
       .then(response => {
         if (!response.error) {
@@ -339,7 +350,7 @@ class App extends Component {
   }
 
   fetchBalance(username) {
-    fetch("/api/accounts/" + username + "/balance", {
+    fetch("https://localhost:3033/api/accounts/" + username + "/balance", {
       method: "GET",
       headers: {
         "Content-Type": "application/json"
@@ -851,7 +862,7 @@ class App extends Component {
         .substring(7)
     ); // Generate redeemable password
 
-    return fetch("/api/accounts/" + redeemableUsername, {
+    return fetch("https://localhost:3033/api/accounts/" + redeemableUsername, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -1035,15 +1046,20 @@ class App extends Component {
           }; // Get acc
         }
 
-        fetch("/api/accounts/" + redeemableAccount.username + "/authenticate", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            password: redeemableAccount.password
-          })
-        })
+        fetch(
+          "https://localhost:3033/api/accounts/" +
+            redeemableAccount.username +
+            "/authenticate",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              password: redeemableAccount.password
+            })
+          }
+        )
           .then(response => response.json())
           .then(response => {
             if (response.error) {
@@ -1063,18 +1079,21 @@ class App extends Component {
                     ); // Set redeemable balance
                   }
 
-                  fetch("/api/transactions/NewTransaction", {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                      username: redeemableAccount.username, // Set username
-                      password: redeemableAccount.password, // Set password
-                      recipient: this.state.address, // Set username
-                      amount: redeemableBalance // Send entire balance
-                    })
-                  })
+                  fetch(
+                    "https://localhost:3033/api/transactions/NewTransaction",
+                    {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json"
+                      },
+                      body: JSON.stringify({
+                        username: redeemableAccount.username, // Set username
+                        password: redeemableAccount.password, // Set password
+                        recipient: this.state.address, // Set username
+                        amount: redeemableBalance // Send entire balance
+                      })
+                    }
+                  )
                     .then(response => response.json())
                     .then(response => {
                       if (response.error) {
@@ -1128,7 +1147,7 @@ class App extends Component {
 
       this.makeRedeemableAccount(formData.burn_rate)
         .then(() =>
-          fetch("/api/transactions/NewTransaction", {
+          fetch("https://localhost:3033/api/transactions/NewTransaction", {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
@@ -1176,7 +1195,7 @@ class App extends Component {
       formData.message = ""; // Prevent undefined
     }
 
-    fetch("/api/transactions/NewTransaction", {
+    fetch("https://localhost:3033/api/transactions/NewTransaction", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -1220,12 +1239,17 @@ class App extends Component {
       cookies.get("username") !== undefined
     ) {
       // Check signed in
-      fetch("/api/accounts/" + cookies.get("username") + "/transactions", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
+      fetch(
+        "https://localhost:3033/api/accounts/" +
+          cookies.get("username") +
+          "/transactions",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
+          }
         }
-      })
+      )
         .then(response => response.json())
         .then(async response => {
           if (response.error) {
