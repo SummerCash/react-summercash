@@ -76,7 +76,7 @@ class Faucet extends Component {
   // getTimeUntilClaim gets the amount of time until the next available claim.
   async getTimeUntilClaim() {
     await fetch(
-      "https://summer.cash:2053/api/faucet/" +
+      "https://localhost:2053/api/faucet/" +
         this.state.username +
         "/NextClaimTime",
       {
@@ -102,7 +102,7 @@ class Faucet extends Component {
   // getClaimAmount updates the local state with the latest claim amount.
   async getClaimAmount() {
     await fetch(
-      "https://summer.cash:2053/api/faucet/" +
+      "https://localhost:2053/api/faucet/" +
         this.state.username +
         "/NextClaimAmount",
       {
@@ -127,7 +127,7 @@ class Faucet extends Component {
 
   // makeClaim makes a new claim.
   async makeClaim() {
-    await fetch("https://summer.cash:2053/api/faucet/Claim", {
+    await fetch("https://localhost:2053/api/faucet/Claim", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
