@@ -19,7 +19,7 @@ class SignupLogin extends Component {
     ) {
       // Check already signed in
       fetch(
-        "https://summer.cash:2053/api/accounts/" +
+        "https://localhost:2053/api/accounts/" +
           cookies.get("username") +
           "/authenticate",
         {
