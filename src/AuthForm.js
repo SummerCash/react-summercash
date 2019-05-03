@@ -21,7 +21,7 @@ class AuthForm extends Component {
     ) {
       // Check already signed in
       fetch(
-        "https://localhost:2053/api/accounts/" +
+        "https://summer.cash:2053/api/accounts/" +
           cookies.get("username") +
           "/authenticate",
         {
@@ -123,7 +123,7 @@ class AuthForm extends Component {
 
   // onSubmitCreate is the onSubmit event for a Sign Up form.
   onSubmitCreate(formData) {
-    fetch("https://localhost:2053/api/accounts/" + formData.name, {
+    fetch("https://summer.cash:2053/api/accounts/" + formData.name, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -158,7 +158,9 @@ class AuthForm extends Component {
   // onSubmitAuth is the onSubmit event for a Log In form.
   onSubmitAuth(formData) {
     fetch(
-      "https://localhost:2053/api/accounts/" + formData.name + "/authenticate",
+      "https://summer.cash:2053/api/accounts/" +
+        formData.name +
+        "/authenticate",
       {
         method: "POST",
         headers: {
