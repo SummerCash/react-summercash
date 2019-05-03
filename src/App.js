@@ -100,7 +100,8 @@ class App extends Component {
           method: "GET",
           headers: {
             "Content-Type": "application/json"
-          }
+          },
+          mode: "cors"
         }
       )
         .then(response => response.json())
@@ -313,7 +314,8 @@ class App extends Component {
         method: "GET",
         headers: {
           "Content-Type": "application/json"
-        }
+        },
+        mode: "cors"
       }
     )
       .then(response => response.json())
@@ -338,7 +340,8 @@ class App extends Component {
         method: "GET",
         headers: {
           "Content-Type": "application/json"
-        }
+        },
+        mode: "cors"
       }
     )
       .then(response => response.json())
@@ -869,6 +872,7 @@ class App extends Component {
         headers: {
           "Content-Type": "application/json"
         },
+        mode: "cors",
         body: JSON.stringify({
           password: redeemablePassword // Set password
         })
@@ -1250,7 +1254,8 @@ class App extends Component {
           method: "GET",
           headers: {
             "Content-Type": "application/json"
-          }
+          },
+          mode: "cors"
         }
       )
         .then(response => response.json())

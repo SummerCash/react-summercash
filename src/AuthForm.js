@@ -29,6 +29,7 @@ class AuthForm extends Component {
           headers: {
             "Content-Type": "application/json"
           },
+          mode: "cors",
           body: JSON.stringify({
             password: cookies.get("password")
           })
@@ -166,6 +167,7 @@ class AuthForm extends Component {
         headers: {
           "Content-Type": "application/json"
         },
+        mode: "cors",
         body: JSON.stringify({
           password: formData.password
         })
