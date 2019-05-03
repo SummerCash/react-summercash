@@ -83,8 +83,7 @@ class Faucet extends Component {
         method: "GET",
         headers: {
           "Content-Type": "application/json"
-        },
-        mode: "cors"
+        }
       }
     )
       .then(response => response.json())
@@ -110,8 +109,7 @@ class Faucet extends Component {
         method: "GET",
         headers: {
           "Content-Type": "application/json"
-        },
-        mode: "cors"
+        }
       }
     )
       .then(response => response.json())
