@@ -24,7 +24,7 @@ const routing = (
           className="drag"
           style={{
             width: "100%",
-            height: "4%",
+            height: "10%",
             alignContent: "center",
             alignItems: "center",
             alignSelf: "center",
