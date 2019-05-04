@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import { routerReducer } from "react-router-redux";
 import { Route, BrowserRouter as Router } from "react-router-dom";
 import Faucet from "./Faucet";
+import ElectronTitlebarWindows from "electron-titlebar-windows"; // Import windows title bar
 
 const store = createStore(
   combineReducers({
@@ -43,6 +44,13 @@ const routing = (
     </Router>
   </Provider>
 );
+
+if (process.platform === "win32") {
+  // Check is windows
+  const titlebar = new ElectronTitlebarWindows(); // Init title bar
+
+  titlebar.appendTo(document.getElementsByClassName("drag"));
+}
 
 ReactDOM.render(routing, document.getElementById("root"));
 

@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^3.9.3",
     "dom-to-image": "^2.6.0",
+    "electron-titlebar-windows": "^3.0.0",
     "grommet": "^2.6.5",
     "grommet-icons": "^4.2.0",
     "grommet-styles": "^0.2.0",
