@@ -1292,7 +1292,7 @@ class App extends Component {
 
                   if (window.isElectron) {
                     // Check is electron
-                    window.ipcRenderrer.send(
+                    window.ipcRenderer.send(
                       "new_tx",
                       JSON.stringify(response.transactions[i])
                     ); // Send new transaction
