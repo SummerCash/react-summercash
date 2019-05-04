@@ -1290,7 +1290,7 @@ class App extends Component {
                     } SummerCash from ${response.transactions[i].sender}!`
                   ); // Alert received
 
-                  alert(process.platform);
+                  console.log(process.platform);
 
                   if (
                     process.platform === "win32" ||
