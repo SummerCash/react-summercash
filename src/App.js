@@ -93,7 +93,7 @@ class App extends Component {
     ) {
       // Check signed in
       fetch(
-        "https://summer.cash:2053/api/accounts/" +
+        "https://summer.cash/api/accounts/" +
           cookies.get("username") +
           "/transactions",
         {
@@ -307,15 +307,12 @@ class App extends Component {
   }
 
   fetchBalancePure(username) {
-    return fetch(
-      "https://summer.cash:2053/api/accounts/" + username + "/balance",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
-        }
+    return fetch("https://summer.cash/api/accounts/" + username + "/balance", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
       }
-    )
+    })
       .then(response => response.json())
       .then(response => {
         var balance = 0; // Init balance buffer
@@ -332,15 +329,12 @@ class App extends Component {
   }
 
   fetchLastTxHash(username) {
-    return fetch(
-      "https://summer.cash:2053/api/accounts/" + username + "/lastHash",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
-        }
+    return fetch("https://summer.cash/api/accounts/" + username + "/lastHash", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
       }
-    )
+    })
       .then(response => response.json())
       .then(response => {
         if (!response.error) {
@@ -350,7 +344,7 @@ class App extends Component {
   }
 
   fetchBalance(username) {
-    fetch("https://summer.cash:2053/api/accounts/" + username + "/balance", {
+    fetch("https://summer.cash/api/accounts/" + username + "/balance", {
       method: "GET",
       headers: {
         "Content-Type": "application/json"
@@ -862,18 +856,15 @@ class App extends Component {
         .substring(7)
     ); // Generate redeemable password
 
-    return fetch(
-      "https://summer.cash:2053/api/accounts/" + redeemableUsername,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          password: redeemablePassword // Set password
-        })
-      }
-    )
+    return fetch("https://summer.cash/api/accounts/" + redeemableUsername, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        password: redeemablePassword // Set password
+      })
+    })
       .then(response => response.json())
       .then(response => {
         if (response.error) {
@@ -1050,7 +1041,7 @@ class App extends Component {
         }
 
         fetch(
-          "https://summer.cash:2053/api/accounts/" +
+          "https://summer.cash/api/accounts/" +
             redeemableAccount.username +
             "/authenticate",
           {
@@ -1082,21 +1073,18 @@ class App extends Component {
                     ); // Set redeemable balance
                   }
 
-                  fetch(
-                    "https://summer.cash:2053/api/transactions/NewTransaction",
-                    {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json"
-                      },
-                      body: JSON.stringify({
-                        username: redeemableAccount.username, // Set username
-                        password: redeemableAccount.password, // Set password
-                        recipient: this.state.address, // Set username
-                        amount: redeemableBalance // Send entire balance
-                      })
-                    }
-                  )
+                  fetch("https://summer.cash/api/transactions/NewTransaction", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                      username: redeemableAccount.username, // Set username
+                      password: redeemableAccount.password, // Set password
+                      recipient: this.state.address, // Set username
+                      amount: redeemableBalance // Send entire balance
+                    })
+                  })
                     .then(response => response.json())
                     .then(response => {
                       if (response.error) {
@@ -1150,7 +1138,7 @@ class App extends Component {
 
       this.makeRedeemableAccount(formData.burn_rate)
         .then(() =>
-          fetch("https://summer.cash:2053/api/transactions/NewTransaction", {
+          fetch("https://summer.cash/api/transactions/NewTransaction", {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
@@ -1198,7 +1186,7 @@ class App extends Component {
       formData.message = ""; // Prevent undefined
     }
 
-    fetch("https://summer.cash:2053/api/transactions/NewTransaction", {
+    fetch("https://summer.cash/api/transactions/NewTransaction", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -1243,7 +1231,7 @@ class App extends Component {
     ) {
       // Check signed in
       fetch(
-        "https://summer.cash:2053/api/accounts/" +
+        "https://summer.cash/api/accounts/" +
           cookies.get("username") +
           "/transactions",
         {
