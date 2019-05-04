@@ -1296,6 +1296,7 @@ class App extends Component {
                     process.platform === "linux"
                   ) {
                     // Check is windows
+                    alert("test");
                     new window.Notification("New Transaction", {
                       body: `Received ${
                         response.transactions[i].amount
