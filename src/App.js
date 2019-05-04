@@ -1290,18 +1290,8 @@ class App extends Component {
                     } SummerCash from ${response.transactions[i].sender}!`
                   ); // Alert received
 
-                  if (
-                    process.platform === "win32" ||
-                    process.platform === "darwin" ||
-                    process.platform === "linux"
-                  ) {
-                    // Check is windows
-                    new window.Notification("New Transaction", {
-                      body: `Received ${
-                        response.transactions[i].amount
-                      } SummerCash from ${response.transactions[i].sender}!`,
-                      silent: false
-                    }); // Initialize notification
+                  if (window.isElectron) { // Check is electron
+                      window.ipcRenderrer.send('new_tx', JSON.stringify(response.transactions[i])); // Send new transaction
                   }
                 }
 
