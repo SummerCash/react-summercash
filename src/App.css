@@ -1,5 +1,4 @@
-body > #root > div {
-  height: 98vh;
+body>#root>div {
   margin-left: 0;
 }
 
