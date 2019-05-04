@@ -71,7 +71,7 @@ class AuthForm extends Component {
           <Form onSubmit={this.onSubmit}>
             <FormField
               name="name"
-              label="Name"
+              label="Username"
               required={true}
               size={size}
               pad={true}
