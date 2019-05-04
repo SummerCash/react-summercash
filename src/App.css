@@ -15,3 +15,7 @@ body>#root>div {
 .mobile-qr section {
   height: 120%;
 }
+
+.drag {
+  -webkit-app-region: drag;
+}
