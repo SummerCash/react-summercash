@@ -224,7 +224,7 @@ class App extends Component {
         <Heading
           responsive={true}
           size="medium"
-          margin={{ left: "large", top: "medium", bottom: "xsmall" }}
+          margin={{ left: "large", top: "small", bottom: "xsmall" }}
         >
           Transactions
         </Heading>
