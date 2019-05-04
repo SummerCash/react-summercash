@@ -1290,13 +1290,14 @@ class App extends Component {
                     } SummerCash from ${response.transactions[i].sender}!`
                   ); // Alert received
 
+                  alert(process.platform);
+
                   if (
                     process.platform === "win32" ||
                     process.platform === "darwin" ||
                     process.platform === "linux"
                   ) {
                     // Check is windows
-                    alert("test");
                     new window.Notification("New Transaction", {
                       body: `Received ${
                         response.transactions[i].amount
