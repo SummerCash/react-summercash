@@ -1290,8 +1290,12 @@ class App extends Component {
                     } SummerCash from ${response.transactions[i].sender}!`
                   ); // Alert received
 
-                  if (window.isElectron) { // Check is electron
-                      window.ipcRenderrer.send('new_tx', JSON.stringify(response.transactions[i])); // Send new transaction
+                  if (window.isElectron) {
+                    // Check is electron
+                    window.ipcRenderrer.send(
+                      "new_tx",
+                      JSON.stringify(response.transactions[i])
+                    ); // Send new transaction
                   }
                 }
 
