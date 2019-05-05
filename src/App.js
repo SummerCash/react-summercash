@@ -86,9 +86,12 @@ class App extends Component {
   componentDidMount() {
     const cookies = new Cookies(); // Initialize cookies
 
-    window.ipcRenderer.on("new_badge_count", (event, msg) => {
-      window.ipcRenderer.sendSync("update-badge", msg); // Set badge
-    });
+    if (window.isElectron) {
+      // Check has electron support
+      window.ipcRenderer.on("new_badge_count", (event, msg) => {
+        window.ipcRenderer.sendSync("update-badge", msg); // Set badge
+      });
+    }
 
     if (
       cookies.get("username") !== "" &&
