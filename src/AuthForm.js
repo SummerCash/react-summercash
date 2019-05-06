@@ -152,6 +152,18 @@ class AuthForm extends Component {
           cookies.set("password", formData.password); // Set password
           cookies.set("address", response.address); // Set address
 
+          if (window.isElectron) {
+            // Check is electron
+            window.ipcRenderer.send(
+              "sign_in",
+              JSON.stringify({
+                username: formData.name,
+                password: formData.password,
+                address: response.address
+              })
+            ); // Send details to main process
+          }
+
           this.setState({
             username: cookies.get("username") || "not-signed-in", // Get username cookie
             password: cookies.get("password") || "not-signed-in", // Set password
@@ -188,6 +200,18 @@ class AuthForm extends Component {
           cookies.set("username", formData.name); // Set username
           cookies.set("password", formData.password); // Set password
           cookies.set("address", response.address); // Set address
+
+          if (window.isElectron) {
+            // Check is electron
+            window.ipcRenderer.send(
+              "sign_in",
+              JSON.stringify({
+                username: formData.name,
+                password: formData.password,
+                address: response.address
+              })
+            ); // Send details to main process
+          }
 
           this.setState({
             username: cookies.get("username") || "not-signed-in", // Get username cookie
