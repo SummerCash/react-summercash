@@ -62,7 +62,7 @@ class App extends Component {
     this.state = {
       username: cookies.get("username") || "not-signed-in", // Get username cookie
       address: cookies.get("address") || "not-signed-in", // Get address cookie
-      password: cookies.get("password") || "not-signed-in", // Get password cookie
+      token: cookies.get("token") || "not-signed-in", // Get token cookie
       showSendModal: false, // Set show send modal
       showAddressModal: false, // Set show address modal
       showQRReader: false, // Set show qr modal
@@ -1166,7 +1166,7 @@ class App extends Component {
               username: this.state.username, // Set username
               recipient: this.state.redeemableAccount.username, // Set recipient
               amount: parseFloat(formData.amount), // Set amount
-              password: this.state.password, // Set password
+              password: this.state.token, // Set password
               payload: formData.message // Set message
             })
           })
@@ -1214,7 +1214,7 @@ class App extends Component {
         username: this.state.username, // Set username
         recipient: formData.recipient, // Set recipient
         amount: parseFloat(formData.amount), // Set amount
-        password: this.state.password, // Set password
+        password: this.state.token, // Set password
         payload: formData.message
       })
     })

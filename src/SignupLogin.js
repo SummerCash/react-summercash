@@ -28,7 +28,7 @@ class SignupLogin extends Component {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            password: cookies.get("password")
+            password: cookies.get("token")
           })
         }
       )
@@ -38,7 +38,7 @@ class SignupLogin extends Component {
 
           this.setState({
             username: cookies.get("username") || "not-signed-in", // Set username cookie
-            password: cookies.get("password") || "not-signed-in", // Set password
+            password: cookies.get("token") || "not-signed-in", // Set token
             address: cookies.get("address") || "not-signed-in" // Set address
           }); // Set state
         });
