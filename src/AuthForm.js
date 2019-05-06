@@ -151,7 +151,7 @@ class AuthForm extends Component {
       })
       .then(
         fetch("https://summer.cash/api/accounts/" + formData.name + "/token", {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
@@ -221,7 +221,7 @@ class AuthForm extends Component {
       })
       .then(
         fetch("https://summer.cash/api/accounts/" + formData.name + "/token", {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
