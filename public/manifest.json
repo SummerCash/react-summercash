@@ -11,8 +11,8 @@
   "theme_color": "#000000",
   "background_color": "#ffffff",
   "permissions": [
+    "https://summer.cash",
     "serial",
-    "storage",
     "videoCapture",
     "clipboard"
   ]
