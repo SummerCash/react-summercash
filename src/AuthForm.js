@@ -14,34 +14,42 @@ class AuthForm extends Component {
 
     const cookies = new Cookies(); // Initialize cookies
 
+    const username = cookies.get("username"); // Get username
+
     if (
-      cookies.get("username") !== undefined &&
-      cookies.get("username") !== "" &&
-      cookies.get("username") !== "not-signed-in"
+      username !== undefined &&
+      username !== "" &&
+      username !== "not-signed-in"
     ) {
       // Check already signed in
       fetch(
         "https://summer.cash/api/accounts/" +
           cookies.get("username") +
-          "/authenticate",
+          "/authenticatetoken",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            password: cookies.get("password")
+            token: cookies.get("token") // Set token
           })
         }
       )
         .then(response => response.json())
         .then(response => {
+          if (response.error) {
+            // Check no error
+            this.errorAlert(response.error); // Show error
+
+            return; // Return
+          }
+
           cookies.set("address", response.address); // Set address
 
           this.setState({
-            username: cookies.get("username") || "not-signed-in", // Set username cookie
-            password: cookies.get("password") || "not-signed-in", // Set password
-            address: cookies.get("address") || "not-signed-in" // Set address
+            username: username, // Set username cookie
+            address: response.address // Set address
           }); // Set state
 
           this.props.history.push("/"); // Go to app
