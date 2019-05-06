@@ -470,11 +470,17 @@ class App extends Component {
               </Box>
               <Box align="center" alignContent="center" direction="column">
                 <QRCode value={this.state.address} size={512} />
-                <Button
-                  onClick={navigator.clipboard.writeText(this.state.address)}
-                >
+                {navigator.clipboard !== undefined ? (
+                  <Button
+                    onClick={navigator.clipboard.writeText(this.state.address)}
+                  >
+                    <Paragraph responsive={true}>
+                      {this.state.address}
+                    </Paragraph>
+                  </Button>
+                ) : (
                   <Paragraph responsive={true}>{this.state.address}</Paragraph>
-                </Button>
+                )}
               </Box>
             </Layer>
           ) : (
@@ -511,15 +517,21 @@ class App extends Component {
                       direction="column"
                     >
                       <QRCode value={this.state.address} size={320} />
-                      <Button
-                        onClick={navigator.clipboard.writeText(
-                          this.state.address
-                        )}
-                      >
+                      {navigator.clipboard !== undefined ? (
+                        <Button
+                          onClick={navigator.clipboard.writeText(
+                            this.state.address
+                          )}
+                        >
+                          <Paragraph size="small" responsive={true}>
+                            {this.state.address}
+                          </Paragraph>
+                        </Button>
+                      ) : (
                         <Paragraph size="small" responsive={true}>
                           {this.state.address}
                         </Paragraph>
-                      </Button>
+                      )}
                     </Box>
                   </Layer>
                 ) : (
