@@ -198,43 +198,20 @@ class AuthForm extends Component {
 
   // onSubmitAuth is the onSubmit event for a Log In form.
   onSubmitAuth(formData) {
-    fetch(
-      "https://summer.cash/api/accounts/" + formData.name + "/authenticate",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          password: formData.password
-        })
-      }
-    )
+    fetch("https://summer.cash/api/accounts/" + formData.name + "/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        password: formData.password
+      })
+    })
       .then(response => response.json())
       .then(response => {
         if (response.error) {
           // Check for errors
           this.errorAlert(response.error); // Alert with error
-
-          return; // Return
-        }
-      })
-      .then(
-        fetch("https://summer.cash/api/accounts/" + formData.name + "/token", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            password: formData.password
-          })
-        })
-      )
-      .then(response => response.json())
-      .then(response => {
-        if (response.error) {
-          // Check for errors
-          this.errorAlert(response.error); // Show alert
 
           return; // Return
         }
