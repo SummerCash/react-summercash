@@ -230,6 +230,10 @@ class AuthForm extends Component {
           })
         })
       )
+      .then(response => {
+        console.log(response);
+        return;
+      })
       .then(response => response.json())
       .then(response => {
         if (response.error) {
