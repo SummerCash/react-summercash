@@ -82,7 +82,7 @@ class SignupLogin extends Component {
               primary
               color="accent-2"
               label="Create New Wallet"
-              href="signup"
+              onClick={this.onClickSignup}
             />
             <Button
               responsive={true}
@@ -95,6 +95,11 @@ class SignupLogin extends Component {
         </Box>
       </Grommet>
     );
+  }
+
+  // onClickSignup handles the signup event.
+  onClickSignup(event) {
+    this.props.history.push("/signup"); // Go to signup
   }
 
   // onClickLogin handles the login event.
