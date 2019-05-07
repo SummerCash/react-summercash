@@ -99,6 +99,7 @@ class SignupLogin extends Component {
 
   // onClickSignup handles the signup event.
   onClickSignup(event) {
+    console.log("test");
     this.props.history.push("/signup"); // Go to signup
   }
 
