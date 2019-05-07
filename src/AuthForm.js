@@ -175,7 +175,7 @@ class AuthForm extends Component {
 
             if (window.isElectron) {
               // Check is electron
-              window.ipcRenderer.send(
+              window.ipcRenderer.sendSync(
                 "sign_in",
                 JSON.stringify({
                   username: formData.name,
@@ -229,8 +229,8 @@ class AuthForm extends Component {
         }); // Set state
 
         if (window.isElectron) {
-          // Check is electron
-          window.ipcRenderer.send(
+          window.ipcRenderer.sendSync(
+            // Check is electron
             "sign_in",
             JSON.stringify({
               username: formData.name,
