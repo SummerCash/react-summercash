@@ -100,6 +100,7 @@ class App extends Component {
       });
 
       window.ipcRenderer.on("cookies_available", msg => {
+        console.log(msg);
         window.cookies = msg; //Set window cookies
       });
     }
