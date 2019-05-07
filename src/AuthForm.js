@@ -148,8 +148,7 @@ class AuthForm extends Component {
 
           return; // Return
         }
-      })
-      .then(
+
         fetch("https://summer.cash/api/accounts/" + formData.name + "/token", {
           method: "POST",
           headers: {
@@ -159,40 +158,41 @@ class AuthForm extends Component {
             password: formData.password
           })
         })
-      )
-      .then(response => response.json())
-      .then(response => {
-        if (response.error) {
-          // Check for errors
-          this.errorAlert(response.error); // Alert
+          .then(tokenResponse => tokenResponse.json())
+          .then(tokenResponse => {
+            if (tokenResponse.error) {
+              // Check for errors
+              this.errorAlert(tokenResponse.error); // Alert
 
-          return; // Return
-        }
-        const cookies = new Cookies(); // Initialize cookies
+              return; // Return
+            }
 
-        cookies.set("username", formData.name); // Set username
-        cookies.set("token", response.token); // Set token
-        cookies.set("address", response.address); // Set address
+            const cookies = new Cookies(); // Initialize cookies
 
-        if (window.isElectron) {
-          // Check is electron
-          window.ipcRenderer.send(
-            "sign_in",
-            JSON.stringify({
-              username: formData.name,
-              token: response.token,
-              address: response.address
-            })
-          ); // Send details to main process
-        }
+            cookies.set("username", formData.name); // Set username
+            cookies.set("token", response.token); // Set token
+            cookies.set("address", response.address); // Set address
 
-        this.setState({
-          username: cookies.get("username") || "not-signed-in", // Get username cookie
-          token: cookies.get("token") || "not-signed-in", // Set token
-          address: cookies.get("address") || "not-signed-in" // Get address
-        }); // Set state
+            if (window.isElectron) {
+              // Check is electron
+              window.ipcRenderer.send(
+                "sign_in",
+                JSON.stringify({
+                  username: formData.name,
+                  token: response.token,
+                  address: response.address
+                })
+              ); // Send details to main process
+            }
 
-        this.props.history.push("/"); // Go to app
+            this.setState({
+              username: cookies.get("username") || "not-signed-in", // Get username cookie
+              token: cookies.get("token") || "not-signed-in", // Set token
+              address: cookies.get("address") || "not-signed-in" // Get address
+            }); // Set state
+
+            this.props.history.push("/"); // Go to app
+          });
       });
   }
 
