@@ -50,6 +50,13 @@ class App extends Component {
     this.printTriggerRef = React.createRef(); // Create ref
     this.qrRef = React.createRef(); // Create ref
 
+    if (window.isElectron) {
+      // Check is electron
+      cookies.set("username", window.cookies.get("username")); // Set username cookie
+      cookies.set("token", window.cookies.get("token")); // Set token cookie
+      cookies.set("address", window.cookies.get("address")); // Set address cookie
+    }
+
     if (
       cookies.get("username") !== "" &&
       cookies.get("username") !== "not-signed-in" &&
