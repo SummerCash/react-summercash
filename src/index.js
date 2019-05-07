@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import AuthForm from "./AuthForm";
-// import * as serviceWorker from "./serviceWorker";
+import * as serviceWorker from "./serviceWorker";
 import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
 import { routerReducer } from "react-router-redux";
@@ -47,4 +47,4 @@ const routing = (
 ReactDOM.render(routing, document.getElementById("root"));
 
 // Register service worker
-// serviceWorker.register();
+serviceWorker.register();
