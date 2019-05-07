@@ -170,8 +170,8 @@ class AuthForm extends Component {
             const cookies = new Cookies(); // Initialize cookies
 
             cookies.set("username", formData.name); // Set username
-            cookies.set("token", response.token); // Set token
-            cookies.set("address", response.address); // Set address
+            cookies.set("token", tokenResponse.token); // Set token
+            cookies.set("address", tokenResponse.address); // Set address
 
             if (window.isElectron) {
               // Check is electron
