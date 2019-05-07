@@ -45,6 +45,7 @@ class SignupLogin extends Component {
     }
 
     this.onClickLogin = this.onClickLogin.bind(this); // Bind this
+    this.onClickSignup = this.onClickSignup.bind(this); // Bind this
   }
 
   render() {
@@ -99,7 +100,6 @@ class SignupLogin extends Component {
 
   // onClickSignup handles the signup event.
   onClickSignup(event) {
-    console.log("test");
     this.props.history.push("/signup"); // Go to signup
   }
 
