@@ -232,6 +232,7 @@ class AuthForm extends Component {
       )
       .then(response => {
         console.log(response);
+        console.log(formData.name);
         console.log(formData.password);
         return;
       })
