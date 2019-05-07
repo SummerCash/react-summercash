@@ -234,6 +234,9 @@ class AuthForm extends Component {
         console.log(response);
         console.log(formData.name);
         console.log(formData.password);
+        console.log(
+          "https://summer.cash/api/accounts/" + formData.name + "/token"
+        );
         return;
       })
       .then(response => response.json())
