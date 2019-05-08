@@ -39,26 +39,6 @@ class App extends Component {
 
     const cookies = new Cookies(); // Initialize cookies
 
-    if (window.isElectron) {
-      // Check is electron
-      window.ipcRenderer.on("cookies_available", msg => {
-        window.cookies = msg; // Set window cookies
-
-        cookies.set("username", window.cookies.get("username")); // Set username cookie
-        cookies.set("token", window.cookies.get("token")); // Set token cookie
-        cookies.set("address", window.cookies.get("address")); // Set address cookie
-
-        switch (window.cookies.get("username")) {
-          case "not-signed-in":
-            break;
-          case "":
-            break;
-          default:
-            this.props.history.push("/"); // Go to home
-        }
-      });
-    }
-
     this.fetchBalance = this.fetchBalance.bind(this); // Bind this
     this.onSubmitTx = this.onSubmitTx.bind(this); // Bind this
     this.handleScan = this.handleScan.bind(this); // Bind this
@@ -70,13 +50,33 @@ class App extends Component {
     this.printTriggerRef = React.createRef(); // Create ref
     this.qrRef = React.createRef(); // Create ref
 
-    if (
-      cookies.get("username") !== "" &&
-      cookies.get("username") !== "not-signed-in" &&
-      cookies.get("username") !== undefined
-    ) {
-      // Check signed in
-      this.fetchBalance(cookies.get("username")); // Fetch balance
+    if (window.isElectron) {
+      // Check is electron
+      const user = window.ipcRenderer.sendSync("sign_in_req"); // Request user details
+
+      if (
+        user !== undefined &&
+        user.username !== "" &&
+        user.username !== "not-signed-in" &&
+        JSON.stringify(user) !== "" &&
+        JSON.stringify(user) !== "{}"
+      ) {
+        // Check could request details
+        cookies.set("username", user.username); // Set username
+        cookies.set("token", user.token); // Set token
+        cookies.set("address", user.address); // Set address
+
+        this.fetchBalance(user.username); // Fetch balance
+      }
+    } else {
+      if (
+        cookies.get("username") !== "" &&
+        cookies.get("username") !== "not-signed-in" &&
+        cookies.get("username") !== undefined
+      ) {
+        // Check signed in
+        this.fetchBalance(cookies.get("username")); // Fetch balance
+      }
     }
 
     this.state = {
