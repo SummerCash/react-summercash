@@ -39,6 +39,13 @@ class App extends Component {
 
     const cookies = new Cookies(); // Initialize cookies
 
+    if (window.isElectron) {
+      // Check is electron
+      window.ipcRenderer.on("cookies_available", msg => {
+        window.cookies = msg; // Set window cookies
+      });
+    }
+
     this.fetchBalance = this.fetchBalance.bind(this); // Bind this
     this.onSubmitTx = this.onSubmitTx.bind(this); // Bind this
     this.handleScan = this.handleScan.bind(this); // Bind this
@@ -97,11 +104,6 @@ class App extends Component {
       // Check has electron support
       window.ipcRenderer.on("new_badge_count", msg => {
         window.ipcRenderer.sendSync("update-badge", msg); // Set badge
-      });
-
-      window.ipcRenderer.on("cookies_available", msg => {
-        console.log(msg);
-        window.cookies = msg; //Set window cookies
       });
     }
 
