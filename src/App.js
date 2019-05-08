@@ -55,6 +55,7 @@ class App extends Component {
       const user = window.ipcRenderer.sendSync("sign_in_req"); // Request user details
 
       if (
+        user &&
         user !== undefined &&
         JSON.stringify(user) !== "" &&
         JSON.stringify(user) !== "{}" &&
