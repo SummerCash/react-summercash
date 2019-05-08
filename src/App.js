@@ -56,10 +56,10 @@ class App extends Component {
 
       if (
         user !== undefined &&
-        user.username !== "" &&
-        user.username !== "not-signed-in" &&
         JSON.stringify(user) !== "" &&
-        JSON.stringify(user) !== "{}"
+        JSON.stringify(user) !== "{}" &&
+        user.username !== "" &&
+        user.username !== "not-signed-in"
       ) {
         // Check could request details
         cookies.set("username", user.username); // Set username
