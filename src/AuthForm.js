@@ -240,6 +240,8 @@ class AuthForm extends Component {
           ); // Send details to main process
         }
 
+        console.log("test");
+
         this.props.history.push("/"); // Go to app
       });
   }
