@@ -21,3 +21,7 @@ code {
 .drag {
   -webkit-app-region: drag;
 }
+
+body {
+  overflow-y: hidden;
+}
