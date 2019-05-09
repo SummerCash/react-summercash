@@ -9,7 +9,6 @@ import { Provider } from "react-redux";
 import { routerReducer } from "react-router-redux";
 import { Route, BrowserRouter as Router } from "react-router-dom";
 import Faucet from "./Faucet";
-import { Titlebar, Color } from "custom-electron-titlebar"; // Import windows-support titlebar
 
 const store = createStore(
   combineReducers({
@@ -44,12 +43,6 @@ const routing = (
     </Router>
   </Provider>
 );
-
-if (window.isElectron && window.isWindows) {
-  new Titlebar({
-    backgroundColor: Color.fromHex("#2162ce") // Set titlebar
-  }); // Initialize titlebar
-}
 
 ReactDOM.render(routing, document.getElementById("root"));
 
