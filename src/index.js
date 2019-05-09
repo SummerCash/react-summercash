@@ -44,6 +44,11 @@ const routing = (
   </Provider>
 );
 
+if (window.isWindows) {
+  // Check is windows
+  document.getElementsByClassName("drag").innerHTML = ""; // Remove drag
+}
+
 ReactDOM.render(routing, document.getElementById("root"));
 
 // Register service worker
