@@ -54,6 +54,22 @@ if (window.isElectron && window.isWindows) {
   const titlebar = new ElectronTitlebarWindows(); // Initialize title bar
 
   titlebar.appendTo(document.getElementsByClassName("drag")); // Append to drag bar
+
+  titlebar.on("close", event => {
+    window.ipcRenderer.sendSync("close_window"); // Close window
+  });
+
+  titlebar.on("minimize", event => {
+    window.ipcRenderer.sendSync("min_window"); // Minimize window
+  });
+
+  titlebar.on("maximize", event => {
+    window.ipcRenderer.sendSync("max_window"); // Maximize window
+  });
+
+  titlebar.on("fullscreen", event => {
+    window.ipcRenderer.sendSync("full_window"); // Fullscreen window
+  });
 }
 
 ReactDOM.render(routing, document.getElementById("root"));
