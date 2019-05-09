@@ -110,7 +110,7 @@ class App extends Component {
     if (window.isElectron) {
       // Check has electron support
       window.ipcRenderer.on("new_badge_count", msg => {
-        window.ipcRenderer.sendSync("update-badge", msg); // Set badge
+        window.ipcRenderer.send("update-badge", msg); // Set badge
       });
     }
 
