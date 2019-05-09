@@ -9,7 +9,6 @@ import { Provider } from "react-redux";
 import { routerReducer } from "react-router-redux";
 import { Route, BrowserRouter as Router } from "react-router-dom";
 import Faucet from "./Faucet";
-import { ElectronTitlebarWindows } from "electron-titlebar-windows"; // Import electron title bar
 
 const store = createStore(
   combineReducers({
@@ -44,33 +43,6 @@ const routing = (
     </Router>
   </Provider>
 );
-
-if (window.isElectron && window.isWindows) {
-  // Check is electron
-  console.log(
-    "App running in windows electron instance, adding metro titlebar support."
-  ); // Log add title bar
-
-  const titlebar = new ElectronTitlebarWindows(); // Initialize title bar
-
-  titlebar.appendTo(document.getElementsByClassName("drag")); // Append to drag bar
-
-  titlebar.on("close", event => {
-    window.ipcRenderer.sendSync("close_window"); // Close window
-  });
-
-  titlebar.on("minimize", event => {
-    window.ipcRenderer.sendSync("min_window"); // Minimize window
-  });
-
-  titlebar.on("maximize", event => {
-    window.ipcRenderer.sendSync("max_window"); // Maximize window
-  });
-
-  titlebar.on("fullscreen", event => {
-    window.ipcRenderer.sendSync("full_window"); // Fullscreen window
-  });
-}
 
 ReactDOM.render(routing, document.getElementById("root"));
 
