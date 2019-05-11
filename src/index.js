@@ -27,6 +27,8 @@ const minWin = () => {
 
 // maxWin maximizes the window.
 const maxWin = () => {
+  console.log("test");
+  console.log(isMaximized);
   isMaximized = true; // Is maximized
 
   window.ipcRenderer.send("max_window"); // Maximize window
@@ -34,6 +36,8 @@ const maxWin = () => {
 
 // restoreWin restores the window.
 const restoreWin = () => {
+  console.log("test2");
+  console.log(isMaximized);
   isMaximized = false; // Is not maximized
 
   window.ipcRenderer.send("restore_window"); // Restore window
