@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import { routerReducer } from "react-router-redux";
 import { Route, BrowserRouter as Router } from "react-router-dom";
 import Faucet from "./Faucet";
+import Support from "./Support";
 import { TitleBar } from "react-desktop/windows";
 
 let titlebar; // Initialize titlebar buffer
@@ -92,6 +93,7 @@ const routing = (
         <Route path="/signup" render={() => <AuthForm label="Sign Up" />} />
         <Route path="/login" render={() => <AuthForm label="Log In" />} />
         <Route path="/faucet" render={() => <Faucet />} />
+        <Route path="/support" render={() => <Support />} />
       </div>
     </Router>
   </Provider>
