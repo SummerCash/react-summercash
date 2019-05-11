@@ -17,25 +17,26 @@ let isMaximized; // Initialize maximized buffer
 
 // closeWin closes the window.
 const closeWin = () => {
-  window.ipcRenderer.sendSync("close_window"); // Close window
+  window.ipcRenderer.send("close_window"); // Close window
 };
 
 // minWin minimizes the window.
 const minWin = () => {
-  window.ipcRenderer.sendSync("min_window"); // Minimize window
+  window.ipcRenderer.send("min_window"); // Minimize window
 };
 
 // maxWin maximizes the window.
 const maxWin = () => {
   isMaximized = true; // Is maximized
 
-  window.ipcRenderer.sendSync("max_window"); // Maximize window
+  window.ipcRenderer.send("max_window"); // Maximize window
 };
 
 // restoreWin restores the window.
 const restoreWin = () => {
   isMaximized = false; // Is not maximized
-  window.ipcRenderer.sendSync("restore_window"); // Restore window
+
+  window.ipcRenderer.send("restore_window"); // Restore window
 };
 
 if (window.isWindows) {
