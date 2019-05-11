@@ -23,6 +23,7 @@ if (window.isWindows) {
       onMinimizeClick={window.remote.getCurrentWindow().minimize}
       onMaximizeClick={window.remote.getCurrentWindow().maximize}
       onRestoreDownClick={window.remote.getCurrentWindow().restore}
+      theme="dark"
     />
   );
 } else {
