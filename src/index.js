@@ -27,18 +27,18 @@ const minWin = () => {
 
 // maxWin maximizes the window.
 const maxWin = () => {
-  console.log("test");
-  console.log(isMaximized);
   isMaximized = true; // Is maximized
+
+  document.getElementById("win-tb").setAttribute("isMaximized", ""); // Set is maximized
 
   window.ipcRenderer.send("max_window"); // Maximize window
 };
 
 // restoreWin restores the window.
 const restoreWin = () => {
-  console.log("test2");
-  console.log(isMaximized);
   isMaximized = false; // Is not maximized
+
+  document.getElementById("win-tb").removeAttribute("isMaximized"); // Set is maximized
 
   window.ipcRenderer.send("restore_window"); // Restore window
 };
@@ -55,6 +55,7 @@ if (window.isWindows) {
       onRestoreDownClick={restoreWin}
       theme="dark"
       controls
+      id="win-tb"
     />
   );
 } else {
