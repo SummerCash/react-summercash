@@ -9,14 +9,21 @@ import { Provider } from "react-redux";
 import { routerReducer } from "react-router-redux";
 import { Route, BrowserRouter as Router } from "react-router-dom";
 import Faucet from "./Faucet";
-import TitleBar from "react-window-titlebar"; // Import TitleBar
+import { TitleBar } from "react-desktop/windows";
 
 let titlebar; // Initialize titlebar buffer
 
 if (window.isWindows) {
   // Check is windows
   titlebar = (
-    <TitleBar title="SummerCash Wallet" remote={window.remote} theme="dark" />
+    <TitleBar
+      title="SummerCash Wallet"
+      isMaximized={window.remote.getCurrentWindow().isMaximized()}
+      onCloseClick={window.remote.getCurrentWindow().close}
+      onMinimizeClick={window.remote.getCurrentWindow().minimize}
+      onMaximizeClick={window.remote.getCurrentWindow().maximize}
+      onRestoreDownClick={window.remote.getCurrentWindow().restore}
+    />
   );
 } else {
   titlebar = "&nbsp;"; // Set titlebar
