@@ -24,6 +24,7 @@ if (window.isWindows) {
       onMaximizeClick={window.remote.getCurrentWindow().maximize}
       onRestoreDownClick={window.remote.getCurrentWindow().restore}
       theme="dark"
+      controls
     />
   );
 } else {
