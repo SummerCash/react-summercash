@@ -9,6 +9,18 @@ import { Provider } from "react-redux";
 import { routerReducer } from "react-router-redux";
 import { Route, BrowserRouter as Router } from "react-router-dom";
 import Faucet from "./Faucet";
+import TitleBar from "react-window-titlebar"; // Import TitleBar
+
+let titlebar; // Initialize titlebar buffer
+
+if (window.isWindows) {
+  // Check is windows
+  titlebar = (
+    <TitleBar title="SummerCash Wallet" remote={window.remote} theme="dark" />
+  );
+} else {
+  titlebar = "&nbsp;"; // Set titlebar
+}
 
 const store = createStore(
   combineReducers({
@@ -33,7 +45,7 @@ const routing = (
             left: 0
           }}
         >
-          &nbsp;
+          {titlebar}
         </div>
         <Route exact path="/" component={App} />
         <Route path="/signup" render={() => <AuthForm label="Sign Up" />} />
@@ -43,11 +55,6 @@ const routing = (
     </Router>
   </Provider>
 );
-
-if (window.isWindows) {
-  // Check is windows
-  document.getElementsByClassName("drag").innerHTML = ""; // Remove drag
-}
 
 ReactDOM.render(routing, document.getElementById("root"));
 
