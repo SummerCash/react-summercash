@@ -41,6 +41,7 @@ const routing = (
             alignItems: "center",
             alignSelf: "center",
             position: "absolute",
+            color: "white",
             top: 0,
             left: 0
           }}
