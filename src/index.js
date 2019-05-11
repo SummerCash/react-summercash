@@ -13,16 +13,41 @@ import { TitleBar } from "react-desktop/windows";
 
 let titlebar; // Initialize titlebar buffer
 
+let isMaximized; // Initialize maximized buffer
+
+// closeWin closes the window.
+const closeWin = () => {
+  window.ipcRenderer.sendSync("close_window"); // Close window
+};
+
+// minWin minimizes the window.
+const minWin = () => {
+  window.ipcRenderer.sendSync("min_window"); // Minimize window
+};
+
+// maxWin maximizes the window.
+const maxWin = () => {
+  isMaximized = true; // Is maximized
+
+  window.ipcRenderer.sendSync("max_window"); // Maximize window
+};
+
+// restoreWin restores the window.
+const restoreWin = () => {
+  isMaximized = false; // Is not maximized
+  window.ipcRenderer.sendSync("restore_window"); // Restore window
+};
+
 if (window.isWindows) {
   // Check is windows
   titlebar = (
     <TitleBar
       title="SummerCash Wallet"
-      isMaximized={window.remote.getCurrentWindow().isMaximized()}
-      onCloseClick={window.remote.getCurrentWindow().close}
-      onMinimizeClick={window.remote.getCurrentWindow().minimize}
-      onMaximizeClick={window.remote.getCurrentWindow().maximize}
-      onRestoreDownClick={window.remote.getCurrentWindow().restore}
+      isMaximized={isMaximized}
+      onCloseClick={closeWin}
+      onMinimizeClick={minWin}
+      onMaximizeClick={maxWin}
+      onRestoreDownClick={restoreWin}
       theme="dark"
       controls
     />
