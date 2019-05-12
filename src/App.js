@@ -27,7 +27,7 @@ import domtoimage from "dom-to-image"; // Import print
 import print from "print-js"; // Import print
 import Media from "react-media";
 import CookieBanner from "react-cookie-banner"; // Import cookie banner
-import * as firebase from "firebase";
+import { messaging } from "./init-fcm"; // Import initialize fcm
 
 class App extends Component {
   errorAlert = message => toast.error(message); // Alert
@@ -151,45 +151,10 @@ class App extends Component {
 
             this.errorAlert(response.error); // Alert
           } else {
-            const config = {
-              apiKey: "AIzaSyA0XqseFmaRijRIRmqogPl2jrf7FyuRyeo",
-              authDomain: "summercash-wallet.firebaseapp.com",
-              databaseURL: "https://summercash-wallet.firebaseio.com",
-              projectId: "summercash-wallet",
-              storageBucket: "summercash-wallet.appspot.com",
-              messagingSenderId: "1059498544595",
-              appId: "1:1059498544595:web:44560a2db9a9c19c"
-            }; // Set config
-
-            firebase.initializeApp(config); // Initialize app
-
-            const messaging = firebase.messaging(); // Get firebase messaging
-
-            console.log("Firebase messaging set up: " + messaging); // Log setup messaging
-
-            console.log(
-              "Setting up FCM token for user with username: " +
-                cookies.get("username")
-            ); // Log set up
-
             messaging
               .requestPermission()
               .then(async () => {
-                console.log("Requesting user token."); // Log get token
-
                 const token = await messaging.getToken(); // Get token
-
-                console.log("Got token."); // Log got token
-
-                return token; // Return token
-              })
-              .then(token => {
-                console.log("Got user token: " + token); // Log got token
-                console.log(
-                  "Posting to https://summer.cash/api/accounts/" +
-                    cookies.get("username") +
-                    "/pushtoken"
-                ); // Log post
 
                 fetch(
                   "https://summer.cash/api/accounts/" +
@@ -214,7 +179,7 @@ class App extends Component {
 
                       return; // Return
                     }
-                  });
+                  }); // Post token
               })
               .catch(error => {
                 console.error(error); // Log error
@@ -222,7 +187,7 @@ class App extends Component {
                 this.errorAlert(
                   "Without enabling notifications, you won't know when you've been sent SummerCash!"
                 ); // Show error
-              }); // Handle error
+              });
 
             if (!response.transactions) {
               // Check txs null
