@@ -165,10 +165,6 @@ class App extends Component {
 
             const messaging = firebase.messaging(); // Get firebase messaging
 
-            navigator.serviceWorker
-              .register("./notificationServiceWorker.js")
-              .then(registration => messaging.useServiceWorker(registration)); // Setup custom service worker
-
             messaging
               .requestPermission()
               .then(() => {
