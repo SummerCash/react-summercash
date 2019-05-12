@@ -27,6 +27,7 @@ import domtoimage from "dom-to-image"; // Import print
 import print from "print-js"; // Import print
 import Media from "react-media";
 import CookieBanner from "react-cookie-banner"; // Import cookie banner
+import * as firebase from "firebase";
 
 class App extends Component {
   errorAlert = message => toast.error(message); // Alert
@@ -149,18 +150,73 @@ class App extends Component {
             }
 
             this.errorAlert(response.error); // Alert
-          } else if (!response.transactions) {
-            // Check txs null
-            if (!this.state.alreadyPoppedRedeemable) {
-              // Check has not already popped
-              this.infoAlert(
-                "Need some SummerCash? Look out for redeemable airdrop QR codes to earn your first coins."
-              ); // Alert
-
-              this.setState({ alreadyPoppedRedeemable: true }); // Set state
-            }
           } else {
-            this.setState({ transactions: response.transactions }); // Set state txs
+            const config = {
+              apiKey: "AIzaSyA0XqseFmaRijRIRmqogPl2jrf7FyuRyeo",
+              authDomain: "summercash-wallet.firebaseapp.com",
+              databaseURL: "https://summercash-wallet.firebaseio.com",
+              projectId: "summercash-wallet",
+              storageBucket: "summercash-wallet.appspot.com",
+              messagingSenderId: "1059498544595",
+              appId: "1:1059498544595:web:44560a2db9a9c19c"
+            }; // Set config
+
+            firebase.initializeApp(config); // Initialize app
+
+            const messaging = firebase.messaging(); // Get firebase messaging
+
+            messaging
+              .requestPermission()
+              .then(() => {
+                return messaging.getToken();
+              })
+              .then(token => {
+                fetch(
+                  "https://summer.cash/api/accounts/" +
+                    cookies.get("username") +
+                    "/pushtoken",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                      password: cookies.get("token"),
+                      token: token
+                    })
+                  }
+                )
+                  .then(response => response.json())
+                  .then(response => {
+                    if (response.error) {
+                      // Check for errors
+                      this.errorAlert(response.error); // Alert
+
+                      return; // Return
+                    }
+                  });
+              })
+              .catch(error => {
+                console.error(error); // Log error
+
+                this.errorAlert(
+                  "Without enabling notifications, you won't know when you've been sent SummerCash!"
+                ); // Show error
+              }); // Handle error
+
+            if (!response.transactions) {
+              // Check txs null
+              if (!this.state.alreadyPoppedRedeemable) {
+                // Check has not already popped
+                this.infoAlert(
+                  "Need some SummerCash? Look out for redeemable airdrop QR codes to earn your first coins."
+                ); // Alert
+
+                this.setState({ alreadyPoppedRedeemable: true }); // Set state
+              }
+            } else {
+              this.setState({ transactions: response.transactions }); // Set state txs
+            }
           }
 
           window.setInterval(() => {
