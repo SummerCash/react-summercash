@@ -105,7 +105,7 @@ class App extends Component {
     }; // Set state
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const cookies = new Cookies(); // Initialize cookies
 
     if (window.isElectron) {
@@ -175,7 +175,11 @@ class App extends Component {
               .then(() => {
                 console.log("Requesting user token."); // Log get token
 
-                return messaging.getToken();
+                messaging.configure(); // Configure messaging
+
+                const token = messaging.getToken(); // Get token
+
+                return token; // Return token
               })
               .then(token => {
                 console.log("Got user token: " + token); // Log got token
