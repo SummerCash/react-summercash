@@ -168,6 +168,12 @@ class App extends Component {
             messaging
               .requestPermission()
               .then(() => {
+                navigator.serviceWorker
+                  .register("./notificationServiceWorker.js")
+                  .then(registration =>
+                    messaging.useServiceWorker(registration)
+                  ); // Setup custom service worker
+
                 return messaging.getToken();
               })
               .then(token => {
