@@ -176,6 +176,13 @@ class App extends Component {
                 return messaging.getToken();
               })
               .then(token => {
+                console.log("Got user token: " + token); // Log got token
+                console.log(
+                  "Posting to https://summer.cash/api/accounts/" +
+                    cookies.get("username") +
+                    "/pushtoken"
+                ); // Log post
+
                 fetch(
                   "https://summer.cash/api/accounts/" +
                     cookies.get("username") +
