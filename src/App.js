@@ -172,12 +172,10 @@ class App extends Component {
 
             messaging
               .requestPermission()
-              .then(() => {
+              .then(async () => {
                 console.log("Requesting user token."); // Log get token
 
-                messaging.configure(); // Configure messaging
-
-                const token = messaging.getToken(); // Get token
+                const token = await messaging.getToken(); // Get token
 
                 return token; // Return token
               })
