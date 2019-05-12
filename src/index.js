@@ -98,6 +98,18 @@ const routing = (
   </Provider>
 );
 
+if ("serviceWorker" in navigator) {
+  // Check for existing service worker
+  navigator.serviceWorker
+    .register("./firebase-messaging-sw.js")
+    .then(registration => {
+      console.log("Registration successful, scope is:", registration.scope); // Log registration scope
+    })
+    .catch(err => {
+      console.error(err); // Log error
+    }); // Register service worker
+}
+
 ReactDOM.render(routing, document.getElementById("root"));
 
 // Register service worker
