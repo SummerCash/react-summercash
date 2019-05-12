@@ -4,4 +4,4 @@ summer.cash
 root ./build
 
 # API Proxy
-proxy /api https://localhost:3033/api
+proxy /api https://localhost:3033
