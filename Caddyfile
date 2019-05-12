@@ -1,7 +1,10 @@
-summer.cash
+summer.cash:80
+
+# Disable TLS
+tls off
 
 # Build
 root ./build
 
 # API Proxy
-proxy /api https://localhost:3033
+proxy /api/ https://summer.cash:2053
