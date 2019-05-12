@@ -50,19 +50,40 @@ class App extends Component {
     this.printTriggerRef = React.createRef(); // Create ref
     this.qrRef = React.createRef(); // Create ref
 
-    if (
-      cookies.get("username") !== "" &&
-      cookies.get("username") !== "not-signed-in" &&
-      cookies.get("username") !== undefined
-    ) {
-      // Check signed in
-      this.fetchBalance(cookies.get("username")); // Fetch balance
+    if (window.isElectron) {
+      // Check is electron
+      const user = window.ipcRenderer.sendSync("sign_in_req"); // Request user details
+
+      if (
+        user &&
+        user !== undefined &&
+        JSON.stringify(user) !== "" &&
+        JSON.stringify(user) !== "{}" &&
+        user.username !== "" &&
+        user.username !== "not-signed-in"
+      ) {
+        // Check could request details
+        cookies.set("username", user.username); // Set username
+        cookies.set("token", user.token); // Set token
+        cookies.set("address", user.address); // Set address
+
+        this.fetchBalance(user.username); // Fetch balance
+      }
+    } else {
+      if (
+        cookies.get("username") !== "" &&
+        cookies.get("username") !== "not-signed-in" &&
+        cookies.get("username") !== undefined
+      ) {
+        // Check signed in
+        this.fetchBalance(cookies.get("username")); // Fetch balance
+      }
     }
 
     this.state = {
       username: cookies.get("username") || "not-signed-in", // Get username cookie
       address: cookies.get("address") || "not-signed-in", // Get address cookie
-      password: cookies.get("password") || "not-signed-in", // Get password cookie
+      token: cookies.get("token") || "not-signed-in", // Get token cookie
       showSendModal: false, // Set show send modal
       showAddressModal: false, // Set show address modal
       showQRReader: false, // Set show qr modal
@@ -88,8 +109,8 @@ class App extends Component {
 
     if (window.isElectron) {
       // Check has electron support
-      window.ipcRenderer.on("new_badge_count", (event, msg) => {
-        window.ipcRenderer.sendSync("update-badge", msg); // Set badge
+      window.ipcRenderer.on("new_badge_count", msg => {
+        window.ipcRenderer.send("update-badge", msg); // Set badge
       });
     }
 
@@ -1166,7 +1187,7 @@ class App extends Component {
               username: this.state.username, // Set username
               recipient: this.state.redeemableAccount.username, // Set recipient
               amount: parseFloat(formData.amount), // Set amount
-              password: this.state.password, // Set password
+              password: this.state.token, // Set password
               payload: formData.message // Set message
             })
           })
@@ -1214,7 +1235,7 @@ class App extends Component {
         username: this.state.username, // Set username
         recipient: formData.recipient, // Set recipient
         amount: parseFloat(formData.amount), // Set amount
-        password: this.state.password, // Set password
+        password: this.state.token, // Set password
         payload: formData.message
       })
     })

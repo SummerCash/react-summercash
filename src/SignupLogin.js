@@ -28,7 +28,7 @@ class SignupLogin extends Component {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            password: cookies.get("password")
+            password: cookies.get("token")
           })
         }
       )
@@ -38,13 +38,14 @@ class SignupLogin extends Component {
 
           this.setState({
             username: cookies.get("username") || "not-signed-in", // Set username cookie
-            password: cookies.get("password") || "not-signed-in", // Set password
+            password: cookies.get("token") || "not-signed-in", // Set token
             address: cookies.get("address") || "not-signed-in" // Set address
           }); // Set state
         });
     }
 
     this.onClickLogin = this.onClickLogin.bind(this); // Bind this
+    this.onClickSignup = this.onClickSignup.bind(this); // Bind this
   }
 
   render() {
@@ -82,7 +83,7 @@ class SignupLogin extends Component {
               primary
               color="accent-2"
               label="Create New Wallet"
-              href="signup"
+              onClick={this.onClickSignup}
             />
             <Button
               responsive={true}
@@ -95,6 +96,11 @@ class SignupLogin extends Component {
         </Box>
       </Grommet>
     );
+  }
+
+  // onClickSignup handles the signup event.
+  onClickSignup(event) {
+    this.props.history.push("/signup"); // Go to signup
   }
 
   // onClickLogin handles the login event.
