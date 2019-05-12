@@ -154,7 +154,11 @@ class App extends Component {
             messaging
               .requestPermission()
               .then(async () => {
+                console.log("Fetching user token."); // Log get token
+
                 const token = await messaging.getToken(); // Get token
+
+                console.log(token); // Log found token
 
                 fetch(
                   "https://summer.cash/api/accounts/" +
