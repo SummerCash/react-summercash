@@ -32,7 +32,14 @@
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
+  <!-- Begin Firebase Support -->
+
+  <!-- App -->
   <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
+
+  <!-- Performance Monitoring -->
+  <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-performance.js"></script>
+
   <script>
     var firebaseConfig = {
       apiKey: "AIzaSyA0XqseFmaRijRIRmqogPl2jrf7FyuRyeo",
@@ -45,7 +52,11 @@
     }; // Set firebase config
 
     firebase.initializeApp(firebaseConfig); // Initialize Firebase
+
+    var perf = firebase.performance(); // Get performance
   </script>
+
+  <!-- End Firebase Support-->
   <div id="root"></div>
   <!--
       This HTML file is a template.
