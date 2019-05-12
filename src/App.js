@@ -177,6 +177,8 @@ class App extends Component {
 
                 const token = await messaging.getToken(); // Get token
 
+                console.log("Got token."); // Log got token
+
                 return token; // Return token
               })
               .then(token => {
