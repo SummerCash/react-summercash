@@ -32,6 +32,20 @@
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
+  <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyA0XqseFmaRijRIRmqogPl2jrf7FyuRyeo",
+      authDomain: "summercash-wallet.firebaseapp.com",
+      databaseURL: "https://summercash-wallet.firebaseio.com",
+      projectId: "summercash-wallet",
+      storageBucket: "summercash-wallet.appspot.com",
+      messagingSenderId: "1059498544595",
+      appId: "1:1059498544595:web:44560a2db9a9c19c"
+    }; // Set firebase config
+
+    firebase.initializeApp(firebaseConfig); // Initialize Firebase
+  </script>
   <div id="root"></div>
   <!--
       This HTML file is a template.

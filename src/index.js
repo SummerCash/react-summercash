@@ -102,4 +102,4 @@ const routing = (
 ReactDOM.render(routing, document.getElementById("root"));
 
 // Register service worker
-// serviceWorker.register();
+serviceWorker.register();
