@@ -11,7 +11,6 @@ import { Route, BrowserRouter as Router } from "react-router-dom";
 import Faucet from "./Faucet";
 import Support from "./Support";
 import { TitleBar } from "react-desktop/windows";
-import * as firebase from "firebase";
 
 let titlebar; // Initialize titlebar buffer
 
@@ -99,18 +98,6 @@ const routing = (
     </Router>
   </Provider>
 );
-
-const config = {
-  apiKey: "AIzaSyA0XqseFmaRijRIRmqogPl2jrf7FyuRyeo",
-  authDomain: "summercash-wallet.firebaseapp.com",
-  databaseURL: "https://summercash-wallet.firebaseio.com",
-  projectId: "summercash-wallet",
-  storageBucket: "summercash-wallet.appspot.com",
-  messagingSenderId: "1059498544595",
-  appId: "1:1059498544595:web:44560a2db9a9c19c"
-}; // Set config
-
-firebase.initializeApp(config); // Initialize app
 
 ReactDOM.render(routing, document.getElementById("root"));
 
