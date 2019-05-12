@@ -173,6 +173,8 @@ class App extends Component {
             messaging
               .requestPermission()
               .then(() => {
+                console.log("Requesting user token."); // Log get token
+
                 return messaging.getToken();
               })
               .then(token => {
