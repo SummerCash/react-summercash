@@ -165,6 +165,8 @@ class App extends Component {
 
             const messaging = firebase.messaging(); // Get firebase messaging
 
+            console.log("Firebase messaging set up: " + messaging); // Log setup messaging
+
             console.log(
               "Setting up FCM token for user with username: " +
                 cookies.get("username")
