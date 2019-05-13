@@ -14,3 +14,24 @@ const config = {
 firebase.initializeApp(config); // Initialize app
 
 const messaging = firebase.messaging(); // Get messaging
+
+messaging.setBackgroundMessageHandler(payload => {
+  const promiseChain = clients
+    .matchAll({
+      type: "window",
+      includeUncontrolled: true
+    })
+    .then(windowClients => {
+      for (let i = 0; i < windowClients.length; i++) {
+        // Iterate through window clients
+        const windowClient = windowClients[i]; // Get current window client
+
+        windowClient.postMessage(payload); // Post message payload
+      }
+    })
+    .then(() => {
+      return registration.showNotification("New Transaction"); // Show notification
+    });
+
+  return promiseChain; // Return promise chain
+});
