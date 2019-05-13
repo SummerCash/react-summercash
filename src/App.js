@@ -162,8 +162,10 @@ class App extends Component {
                 .then(() => {
                   return messaging.getToken();
                 })
-                .then(token =>
-                  fetch(
+                .then(token => {
+                  console.log(token); // Log token
+
+                  return fetch(
                     "https://summer.cash/api/accounts/" +
                       cookies.get("username") +
                       "/pushtoken",
@@ -177,8 +179,8 @@ class App extends Component {
                         fcm_token: token
                       })
                     }
-                  )
-                )
+                  );
+                })
                 .then(response => response.json())
                 .then(response => {
                   if (
