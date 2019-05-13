@@ -31,7 +31,7 @@ messaging.setBackgroundMessageHandler(payload => {
     })
     .then(() => {
       return registration.showNotification("New Transaction", {
-        body: payload
+        body: JSON.stringify(payload)
       }); // Show notification
     });
 
