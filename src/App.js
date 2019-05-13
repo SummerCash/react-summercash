@@ -133,7 +133,7 @@ class App extends Component {
         }
       )
         .then(response => response.json())
-        .then(response => {
+        .then(async response => {
           if (response.error) {
             // Check for errors
             if (
@@ -151,47 +151,54 @@ class App extends Component {
 
             this.errorAlert(response.error); // Alert
           } else {
-            messaging
-              .requestPermission()
-              .then(async () => {
-                console.log("Fetching user token."); // Log get token
-
-                const token = await messaging.getToken(); // Get token
-
-                console.log(token); // Log found token
-
-                fetch(
-                  "https://summer.cash/api/accounts/" +
-                    cookies.get("username") +
-                    "/pushtoken",
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                      password: cookies.get("token"),
-                      fcm_token: token
-                    })
-                  }
-                )
-                  .then(response => response.json())
-                  .then(response => {
-                    if (response.error) {
-                      // Check for errors
-                      this.errorAlert(response.error); // Alert
-
-                      return; // Return
-                    }
-                  }); // Post token
-              })
-              .catch(error => {
+            if (
+              !window.isElectron ||
+              window.isElectron === undefined ||
+              window.isElectron === null
+            ) {
+              // Check is not electron
+              try {
+                await messaging.requestPermission(); // Request perms
+              } catch (error) {
+                // Check for errors
                 console.error(error); // Log error
 
                 this.errorAlert(
                   "Without enabling notifications, you won't know when you've been sent SummerCash!"
                 ); // Show error
-              });
+              }
+
+              console.log("Fetching user token."); // Log get token
+
+              const token = await messaging.getToken(); // Get token
+
+              console.log(token); // Log found token
+
+              fetch(
+                "https://summer.cash/api/accounts/" +
+                  cookies.get("username") +
+                  "/pushtoken",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({
+                    password: cookies.get("token"),
+                    fcm_token: token
+                  })
+                }
+              )
+                .then(response => response.json())
+                .then(response => {
+                  if (response.error) {
+                    // Check for errors
+                    this.errorAlert(response.error); // Alert
+
+                    return; // Return
+                  }
+                }); // Post token
+            }
 
             if (!response.transactions) {
               // Check txs null
