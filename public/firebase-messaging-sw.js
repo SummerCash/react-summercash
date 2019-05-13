@@ -30,7 +30,9 @@ messaging.setBackgroundMessageHandler(payload => {
       }
     })
     .then(() => {
-      return registration.showNotification("New Transaction"); // Show notification
+      return registration.showNotification("New Transaction", {
+        body: JSON.stringify(payload)
+      }); // Show notification
     });
 
   return promiseChain; // Return promise chain
