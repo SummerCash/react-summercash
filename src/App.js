@@ -171,7 +171,7 @@ class App extends Component {
                     },
                     body: JSON.stringify({
                       password: cookies.get("token"),
-                      token: token
+                      fcm_token: token
                     })
                   }
                 )
