@@ -181,7 +181,10 @@ class App extends Component {
                 )
                 .then(response => response.json())
                 .then(response => {
-                  if (response.error) {
+                  if (
+                    response.error &&
+                    !response.error.includes("already exists")
+                  ) {
                     // Check for errors
                     this.errorAlert(response.error); // Alert
 
