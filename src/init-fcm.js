@@ -1,7 +1,7 @@
 import * as firebase from "firebase/app"; // Import firebase
 import "firebase/messaging"; // Import firebase messaging
 
-const config = {
+const initializedApp = firebase.initializeApp({
   apiKey: "AIzaSyA0XqseFmaRijRIRmqogPl2jrf7FyuRyeo",
   authDomain: "summercash-wallet.firebaseapp.com",
   databaseURL: "https://summercash-wallet.firebaseio.com",
@@ -9,11 +9,9 @@ const config = {
   storageBucket: "summercash-wallet.appspot.com",
   messagingSenderId: "1059498544595",
   appId: "1:1059498544595:web:44560a2db9a9c19c"
-}; // Set config
+}); // Initialize app
 
-firebase.initializeApp(config); // Initialize app
-
-const messaging = firebase.messaging(); // Get firebase messaging
+const messaging = initializedApp.messaging(); // Get messaging
 
 messaging.usePublicVapidKey(
   "BC4ZqPJCqZhv1LpaC4iDYMldku5h6JsfvYf4IQyAufOQ53ODDQB8Fg06zAaC5z6UThSgXYgmw6i2jpxM9_AmfJ0"
