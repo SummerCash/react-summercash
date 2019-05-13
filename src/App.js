@@ -335,7 +335,7 @@ class App extends Component {
                   size="xlarge"
                 />
                 <Button
-                  label="Redeem"
+                  label="Scan"
                   onClick={() => this.setState({ showRedeemModal: true })}
                   margin={{ top: "small", left: "small" }}
                   size="xlarge"
@@ -363,7 +363,7 @@ class App extends Component {
                   margin={{ top: "small" }}
                 />
                 <Button
-                  label="Redeem"
+                  label="Scan"
                   onClick={() => this.setState({ showRedeemModal: true })}
                   margin={{ top: "small" }}
                 />
