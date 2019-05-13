@@ -2,6 +2,11 @@ import * as firebase from "firebase/app"; // Import firebase
 import "firebase/messaging"; // Import firebase messaging
 
 const initializedApp = firebase.initializeApp({
+  apiKey: "AIzaSyA0XqseFmaRijRIRmqogPl2jrf7FyuRyeo",
+  authDomain: "summercash-wallet.firebaseapp.com",
+  databaseURL: "https://summercash-wallet.firebaseio.com",
+  projectId: "summercash-wallet",
+  storageBucket: "summercash-wallet.appspot.com",
   messagingSenderId: "1059498544595"
 }); // Initialize app
 
