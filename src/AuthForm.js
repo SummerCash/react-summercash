@@ -146,6 +146,9 @@ class AuthForm extends Component {
 
   // onSubmitCreate is the onSubmit event for a Sign Up form.
   onSubmitCreate(formData) {
+    if (formData.name.length > 24) {
+      // Check username too long
+    }
     fetch("https://summer.cash/api/accounts/" + formData.name, {
       method: "POST",
       headers: {
