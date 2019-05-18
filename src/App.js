@@ -1275,7 +1275,51 @@ class App extends Component {
       formData.message = ""; // Prevent undefined
     }
 
-    fetch("https://summer.cash/api/transactions/NewTransaction", {
+    if (formData.recipient === "everyone") { // Check is everyone
+      fetch("https://summer.cash/api/accounts/everyone", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+      })
+      /*
+      fetch("https://summer.cash/api/transactions/NewTransaction", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username: this.state.username, // Set username
+          recipient: formData.recipient, // Set recipient
+          amount: parseFloat(formData.amount), // Set amount
+          password: this.state.token, // Set password
+          payload: formData.message
+        })
+      })
+        .then(response => response.json())
+        .then(response => {
+          if (response.error) {
+            // Check for errors
+            this.errorAlert(response.error); // Alert
+          } else {
+            this.successAlert("Transaction sent successfully!"); // Alert success
+          }
+  
+          this.fetchTransactions(); // Fetch transactions
+  
+          this.setState({
+            showSendModal: false,
+            showQRReader: false,
+            sendAddressValue: ""
+          }); // Set state
+        });
+        */
+    } else {
+      fetch("https://summer.cash/api/transactions/NewTransaction", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -1305,6 +1349,7 @@ class App extends Component {
           sendAddressValue: ""
         }); // Set state
       });
+    }
   }
 
   // fetchTransactions fetches all account txs.
