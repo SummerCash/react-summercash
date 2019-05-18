@@ -1284,40 +1284,38 @@ class App extends Component {
       })
       .then((response) => response.json())
       .then((response) => {
-        console.log(response);
-      })
-      /*
-      fetch("https://summer.cash/api/transactions/NewTransaction", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          username: this.state.username, // Set username
-          recipient: formData.recipient, // Set recipient
-          amount: parseFloat(formData.amount), // Set amount
-          password: this.state.token, // Set password
-          payload: formData.message
-        })
-      })
-        .then(response => response.json())
-        .then(response => {
-          if (response.error) {
-            // Check for errors
-            this.errorAlert(response.error); // Alert
-          } else {
-            this.successAlert("Transaction sent successfully!"); // Alert success
-          }
-  
-          this.fetchTransactions(); // Fetch transactions
-  
-          this.setState({
-            showSendModal: false,
-            showQRReader: false,
-            sendAddressValue: ""
-          }); // Set state
-        });
-        */
+        if (response.error) { // Check for errors
+          this.errorAlert(response.error); // Show error
+
+          return; // Return
+        }
+
+        var i; // Initialize iterator
+      
+        for (i = 0; i < response.accounts.length; i++) { // Iterate through accounts
+          fetch("https://summer.cash/api/transactions/NewTransaction", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              username: this.state.username, // Set username
+              recipient: response.accounts[i].address, // Set recipient
+              amount: parseFloat(formData.amount)/response.accounts.length, // Set amount
+              password: this.state.token, // Set password
+              payload: formData.message
+            })
+          }); // Send tx
+        }
+
+        this.successAlert("Transaction sent successfully!"); // Alert success
+
+        this.setState({
+          showSendModal: false,
+          showQRReader: false,
+          sendAddressValue: ""
+        }); // Set state
+      });
     } else {
       fetch("https://summer.cash/api/transactions/NewTransaction", {
       method: "POST",
