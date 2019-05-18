@@ -310,7 +310,7 @@ class App extends Component {
         </Heading>
 
         {!this.state.hasLoadedTransactions ? (
-          <Box margin={{ left: "large" }} height="40%">
+          <Box margin={{ left: "large" }} height="40%" width="40%">
             <LinearProgress variant="query" />
           </Box>
         ) : (
