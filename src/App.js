@@ -28,7 +28,6 @@ import print from "print-js"; // Import print
 import Media from "react-media";
 import CookieBanner from "react-cookie-banner"; // Import cookie banner
 import { messaging } from "./init-fcm"; // Import initialize fcm
-import CircularProgress from "@material-ui/core/CircularProgress"; // Import progress
 
 class App extends Component {
   errorAlert = message => toast.error(message); // Alert
@@ -102,8 +101,7 @@ class App extends Component {
       alreadyReceivedHashes: [], // Set received hashes
       hasInitiallyLoaded: false, // Set has already loaded
       hasAlreadyScanned: false, // Set has already scanned
-      hasCookie: cookies.get("has-cookie-accept"), // Set has cookie
-      hasLoadedTransactions: false // Set has loaded txs
+      hasCookie: cookies.get("has-cookie-accept") // Set has cookie
     }; // Set state
   }
 
@@ -310,7 +308,6 @@ class App extends Component {
           margin={{ left: "large" }}
           height="50%"
         >
-          {!this.state.hasLoadedTransactions ? <CircularProgress /> : <div />}
           {this.renderTransactions()}
         </Box>
         <Media query="(min-width:605px)">
@@ -1565,10 +1562,6 @@ class App extends Component {
           break;
       }
     }
-
-    this.setState({
-      hasLoadedTransactions: true
-    }); // Set state
 
     return transactionViews; // Return tx views
   }
