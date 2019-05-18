@@ -437,7 +437,7 @@ class App extends Component {
         }
 
         this.setState({
-          balance: balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          balance: balance.toLocaleString("EG")
         }); // Set state
       });
   }
