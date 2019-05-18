@@ -28,7 +28,7 @@ import print from "print-js"; // Import print
 import Media from "react-media";
 import CookieBanner from "react-cookie-banner"; // Import cookie banner
 import { messaging } from "./init-fcm"; // Import initialize fcm
-import CircularProgress from "@material-ui/core/CircularProgress"; // Import progress
+import LinearProgress from "@material-ui/core/LinearProgress"; // Import progress
 
 class App extends Component {
   errorAlert = message => toast.error(message); // Alert
@@ -308,13 +308,20 @@ class App extends Component {
         >
           Transactions
         </Heading>
-        <Box
-          overflow={{ vertical: "scroll" }}
-          margin={{ left: "large" }}
-          height="50%"
-        >
-          {!this.state.hasLoadedTransactions ? <CircularProgress /> : <div />}
-        </Box>
+
+        {!this.state.hasLoadedTransactions ? (
+          <Box
+            margin={{ left: "large" }}
+            align="start"
+            alignContent="start"
+            alignSelf="start"
+            width="40%"
+          >
+            <LinearProgress />
+          </Box>
+        ) : (
+          <div />
+        )}
         <Box
           overflow={{ vertical: "scroll" }}
           margin={{ left: "large" }}
