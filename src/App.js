@@ -309,7 +309,7 @@ class App extends Component {
           margin={{ left: "large" }}
           height="50%"
         >
-          {this.state.hasInitiallyLoaded ? <CircularProgress /> : <div />}
+          {!this.state.hasInitiallyLoaded ? <CircularProgress /> : <div />}
           {this.renderTransactions()}
         </Box>
         <Media query="(min-width:605px)">
