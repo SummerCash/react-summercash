@@ -1292,7 +1292,7 @@ class App extends Component {
             return; // Return
           }
 
-          var i; // Initialize iterator
+          var i = 0; // Initialize iterator
 
           while (i < response.accounts.length) {
             // Iterate through accounts
