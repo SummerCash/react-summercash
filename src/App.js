@@ -102,7 +102,8 @@ class App extends Component {
       alreadyReceivedHashes: [], // Set received hashes
       hasInitiallyLoaded: false, // Set has already loaded
       hasAlreadyScanned: false, // Set has already scanned
-      hasCookie: cookies.get("has-cookie-accept") // Set has cookie
+      hasCookie: cookies.get("has-cookie-accept"), // Set has cookie
+      hasLoadedTransactions: false // Set has loaded txs
     }; // Set state
   }
 
@@ -207,6 +208,8 @@ class App extends Component {
                 this.setState({ alreadyPoppedRedeemable: true }); // Set state
               }
             } else {
+              this.setState({ hasLoadedTransactions: true }); // Set already loaded
+
               this.setState({ transactions: response.transactions }); // Set state txs
             }
           }
@@ -309,7 +312,13 @@ class App extends Component {
           margin={{ left: "large" }}
           height="50%"
         >
-          {!this.state.hasInitiallyLoaded ? <CircularProgress /> : <div />}
+          {!this.state.hasLoadedTransactions ? <CircularProgress /> : <div />}
+        </Box>
+        <Box
+          overflow={{ vertical: "scroll" }}
+          margin={{ left: "large" }}
+          height="50%"
+        >
           {this.renderTransactions()}
         </Box>
         <Media query="(min-width:605px)">
