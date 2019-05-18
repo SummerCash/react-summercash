@@ -28,7 +28,7 @@ import print from "print-js"; // Import print
 import Media from "react-media";
 import CookieBanner from "react-cookie-banner"; // Import cookie banner
 import { messaging } from "./init-fcm"; // Import initialize fcm
-import LinearProgress from "@material-ui/core/LinearProgress"; // Import progress
+import LinearQuery from "@material-ui/core/LinearProgress"; // Import progress
 
 class App extends Component {
   errorAlert = message => toast.error(message); // Alert
@@ -317,7 +317,7 @@ class App extends Component {
             alignSelf="start"
             width="40%"
           >
-            <LinearProgress />
+            <LinearQuery />
           </Box>
         ) : (
           <div />
