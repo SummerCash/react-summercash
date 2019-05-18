@@ -1275,78 +1275,81 @@ class App extends Component {
       formData.message = ""; // Prevent undefined
     }
 
-    if (formData.recipient === "everyone") { // Check is everyone
+    if (formData.recipient === "everyone") {
+      // Check is everyone
       fetch("https://summer.cash/api/accounts/everyone", {
         method: "GET",
         headers: {
           "Content-Type": "application/json"
         }
       })
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.error) { // Check for errors
-          this.errorAlert(response.error); // Show error
+        .then(response => response.json())
+        .then(response => {
+          if (response.error) {
+            // Check for errors
+            this.errorAlert(response.error); // Show error
 
-          return; // Return
-        }
+            return; // Return
+          }
 
-        var i; // Initialize iterator
-      
-        for (i = 0; i < response.accounts.length; i++) { // Iterate through accounts
-          fetch("https://summer.cash/api/transactions/NewTransaction", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              username: this.state.username, // Set username
-              recipient: response.accounts[i].address, // Set recipient
-              amount: parseFloat(formData.amount)/response.accounts.length, // Set amount
-              password: this.state.token, // Set password
-              payload: formData.message
-            })
-          }); // Send tx
-        }
+          var i; // Initialize iterator
 
-        this.successAlert("Transaction sent successfully!"); // Alert success
+          while (i < response.accounts.length) {
+            // Iterate through accounts
+            fetch("https://summer.cash/api/transactions/NewTransaction", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                username: this.state.username, // Set username
+                recipient: response.accounts[i].address, // Set recipient
+                amount: parseFloat(formData.amount) / response.accounts.length, // Set amount
+                password: this.state.token, // Set password
+                payload: formData.message
+              })
+            }).then(i++); // Send tx
+          }
 
-        this.setState({
-          showSendModal: false,
-          showQRReader: false,
-          sendAddressValue: ""
-        }); // Set state
-      });
+          this.successAlert("Transaction sent successfully!"); // Alert success
+
+          this.setState({
+            showSendModal: false,
+            showQRReader: false,
+            sendAddressValue: ""
+          }); // Set state
+        });
     } else {
       fetch("https://summer.cash/api/transactions/NewTransaction", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        username: this.state.username, // Set username
-        recipient: formData.recipient, // Set recipient
-        amount: parseFloat(formData.amount), // Set amount
-        password: this.state.token, // Set password
-        payload: formData.message
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username: this.state.username, // Set username
+          recipient: formData.recipient, // Set recipient
+          amount: parseFloat(formData.amount), // Set amount
+          password: this.state.token, // Set password
+          payload: formData.message
+        })
       })
-    })
-      .then(response => response.json())
-      .then(response => {
-        if (response.error) {
-          // Check for errors
-          this.errorAlert(response.error); // Alert
-        } else {
-          this.successAlert("Transaction sent successfully!"); // Alert success
-        }
+        .then(response => response.json())
+        .then(response => {
+          if (response.error) {
+            // Check for errors
+            this.errorAlert(response.error); // Alert
+          } else {
+            this.successAlert("Transaction sent successfully!"); // Alert success
+          }
 
-        this.fetchTransactions(); // Fetch transactions
+          this.fetchTransactions(); // Fetch transactions
 
-        this.setState({
-          showSendModal: false,
-          showQRReader: false,
-          sendAddressValue: ""
-        }); // Set state
-      });
+          this.setState({
+            showSendModal: false,
+            showQRReader: false,
+            sendAddressValue: ""
+          }); // Set state
+        });
     }
   }
 
