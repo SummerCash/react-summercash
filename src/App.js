@@ -28,7 +28,7 @@ import print from "print-js"; // Import print
 import Media from "react-media";
 import CookieBanner from "react-cookie-banner"; // Import cookie banner
 import { messaging } from "./init-fcm"; // Import initialize fcm
-import LinearQuery from "@material-ui/core/LinearProgress"; // Import progress
+import LinearProgress from "@material-ui/core/LinearProgress"; // Import progress
 
 class App extends Component {
   errorAlert = message => toast.error(message); // Alert
@@ -310,15 +310,8 @@ class App extends Component {
         </Heading>
 
         {!this.state.hasLoadedTransactions ? (
-          <Box
-            margin={{ left: "large" }}
-            align="start"
-            alignContent="start"
-            alignSelf="start"
-            width="40%"
-            height="50%"
-          >
-            <LinearQuery />
+          <Box margin={{ left: "large" }} align="start">
+            <LinearProgress variant="query" />
           </Box>
         ) : (
           <div />
