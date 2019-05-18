@@ -208,9 +208,10 @@ class App extends Component {
                 this.setState({ alreadyPoppedRedeemable: true }); // Set state
               }
             } else {
-              this.setState({ hasLoadedTransactions: true }); // Set already loaded
-
-              this.setState({ transactions: response.transactions }); // Set state txs
+              this.setState({
+                hasLoadedTransactions: true,
+                transactions: response.transactions
+              }); // Set state txs
             }
           }
 
