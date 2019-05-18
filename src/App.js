@@ -436,7 +436,9 @@ class App extends Component {
           balance = response.balance; // Set balance
         }
 
-        this.setState({ balance: balance }); // Set state
+        this.setState({
+          balance: balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        }); // Set state
       });
   }
 
