@@ -316,6 +316,7 @@ class App extends Component {
             alignContent="start"
             alignSelf="start"
             width="40%"
+            height="50%"
           >
             <LinearQuery />
           </Box>
