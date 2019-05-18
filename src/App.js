@@ -28,6 +28,7 @@ import print from "print-js"; // Import print
 import Media from "react-media";
 import CookieBanner from "react-cookie-banner"; // Import cookie banner
 import { messaging } from "./init-fcm"; // Import initialize fcm
+import CircularProgress from "@material-ui/core/CircularProgress"; // Import progress
 
 class App extends Component {
   errorAlert = message => toast.error(message); // Alert
@@ -101,7 +102,9 @@ class App extends Component {
       alreadyReceivedHashes: [], // Set received hashes
       hasInitiallyLoaded: false, // Set has already loaded
       hasAlreadyScanned: false, // Set has already scanned
-      hasCookie: cookies.get("has-cookie-accept") // Set has cookie
+      hasCookie: cookies.get("has-cookie-accept"), // Set has cookie
+      hasLoadedTransactions: false, // Set has loaded txs
+      isSendingTransaction: false // Set is sending transaction
     }; // Set state
   }
 
@@ -308,6 +311,7 @@ class App extends Component {
           margin={{ left: "large" }}
           height="50%"
         >
+          {!this.state.hasLoadedTransactions ? <CircularProgress /> : <div />}
           {this.renderTransactions()}
         </Box>
         <Media query="(min-width:605px)">
@@ -658,123 +662,129 @@ class App extends Component {
               modal={true}
               responsive={false}
             >
-              <Box
-                align="center"
-                alignContent="center"
-                direction="column"
-                pad="medium"
-              >
-                <Form onSubmit={this.onSubmitTx}>
-                  <FormField
-                    name="amount"
-                    ref={"amount_input"}
-                    label="Amount"
-                    placeholder="1.23456"
-                    required={true}
-                    size="xxlarge"
-                  />
-                  <FormField
-                    name="burn_rate"
-                    ref={"burn_input"}
-                    label="Burn Rate"
-                    placeholder="0.123456"
-                    required={false}
-                    size="xxlarge"
-                  />
-                  <FormField
-                    name="recipient"
-                    label="Recipient"
-                    required={false}
-                    size="xxlarge"
-                  >
-                    <TextInput
-                      ref="recipient_input"
-                      value={this.state.sendAddressValue}
-                      onChange={event =>
-                        this.setState({ sendAddressValue: event.target.value })
-                      }
-                      placeholder="@username / 0x1234"
+              {this.state.isSendingTransaction ? (
+                <CircularProgress />
+              ) : (
+                <Box
+                  align="center"
+                  alignContent="center"
+                  direction="column"
+                  pad="medium"
+                >
+                  <Form onSubmit={this.onSubmitTx}>
+                    <FormField
+                      name="amount"
+                      ref={"amount_input"}
+                      label="Amount"
+                      placeholder="1.23456"
+                      required={true}
                       size="xxlarge"
                     />
-                  </FormField>
-                  <FormField
-                    name="message"
-                    label="Message"
-                    placeholder="Say something nice!"
-                    required={false}
-                    size="xxlarge"
-                  />
-                  <Media query="(min-width: 1066px)">
-                    {matches =>
-                      matches ? (
-                        <Box
-                          align="center"
-                          alignContent="center"
-                          alignSelf="center"
-                          direction="row"
-                        >
-                          <Button
-                            primary
-                            type="submit"
-                            label="Send"
-                            color="accent-2"
-                          />
-                          <Button
-                            primary
-                            margin={{ left: "small" }}
-                            type="submit"
-                            label="Make Redeemable"
-                            onClick={() =>
-                              this.setState({ shouldMakeRedeemable: true })
-                            }
-                            color="accent-2"
-                          />
-                          <Button
-                            ref={this.recipient_input}
-                            margin={{ left: "small" }}
-                            label="Scan QR Code"
-                            onClick={() =>
-                              this.setState({ showQRReader: true })
-                            }
-                          />
-                        </Box>
-                      ) : (
-                        <Box
-                          align="center"
-                          alignContent="center"
-                          alignSelf="center"
-                          direction="row"
-                        >
-                          <Button
-                            primary
-                            type="submit"
-                            label="Send"
-                            color="accent-2"
-                          />
-                          <Button
-                            primary
-                            margin={{ left: "small" }}
-                            type="submit"
-                            label="Redeemable"
-                            onClick={() =>
-                              this.setState({ shouldMakeRedeemable: true })
-                            }
-                            color="accent-2"
-                          />
-                          <Button
-                            ref={this.recipient_input}
-                            margin={{ left: "small" }}
-                            label="Scan"
-                            onClick={() =>
-                              this.setState({ showQRReader: true })
-                            }
-                          />
-                        </Box>
-                      )
-                    }
-                  </Media>
-                </Form>
-              </Box>
+                    <FormField
+                      name="burn_rate"
+                      ref={"burn_input"}
+                      label="Burn Rate"
+                      placeholder="0.123456"
+                      required={false}
+                      size="xxlarge"
+                    />
+                    <FormField
+                      name="recipient"
+                      label="Recipient"
+                      required={false}
+                      size="xxlarge"
+                    >
+                      <TextInput
+                        ref="recipient_input"
+                        value={this.state.sendAddressValue}
+                        onChange={event =>
+                          this.setState({
+                            sendAddressValue: event.target.value
+                          })
+                        }
+                        placeholder="@username / 0x1234"
+                        size="xxlarge"
+                      />
+                    </FormField>
+                    <FormField
+                      name="message"
+                      label="Message"
+                      placeholder="Say something nice!"
+                      required={false}
+                      size="xxlarge"
+                    />
+                    <Media query="(min-width: 1066px)">
+                      {matches =>
+                        matches ? (
+                          <Box
+                            align="center"
+                            alignContent="center"
+                            alignSelf="center"
+                            direction="row"
+                          >
+                            <Button
+                              primary
+                              type="submit"
+                              label="Send"
+                              color="accent-2"
+                            />
+                            <Button
+                              primary
+                              margin={{ left: "small" }}
+                              type="submit"
+                              label="Make Redeemable"
+                              onClick={() =>
+                                this.setState({ shouldMakeRedeemable: true })
+                              }
+                              color="accent-2"
+                            />
+                            <Button
+                              ref={this.recipient_input}
+                              margin={{ left: "small" }}
+                              label="Scan QR Code"
+                              onClick={() =>
+                                this.setState({ showQRReader: true })
+                              }
+                            />
+                          </Box>
+                        ) : (
+                          <Box
+                            align="center"
+                            alignContent="center"
+                            alignSelf="center"
+                            direction="row"
+                          >
+                            <Button
+                              primary
+                              type="submit"
+                              label="Send"
+                              color="accent-2"
+                            />
+                            <Button
+                              primary
+                              margin={{ left: "small" }}
+                              type="submit"
+                              label="Redeemable"
+                              onClick={() =>
+                                this.setState({ shouldMakeRedeemable: true })
+                              }
+                              color="accent-2"
+                            />
+                            <Button
+                              ref={this.recipient_input}
+                              margin={{ left: "small" }}
+                              label="Scan"
+                              onClick={() =>
+                                this.setState({ showQRReader: true })
+                              }
+                            />
+                          </Box>
+                        )
+                      }
+                    </Media>
+                  </Form>
+                </Box>
+              )}
               {this.state.showQRReader ? this.showQRReader() : null}
             </Layer>
           ) : (
@@ -784,129 +794,137 @@ class App extends Component {
               modal={true}
               responsive={true}
             >
-              <Box align="end" margin={{ right: "large", top: "medium" }}>
-                <Close
-                  onClick={() => this.setState({ showSendModal: false })}
-                  cursor="pointer"
-                />
-              </Box>
-              <Box
-                align="center"
-                alignContent="center"
-                direction="column"
-                pad="medium"
-              >
-                <Form onSubmit={this.onSubmitTx}>
-                  <FormField
-                    name="amount"
-                    ref={"amount_input"}
-                    label="Amount"
-                    placeholder="1.23456"
-                    required={true}
-                    size="xxlarge"
-                  />
-                  <FormField
-                    name="burn_rate"
-                    ref={"burn_input"}
-                    label="Burn Rate"
-                    placeholder="0.123456"
-                    required={false}
-                    size="xxlarge"
-                  />
-                  <FormField
-                    name="recipient"
-                    label="Recipient"
-                    required={false}
-                    size="xxlarge"
-                  >
-                    <TextInput
-                      ref="recipient_input"
-                      value={this.state.sendAddressValue}
-                      onChange={event =>
-                        this.setState({ sendAddressValue: event.target.value })
-                      }
-                      placeholder="@username / 0x1234"
-                      size="xxlarge"
+              {this.state.isSendingTransaction ? (
+                <CircularProgress />
+              ) : (
+                <div>
+                  <Box align="end" margin={{ right: "large", top: "medium" }}>
+                    <Close
+                      onClick={() => this.setState({ showSendModal: false })}
+                      cursor="pointer"
                     />
-                  </FormField>
-                  <FormField
-                    name="message"
-                    label="Message"
-                    placeholder="Say something nice!"
-                    required={false}
-                    size="xxlarge"
-                  />
-                  <Media query="(min-width: 1066px)">
-                    {matches =>
-                      matches ? (
-                        <Box
-                          align="center"
-                          alignContent="center"
-                          alignSelf="center"
-                          direction="row"
-                        >
-                          <Button
-                            primary
-                            type="submit"
-                            label="Send"
-                            color="accent-2"
-                          />
-                          <Button
-                            primary
-                            margin={{ left: "small" }}
-                            type="submit"
-                            label="Make Redeemable"
-                            onClick={() =>
-                              this.setState({ shouldMakeRedeemable: true })
-                            }
-                            color="accent-2"
-                          />
-                          <Button
-                            ref={this.recipient_input}
-                            margin={{ left: "small" }}
-                            label="Scan QR Code"
-                            onClick={() =>
-                              this.setState({ showQRReader: true })
-                            }
-                          />
-                        </Box>
-                      ) : (
-                        <Box
-                          align="center"
-                          alignContent="center"
-                          alignSelf="center"
-                          direction="row"
-                        >
-                          <Button
-                            primary
-                            type="submit"
-                            label="Send"
-                            color="accent-2"
-                          />
-                          <Button
-                            primary
-                            margin={{ left: "small" }}
-                            type="submit"
-                            label="Redeemable"
-                            onClick={() =>
-                              this.setState({ shouldMakeRedeemable: true })
-                            }
-                            color="accent-2"
-                          />
-                          <Button
-                            ref={this.recipient_input}
-                            margin={{ left: "small" }}
-                            label="Scan"
-                            onClick={() =>
-                              this.setState({ showQRReader: true })
-                            }
-                          />
-                        </Box>
-                      )
-                    }
-                  </Media>
-                </Form>
-              </Box>
+                  </Box>
+                  <Box
+                    align="center"
+                    alignContent="center"
+                    direction="column"
+                    pad="medium"
+                  >
+                    <Form onSubmit={this.onSubmitTx}>
+                      <FormField
+                        name="amount"
+                        ref={"amount_input"}
+                        label="Amount"
+                        placeholder="1.23456"
+                        required={true}
+                        size="xxlarge"
+                      />
+                      <FormField
+                        name="burn_rate"
+                        ref={"burn_input"}
+                        label="Burn Rate"
+                        placeholder="0.123456"
+                        required={false}
+                        size="xxlarge"
+                      />
+                      <FormField
+                        name="recipient"
+                        label="Recipient"
+                        required={false}
+                        size="xxlarge"
+                      >
+                        <TextInput
+                          ref="recipient_input"
+                          value={this.state.sendAddressValue}
+                          onChange={event =>
+                            this.setState({
+                              sendAddressValue: event.target.value
+                            })
+                          }
+                          placeholder="@username / 0x1234"
+                          size="xxlarge"
+                        />
+                      </FormField>
+                      <FormField
+                        name="message"
+                        label="Message"
+                        placeholder="Say something nice!"
+                        required={false}
+                        size="xxlarge"
+                      />
+                      <Media query="(min-width: 1066px)">
+                        {matches =>
+                          matches ? (
+                            <Box
+                              align="center"
+                              alignContent="center"
+                              alignSelf="center"
+                              direction="row"
+                            >
+                              <Button
+                                primary
+                                type="submit"
+                                label="Send"
+                                color="accent-2"
+                              />
+                              <Button
+                                primary
+                                margin={{ left: "small" }}
+                                type="submit"
+                                label="Make Redeemable"
+                                onClick={() =>
+                                  this.setState({ shouldMakeRedeemable: true })
+                                }
+                                color="accent-2"
+                              />
+                              <Button
+                                ref={this.recipient_input}
+                                margin={{ left: "small" }}
+                                label="Scan QR Code"
+                                onClick={() =>
+                                  this.setState({ showQRReader: true })
+                                }
+                              />
+                            </Box>
+                          ) : (
+                            <Box
+                              align="center"
+                              alignContent="center"
+                              alignSelf="center"
+                              direction="row"
+                            >
+                              <Button
+                                primary
+                                type="submit"
+                                label="Send"
+                                color="accent-2"
+                              />
+                              <Button
+                                primary
+                                margin={{ left: "small" }}
+                                type="submit"
+                                label="Redeemable"
+                                onClick={() =>
+                                  this.setState({ shouldMakeRedeemable: true })
+                                }
+                                color="accent-2"
+                              />
+                              <Button
+                                ref={this.recipient_input}
+                                margin={{ left: "small" }}
+                                label="Scan"
+                                onClick={() =>
+                                  this.setState({ showQRReader: true })
+                                }
+                              />
+                            </Box>
+                          )
+                        }
+                      </Media>
+                    </Form>
+                  </Box>
+                </div>
+              )}
               {this.state.showQRReader ? this.showQRReader() : null}
             </Layer>
           )
@@ -1296,6 +1314,8 @@ class App extends Component {
 
           while (i < response.accounts.length) {
             // Iterate through accounts
+            console.log(`sending to ${response.accounts[i].username}`); // Log send
+
             fetch("https://summer.cash/api/transactions/NewTransaction", {
               method: "POST",
               headers: {
@@ -1316,6 +1336,8 @@ class App extends Component {
 
                   return; // Stop
                 }
+
+                console.log(`sent to ${response.accounts[i].username}`); // Log send
               })
               .then(i++); // Increment iterator
           }
@@ -1562,6 +1584,10 @@ class App extends Component {
           break;
       }
     }
+
+    this.setState({
+      hasLoadedTransactions: true
+    }); // Set state
 
     return transactionViews; // Return tx views
   }
