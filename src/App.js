@@ -1308,7 +1308,16 @@ class App extends Component {
                 password: this.state.token, // Set password
                 payload: formData.message
               })
-            }).then(i++); // Send tx
+            })
+              .then(response => {
+                if (response.error) {
+                  // Check for errors
+                  this.errorAlert(response.error); // Show error
+
+                  return; // Stop
+                }
+              })
+              .then(i++); // Increment iterator
           }
 
           this.successAlert("Transaction sent successfully!"); // Alert success
