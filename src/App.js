@@ -1335,6 +1335,9 @@ class App extends Component {
 
           this.successAlert("Transaction sent successfully!"); // Alert success
 
+          this.fetchBalance(); // Fetch balance
+          this.fetchTransactions(); // Fetch Transactions
+
           this.setState({
             showSendModal: false,
             showQRReader: false,
