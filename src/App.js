@@ -1322,12 +1322,10 @@ class App extends Component {
                 payload: formData.message
               })
             })
-              .then(response => {
-                if (response.error) {
+              .then(newTxResponse => {
+                if (newTxResponse.error) {
                   // Check for errors
-                  this.errorAlert(response.error); // Show error
-
-                  return; // Stop
+                  this.errorAlert(newTxResponse.error); // Show error
                 }
               })
               .then(i++); // Increment iterator
