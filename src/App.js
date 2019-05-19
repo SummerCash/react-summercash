@@ -159,7 +159,7 @@ class App extends Component {
               window.isElectron === null
             ) {
               // Check is not electron
-              if (messaging.isSupported()) {
+              if (messaging && messaging !== undefined && messaging !== null) {
                 // Check supports messaging API
                 messaging
                   .requestPermission()
