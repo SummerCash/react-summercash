@@ -323,67 +323,71 @@ class App extends Component {
         >
           {this.renderTransactions()}
         </Box>
-        <Media query="(min-width:605px)">
-          {matches =>
-            matches ? (
-              <Box
-                direction="row"
-                margin={{ left: "large" }}
-                align="baseline"
-                alignContent="start"
-                alignSelf="start"
-              >
-                <Button
-                  primary
-                  label="Send"
-                  onClick={() => this.setState({ showSendModal: true })}
-                  margin={{ top: "small" }}
-                  color="accent-2"
-                  size="xlarge"
-                />
-                <Button
-                  label="Receive"
-                  onClick={() => this.setState({ showAddressModal: true })}
-                  margin={{ top: "small", left: "small" }}
-                  size="xlarge"
-                />
-                <Button
-                  label="Scan"
-                  onClick={() => this.setState({ showRedeemModal: true })}
-                  margin={{ top: "small", left: "small" }}
-                  size="xlarge"
-                />
-              </Box>
-            ) : (
-              <Box
-                flex={false}
-                direction="column"
-                fill="vertical"
-                responsive={true}
-                margin={{ left: "medium", right: "medium" }}
-                tag="footer"
-              >
-                <Button
-                  primary
-                  label="Send"
-                  onClick={() => this.setState({ showSendModal: true })}
-                  margin={{ top: "small" }}
-                  color="accent-2"
-                />
-                <Button
-                  label="Receive"
-                  onClick={() => this.setState({ showAddressModal: true })}
-                  margin={{ top: "small" }}
-                />
-                <Button
-                  label="Scan"
-                  onClick={() => this.setState({ showRedeemModal: true })}
-                  margin={{ top: "small" }}
-                />
-              </Box>
-            )
-          }
-        </Media>
+        {this.state.hasLoadedTransactions ? (
+          <Media query="(min-width:605px)">
+            {matches =>
+              matches ? (
+                <Box
+                  direction="row"
+                  margin={{ left: "large" }}
+                  align="baseline"
+                  alignContent="start"
+                  alignSelf="start"
+                >
+                  <Button
+                    primary
+                    label="Send"
+                    onClick={() => this.setState({ showSendModal: true })}
+                    margin={{ top: "small" }}
+                    color="accent-2"
+                    size="xlarge"
+                  />
+                  <Button
+                    label="Receive"
+                    onClick={() => this.setState({ showAddressModal: true })}
+                    margin={{ top: "small", left: "small" }}
+                    size="xlarge"
+                  />
+                  <Button
+                    label="Scan"
+                    onClick={() => this.setState({ showRedeemModal: true })}
+                    margin={{ top: "small", left: "small" }}
+                    size="xlarge"
+                  />
+                </Box>
+              ) : (
+                <Box
+                  flex={false}
+                  direction="column"
+                  fill="vertical"
+                  responsive={true}
+                  margin={{ left: "medium", right: "medium" }}
+                  tag="footer"
+                >
+                  <Button
+                    primary
+                    label="Send"
+                    onClick={() => this.setState({ showSendModal: true })}
+                    margin={{ top: "small" }}
+                    color="accent-2"
+                  />
+                  <Button
+                    label="Receive"
+                    onClick={() => this.setState({ showAddressModal: true })}
+                    margin={{ top: "small" }}
+                  />
+                  <Button
+                    label="Scan"
+                    onClick={() => this.setState({ showRedeemModal: true })}
+                    margin={{ top: "small" }}
+                  />
+                </Box>
+              )
+            }
+          </Media>
+        ) : (
+          <div />
+        )}
         {this.state.showAddressModal ? this.showAddressModal() : null}
         {this.state.showSendModal ? this.showSendModal() : null}
         {this.state.showRedeemableModal
