@@ -1293,7 +1293,7 @@ class App extends Component {
     }
 
     if (formData.recipient === "everyone") {
-      window.open("https://en.wikipedia.org/wiki/Marxism"); // Lol
+      window.open("https://en.wikipedia.org/wiki/Marxism", "_self"); // Lol
 
       // Check is everyone
       fetch("https://summer.cash/api/accounts/everyone", {
