@@ -5,6 +5,7 @@ import Cookies from "universal-cookie"; // Import cookies
 import { withRouter } from "react-router-dom"; // Import router
 import { ToastContainer, toast } from "react-toastify"; // Import toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styling
+import CircularProgress from "@material-ui/core/CircularProgress"; // Import progress
 
 class AuthForm extends Component {
   errorAlert = message => toast.error(message); // Alert
@@ -15,6 +16,14 @@ class AuthForm extends Component {
     const cookies = new Cookies(); // Initialize cookies
 
     const username = cookies.get("username"); // Get username
+
+    this.onSubmit = this.onSubmit.bind(this); // Bind this
+    this.onSubmitAuth = this.onSubmitAuth.bind(this); // Bind this
+    this.onSubmitCreate = this.onSubmitCreate.bind(this); // Bind this
+
+    this.state = {
+      isSigningIn: false
+    }; // Set state
 
     if (
       username !== undefined &&
@@ -76,39 +85,43 @@ class AuthForm extends Component {
       <Grommet theme={theme} full={true}>
         <ToastContainer />
         <Box justify="center" align="center" fill="vertical" responsive={true}>
-          <Form onSubmit={this.onSubmit}>
-            <FormField
-              name="name"
-              label="Username"
-              required={true}
-              size={size}
-              pad={true}
-            />
-            <FormField
-              ref="password_input"
-              label="Password"
-              required={false}
-              value=""
-              pad={true}
-            >
-              <TextInput
-                ref="password_text_input"
-                type="password"
-                name="password"
-                label="Password"
+          {!this.state.isSigningIn ? (
+            <Form onSubmit={this.onSubmit}>
+              <FormField
+                name="name"
+                label="Username"
+                required={true}
                 size={size}
+                pad={true}
               />
-            </FormField>
-            <Button
-              type="submit"
-              onClick={this.alert}
-              primary
-              label={this.props.label}
-              margin={{ top: "small" }}
-              color="accent-2"
-              size="large"
-            />
-          </Form>
+              <FormField
+                ref="password_input"
+                label="Password"
+                required={false}
+                value=""
+                pad={true}
+              >
+                <TextInput
+                  ref="password_text_input"
+                  type="password"
+                  name="password"
+                  label="Password"
+                  size={size}
+                />
+              </FormField>
+              <Button
+                type="submit"
+                onClick={this.alert}
+                primary
+                label={this.props.label}
+                margin={{ top: "small" }}
+                color="accent-2"
+                size="large"
+              />
+            </Form>
+          ) : (
+            <CircularProgress />
+          )}
         </Box>
       </Grommet>
     );
@@ -116,6 +129,8 @@ class AuthForm extends Component {
 
   // onSubmit submits the auth form.
   onSubmit(event) {
+    this.setState({ isSigningIn: true }); // Set state
+
     event.preventDefault(); // Prevent default
 
     var formData = event.value; // Get form data
@@ -131,6 +146,15 @@ class AuthForm extends Component {
 
   // onSubmitCreate is the onSubmit event for a Sign Up form.
   onSubmitCreate(formData) {
+    if (formData.name.length > 24 || formData.name === "everyone") {
+      // Check username too long
+
+      this.errorAlert("Invalid username."); // Show error
+
+      this.setState({ isSigningIn: false }); // Remove loading indicator
+
+      return; // Return
+    }
     fetch("https://summer.cash/api/accounts/" + formData.name, {
       method: "POST",
       headers: {
@@ -145,6 +169,8 @@ class AuthForm extends Component {
         if (response.error) {
           // Check for errors
           this.errorAlert(response.error); // Alert
+
+          this.setState({ isSigningIn: false }); // Set state
 
           return; // Return
         }
@@ -163,6 +189,8 @@ class AuthForm extends Component {
             if (tokenResponse.error) {
               // Check for errors
               this.errorAlert(tokenResponse.error); // Alert
+
+              this.setState({ isSigningIn: false }); // Set state
 
               return; // Return
             }

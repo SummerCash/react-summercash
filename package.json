@@ -10,6 +10,7 @@
     "grommet-icons": "^4.2.0",
     "grommet-styles": "^0.2.0",
     "js-sha3": "^0.8.0",
+    "material-ui": "^0.20.2",
     "polished": "^3.2.0",
     "print-js": "^1.0.55",
     "qrcode.react": "^0.9.3",
@@ -48,5 +49,5 @@
     "not op_mini all"
   ],
   "proxy": "https://localhost:3033",
-  "homepage": "http://summer.cash"
+  "homepage": "https://summer.cash"
 }

@@ -28,6 +28,7 @@ import print from "print-js"; // Import print
 import Media from "react-media";
 import CookieBanner from "react-cookie-banner"; // Import cookie banner
 import { messaging } from "./init-fcm"; // Import initialize fcm
+import LinearProgress from "@material-ui/core/LinearProgress"; // Import progress
 
 class App extends Component {
   errorAlert = message => toast.error(message); // Alert
@@ -101,7 +102,8 @@ class App extends Component {
       alreadyReceivedHashes: [], // Set received hashes
       hasInitiallyLoaded: false, // Set has already loaded
       hasAlreadyScanned: false, // Set has already scanned
-      hasCookie: cookies.get("has-cookie-accept") // Set has cookie
+      hasCookie: cookies.get("has-cookie-accept"), // Set has cookie
+      hasLoadedTransactions: false // Set has loaded txs
     }; // Set state
   }
 
@@ -157,42 +159,45 @@ class App extends Component {
               window.isElectron === null
             ) {
               // Check is not electron
-              messaging
-                .requestPermission()
-                .then(() => {
-                  return messaging.getToken();
-                })
-                .then(token => {
-                  console.log(token); // Log token
+              if (messaging && messaging !== undefined && messaging !== null) {
+                // Check supports messaging API
+                messaging
+                  .requestPermission()
+                  .then(() => {
+                    return messaging.getToken();
+                  })
+                  .then(token => {
+                    console.log(token); // Log token
 
-                  return fetch(
-                    "https://summer.cash/api/accounts/" +
-                      cookies.get("username") +
-                      "/pushtoken",
-                    {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json"
-                      },
-                      body: JSON.stringify({
-                        password: cookies.get("token"),
-                        fcm_token: token
-                      })
+                    return fetch(
+                      "https://summer.cash/api/accounts/" +
+                        cookies.get("username") +
+                        "/pushtoken",
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                          password: cookies.get("token"),
+                          fcm_token: token
+                        })
+                      }
+                    );
+                  })
+                  .then(response => response.json())
+                  .then(response => {
+                    if (
+                      response.error &&
+                      !response.error.includes("already exists")
+                    ) {
+                      // Check for errors
+                      this.errorAlert(response.error); // Alert
+
+                      return; // Return
                     }
-                  );
-                })
-                .then(response => response.json())
-                .then(response => {
-                  if (
-                    response.error &&
-                    !response.error.includes("already exists")
-                  ) {
-                    // Check for errors
-                    this.errorAlert(response.error); // Alert
-
-                    return; // Return
-                  }
-                }); // Post token
+                  }); // Post token
+              }
             }
 
             if (!response.transactions) {
@@ -206,7 +211,10 @@ class App extends Component {
                 this.setState({ alreadyPoppedRedeemable: true }); // Set state
               }
             } else {
-              this.setState({ transactions: response.transactions }); // Set state txs
+              this.setState({
+                hasLoadedTransactions: true,
+                transactions: response.transactions
+              }); // Set state txs
             }
           }
 
@@ -303,6 +311,14 @@ class App extends Component {
         >
           Transactions
         </Heading>
+
+        {!this.state.hasLoadedTransactions ? (
+          <Box margin={{ left: "large" }} height="5%" width="40%">
+            <LinearProgress variant="query" />
+          </Box>
+        ) : (
+          <div />
+        )}
         <Box
           overflow={{ vertical: "scroll" }}
           margin={{ left: "large" }}
@@ -310,67 +326,71 @@ class App extends Component {
         >
           {this.renderTransactions()}
         </Box>
-        <Media query="(min-width:605px)">
-          {matches =>
-            matches ? (
-              <Box
-                direction="row"
-                margin={{ left: "large" }}
-                align="baseline"
-                alignContent="start"
-                alignSelf="start"
-              >
-                <Button
-                  primary
-                  label="Send"
-                  onClick={() => this.setState({ showSendModal: true })}
-                  margin={{ top: "small" }}
-                  color="accent-2"
-                  size="xlarge"
-                />
-                <Button
-                  label="Receive"
-                  onClick={() => this.setState({ showAddressModal: true })}
-                  margin={{ top: "small", left: "small" }}
-                  size="xlarge"
-                />
-                <Button
-                  label="Scan"
-                  onClick={() => this.setState({ showRedeemModal: true })}
-                  margin={{ top: "small", left: "small" }}
-                  size="xlarge"
-                />
-              </Box>
-            ) : (
-              <Box
-                flex={false}
-                direction="column"
-                fill="vertical"
-                responsive={true}
-                margin={{ left: "medium", right: "medium" }}
-                tag="footer"
-              >
-                <Button
-                  primary
-                  label="Send"
-                  onClick={() => this.setState({ showSendModal: true })}
-                  margin={{ top: "small" }}
-                  color="accent-2"
-                />
-                <Button
-                  label="Receive"
-                  onClick={() => this.setState({ showAddressModal: true })}
-                  margin={{ top: "small" }}
-                />
-                <Button
-                  label="Scan"
-                  onClick={() => this.setState({ showRedeemModal: true })}
-                  margin={{ top: "small" }}
-                />
-              </Box>
-            )
-          }
-        </Media>
+        {this.state.hasLoadedTransactions ? (
+          <Media query="(min-width:605px)">
+            {matches =>
+              matches ? (
+                <Box
+                  direction="row"
+                  margin={{ left: "large" }}
+                  align="baseline"
+                  alignContent="start"
+                  alignSelf="start"
+                >
+                  <Button
+                    primary
+                    label="Send"
+                    onClick={() => this.setState({ showSendModal: true })}
+                    margin={{ top: "small" }}
+                    color="accent-2"
+                    size="xlarge"
+                  />
+                  <Button
+                    label="Receive"
+                    onClick={() => this.setState({ showAddressModal: true })}
+                    margin={{ top: "small", left: "small" }}
+                    size="xlarge"
+                  />
+                  <Button
+                    label="Scan"
+                    onClick={() => this.setState({ showRedeemModal: true })}
+                    margin={{ top: "small", left: "small" }}
+                    size="xlarge"
+                  />
+                </Box>
+              ) : (
+                <Box
+                  flex={false}
+                  direction="column"
+                  fill="vertical"
+                  responsive={true}
+                  margin={{ left: "medium", right: "medium" }}
+                  tag="footer"
+                >
+                  <Button
+                    primary
+                    label="Send"
+                    onClick={() => this.setState({ showSendModal: true })}
+                    margin={{ top: "small" }}
+                    color="accent-2"
+                  />
+                  <Button
+                    label="Receive"
+                    onClick={() => this.setState({ showAddressModal: true })}
+                    margin={{ top: "small" }}
+                  />
+                  <Button
+                    label="Scan"
+                    onClick={() => this.setState({ showRedeemModal: true })}
+                    margin={{ top: "small" }}
+                  />
+                </Box>
+              )
+            }
+          </Media>
+        ) : (
+          <div />
+        )}
         {this.state.showAddressModal ? this.showAddressModal() : null}
         {this.state.showSendModal ? this.showSendModal() : null}
         {this.state.showRedeemableModal
@@ -436,7 +456,9 @@ class App extends Component {
           balance = response.balance; // Set balance
         }
 
-        this.setState({ balance: balance }); // Set state
+        this.setState({
+          balance: balance.toLocaleString("EG")
+        }); // Set state
       });
   }
 
@@ -1273,36 +1295,97 @@ class App extends Component {
       formData.message = ""; // Prevent undefined
     }
 
-    fetch("https://summer.cash/api/transactions/NewTransaction", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        username: this.state.username, // Set username
-        recipient: formData.recipient, // Set recipient
-        amount: parseFloat(formData.amount), // Set amount
-        password: this.state.token, // Set password
-        payload: formData.message
+    if (formData.recipient === "everyone") {
+      window.open("https://en.wikipedia.org/wiki/Marxism", "_self"); // Lol
+
+      if (window.isCommunist) {
+        // Check is communist
+        fetch("https://summer.cash/api/accounts/everyone", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+          .then(response => response.json())
+          .then(response => {
+            if (response.error) {
+              // Check for errors
+              this.errorAlert(response.error); // Show error
+
+              return; // Return
+            }
+
+            var i = 0; // Initialize iterator
+
+            while (i < response.accounts.length) {
+              // Iterate through accounts
+              fetch("https://summer.cash/api/transactions/NewTransaction", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                  username: this.state.username, // Set username
+                  recipient: response.accounts[i].address, // Set recipient
+                  amount:
+                    parseFloat(formData.amount) / response.accounts.length, // Set amount
+                  password: this.state.token, // Set password
+                  payload: formData.message
+                })
+              })
+                .then(newTxResponse => {
+                  if (newTxResponse.error) {
+                    // Check for errors
+                    this.errorAlert(newTxResponse.error); // Show error
+                  }
+                })
+                .then(i++); // Increment iterator
+            }
+
+            this.successAlert("Transaction sent successfully!"); // Alert success
+
+            this.fetchBalance(); // Fetch balance
+            this.fetchTransactions(); // Fetch Transactions
+
+            this.setState({
+              showSendModal: false,
+              showQRReader: false,
+              sendAddressValue: ""
+            }); // Set state
+          });
+      }
+    } else {
+      fetch("https://summer.cash/api/transactions/NewTransaction", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username: this.state.username, // Set username
+          recipient: formData.recipient, // Set recipient
+          amount: parseFloat(formData.amount), // Set amount
+          password: this.state.token, // Set password
+          payload: formData.message
+        })
       })
-    })
-      .then(response => response.json())
-      .then(response => {
-        if (response.error) {
-          // Check for errors
-          this.errorAlert(response.error); // Alert
-        } else {
-          this.successAlert("Transaction sent successfully!"); // Alert success
-        }
+        .then(response => response.json())
+        .then(response => {
+          if (response.error) {
+            // Check for errors
+            this.errorAlert(response.error); // Alert
+          } else {
+            this.successAlert("Transaction sent successfully!"); // Alert success
+          }
 
-        this.fetchTransactions(); // Fetch transactions
+          this.fetchTransactions(); // Fetch transactions
 
-        this.setState({
-          showSendModal: false,
-          showQRReader: false,
-          sendAddressValue: ""
-        }); // Set state
-      });
+          this.setState({
+            showSendModal: false,
+            showQRReader: false,
+            sendAddressValue: ""
+          }); // Set state
+        });
+    }
   }
 
   // fetchTransactions fetches all account txs.
@@ -1415,7 +1498,7 @@ class App extends Component {
 
     var x; // Init iterator
 
-    for (x = 0; x < this.state.transactions.length; x++) {
+    for (x = this.state.transactions.length - 1; x !== -1; x--) {
       // Iterate through txs
       var type = "send"; // Init type buffer
 
