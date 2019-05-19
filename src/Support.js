@@ -42,6 +42,10 @@ class Support extends Component {
     event.preventDefault(); // Prevent default
 
     this.successAlert("Your message has been sent!"); // Alert send message
+
+    setTimeout(() => {
+      this.props.history.push("/"); // Go back to home
+    }, 5000);
   }
 }
 
