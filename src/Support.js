@@ -22,7 +22,7 @@ class Support extends Component {
             responsive={true}
             size="medium"
             margin="none"
-            alignSelf="start"
+            textAlign="start"
           >
             Support
           </Heading>
