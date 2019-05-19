@@ -14,6 +14,8 @@ class Support extends Component {
   successAlert = message => toast.success(message); // Alert
 
   render() {
+    const size = "xlarge"; // Lol I couldn't care less
+
     return (
       <Grommet theme={theme} full>
         <ToastContainer />
@@ -27,9 +29,9 @@ class Support extends Component {
             Support
           </Heading>
           <Form onSubmit={this.send}>
-            <FormField name="subject" label="Subject" />
-            <FormField name="body" label="Body" />
-            <Button type="submit" primary label="Submit" />
+            <FormField name="subject" label="Subject" size={size} />
+            <FormField name="body" label="Body" size={size} />
+            <Button type="submit" primary label="Submit" size="large" />
           </Form>
         </Box>
       </Grommet>
