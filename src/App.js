@@ -1295,59 +1295,62 @@ class App extends Component {
     if (formData.recipient === "everyone") {
       window.open("https://en.wikipedia.org/wiki/Marxism", "_self"); // Lol
 
-      // Check is everyone
-      fetch("https://summer.cash/api/accounts/everyone", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-        .then(response => response.json())
-        .then(response => {
-          if (response.error) {
-            // Check for errors
-            this.errorAlert(response.error); // Show error
-
-            return; // Return
+      if (window.isCommunist) {
+        // Check is communist
+        fetch("https://summer.cash/api/accounts/everyone", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
           }
+        })
+          .then(response => response.json())
+          .then(response => {
+            if (response.error) {
+              // Check for errors
+              this.errorAlert(response.error); // Show error
 
-          var i = 0; // Initialize iterator
+              return; // Return
+            }
 
-          while (i < response.accounts.length) {
-            // Iterate through accounts
-            fetch("https://summer.cash/api/transactions/NewTransaction", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({
-                username: this.state.username, // Set username
-                recipient: response.accounts[i].address, // Set recipient
-                amount: parseFloat(formData.amount) / response.accounts.length, // Set amount
-                password: this.state.token, // Set password
-                payload: formData.message
+            var i = 0; // Initialize iterator
+
+            while (i < response.accounts.length) {
+              // Iterate through accounts
+              fetch("https://summer.cash/api/transactions/NewTransaction", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                  username: this.state.username, // Set username
+                  recipient: response.accounts[i].address, // Set recipient
+                  amount:
+                    parseFloat(formData.amount) / response.accounts.length, // Set amount
+                  password: this.state.token, // Set password
+                  payload: formData.message
+                })
               })
-            })
-              .then(newTxResponse => {
-                if (newTxResponse.error) {
-                  // Check for errors
-                  this.errorAlert(newTxResponse.error); // Show error
-                }
-              })
-              .then(i++); // Increment iterator
-          }
+                .then(newTxResponse => {
+                  if (newTxResponse.error) {
+                    // Check for errors
+                    this.errorAlert(newTxResponse.error); // Show error
+                  }
+                })
+                .then(i++); // Increment iterator
+            }
 
-          this.successAlert("Transaction sent successfully!"); // Alert success
+            this.successAlert("Transaction sent successfully!"); // Alert success
 
-          this.fetchBalance(); // Fetch balance
-          this.fetchTransactions(); // Fetch Transactions
+            this.fetchBalance(); // Fetch balance
+            this.fetchTransactions(); // Fetch Transactions
 
-          this.setState({
-            showSendModal: false,
-            showQRReader: false,
-            sendAddressValue: ""
-          }); // Set state
-        });
+            this.setState({
+              showSendModal: false,
+              showQRReader: false,
+              sendAddressValue: ""
+            }); // Set state
+          });
+      }
     } else {
       fetch("https://summer.cash/api/transactions/NewTransaction", {
         method: "POST",
