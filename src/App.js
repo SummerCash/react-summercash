@@ -159,42 +159,45 @@ class App extends Component {
               window.isElectron === null
             ) {
               // Check is not electron
-              messaging
-                .requestPermission()
-                .then(() => {
-                  return messaging.getToken();
-                })
-                .then(token => {
-                  console.log(token); // Log token
+              if (messaging.isSupported()) {
+                // Check supports messaging API
+                messaging
+                  .requestPermission()
+                  .then(() => {
+                    return messaging.getToken();
+                  })
+                  .then(token => {
+                    console.log(token); // Log token
 
-                  return fetch(
-                    "https://summer.cash/api/accounts/" +
-                      cookies.get("username") +
-                      "/pushtoken",
-                    {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json"
-                      },
-                      body: JSON.stringify({
-                        password: cookies.get("token"),
-                        fcm_token: token
-                      })
+                    return fetch(
+                      "https://summer.cash/api/accounts/" +
+                        cookies.get("username") +
+                        "/pushtoken",
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                          password: cookies.get("token"),
+                          fcm_token: token
+                        })
+                      }
+                    );
+                  })
+                  .then(response => response.json())
+                  .then(response => {
+                    if (
+                      response.error &&
+                      !response.error.includes("already exists")
+                    ) {
+                      // Check for errors
+                      this.errorAlert(response.error); // Alert
+
+                      return; // Return
                     }
-                  );
-                })
-                .then(response => response.json())
-                .then(response => {
-                  if (
-                    response.error &&
-                    !response.error.includes("already exists")
-                  ) {
-                    // Check for errors
-                    this.errorAlert(response.error); // Alert
-
-                    return; // Return
-                  }
-                }); // Post token
+                  }); // Post token
+              }
             }
 
             if (!response.transactions) {
@@ -1495,7 +1498,7 @@ class App extends Component {
 
     var x; // Init iterator
 
-    for (x = this.state.transactions.length-1; x !== -1; x--) {
+    for (x = this.state.transactions.length - 1; x !== -1; x--) {
       // Iterate through txs
       var type = "send"; // Init type buffer
 
