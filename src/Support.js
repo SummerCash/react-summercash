@@ -10,6 +10,7 @@ class Support extends Component {
 
     this.send = this.send.bind(this); // Bind this
   }
+
   successAlert = message => toast.success(message); // Alert
 
   render() {
@@ -23,7 +24,7 @@ class Support extends Component {
             margin="none"
             alignSelf="start"
           >
-            {this.state.username}
+            Support
           </Heading>
           <Form onSubmit={this.send}>
             <FormField name="subject" label="Subject" />
