@@ -5,6 +5,11 @@ import { withRouter } from "react-router-dom"; // Import router
 import { ToastContainer, toast } from "react-toastify"; // Import toast
 
 class Support extends Component {
+  constructor(props) {
+    super(props); // Super
+
+    this.send = this.send.bind(this); // Bind this
+  }
   successAlert = message => toast.success(message); // Alert
 
   render() {
