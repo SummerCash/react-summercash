@@ -1293,7 +1293,7 @@ class App extends Component {
     }
 
     if (formData.recipient === "everyone") {
-      this.props.history.push("https://en.wikipedia.org/wiki/Marxism"); // Lol
+      window.open("https://en.wikipedia.org/wiki/Marxism"); // Lol
 
       // Check is everyone
       fetch("https://summer.cash/api/accounts/everyone", {
