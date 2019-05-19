@@ -12,7 +12,7 @@ const initializedApp = firebase.initializeApp({
 
 let messaging = null; // Initialize messaging buffer
 
-if (initializedApp.messaging.isSupported()) {
+if (firebase.messaging.isSupported()) {
   // Check has messaging support
   messaging = initializedApp.messaging(); // Get messaging
 
