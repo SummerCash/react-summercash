@@ -1495,7 +1495,7 @@ class App extends Component {
 
     var x; // Init iterator
 
-    for (x = 0; x < this.state.transactions.length; x++) {
+    for (x = this.state.transactions.length-1; x !== -1; x--) {
       // Iterate through txs
       var type = "send"; // Init type buffer
 
