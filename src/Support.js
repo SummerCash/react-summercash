@@ -19,19 +19,18 @@ class Support extends Component {
     return (
       <Grommet theme={theme} full>
         <ToastContainer />
-        <Box align="center" fill="vertical" justify="center" basis="large">
-          <Heading
-            responsive={true}
-            size="medium"
-            margin="none"
-            textAlign="start"
-          >
-            Support
-          </Heading>
+        <Box justify="center" align="center" fill="vertical" responsive={true}>
           <Form onSubmit={this.send}>
-            <FormField name="subject" label="Subject" size={size} />
-            <FormField name="body" label="Body" size={size} />
-            <Button type="submit" primary label="Submit" size="large" />
+            <FormField name="subject" label="Subject" size={size} pad={true} />
+            <FormField name="body" label="Body" size={size} pad={true} />
+            <Button
+              type="submit"
+              primary
+              label="Submit"
+              size="large"
+              color="accent-2"
+              margin={{ top: "small" }}
+            />
           </Form>
         </Box>
       </Grommet>
