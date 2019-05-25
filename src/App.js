@@ -208,7 +208,7 @@ class App extends Component {
                   "Need some SummerCash? Look out for redeemable airdrop QR codes to earn your first coins."
                 ); // Alert
 
-                this.setState({ alreadyPoppedRedeemable: true }); // Set state
+                this.setState({ alreadyPoppedRedeemable: true, hasLoadedTransactions: true }); // Set state
               }
             } else {
               this.setState({
