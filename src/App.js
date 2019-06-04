@@ -451,6 +451,20 @@ class App extends Component {
 
         if (response.error) {
           // Check for errors
+          if (
+            response.error
+              .toString()
+              .includes("no account exists with the given username")
+          ) {
+            const cookies = new Cookies(); // Initialize cookies
+
+            // Check invalid user
+            cookies.remove("username"); // Remove account details
+            cookies.remove("password"); // Remove account details
+            cookies.remove("address"); // Remove account details
+
+            this.props.history.push("/"); // Go to home
+          }
           this.errorAlert(response.error); // Error
         } else {
           balance = response.balance; // Set balance
