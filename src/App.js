@@ -306,7 +306,7 @@ class App extends Component {
               Balance: {this.state.balance} SMC
             </Paragraph>
           </Box>
-          <Box marign={{ left: "medium", top: "xsmall" }}>
+          <Box marign={{ left: "medium", top: "small" }}>
             <Down
               onClick={() => this.props.history.push("/settings")}
               cursor="pointer"
