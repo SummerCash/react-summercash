@@ -308,8 +308,9 @@ class App extends Component {
           </Box>
           <Box marign={{ left: "small" }}>
             <Down
-              onClick={this.props.history.push("/settings")}
+              onClick={() => this.props.history.push("/settings")}
               cursor="pointer"
+              size="small"
             />
           </Box>
         </Box>

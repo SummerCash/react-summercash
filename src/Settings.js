@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom"; // Import router
 import { Grommet, Box, Heading, Button } from "grommet"; // Import Grommet
 import { ToastContainer } from "react-toastify"; // Import toast
 import Cookies from "universal-cookie";
+import { Down } from "grommet-icons";
 
 class Settings extends Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class Settings extends Component {
       cookies.get("username") === "not-signed-in"
     ) {
       // Check not signed in
-      // this.props.history.push("/"); // Go to home
+      this.props.history.push("/"); // Go to home
     }
 
     this.signOut = this.signOut.bind(this); // Bind this
