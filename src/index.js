@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import AuthForm from "./AuthForm";
+import Settings from "./Settings";
 import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
 import { routerReducer } from "react-router-redux";
@@ -93,6 +94,7 @@ const routing = (
         <Route path="/login" render={() => <AuthForm label="Log In" />} />
         <Route path="/faucet" render={() => <Faucet />} />
         <Route path="/support" render={() => <Support />} />
+        <Route path="/settings" render={() => <Settings />} />
       </div>
     </Router>
   </Provider>

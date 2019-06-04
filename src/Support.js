@@ -1,5 +1,5 @@
 import React, { Component } from "react"; // Import react
-import { Grommet, Form, FormField, Button, Box, Heading } from "grommet"; // Import grommet
+import { Grommet, Form, FormField, Button, Box } from "grommet"; // Import grommet
 import { theme } from "./SummerTechTheme"; // Import SummerTech theme
 import { withRouter } from "react-router-dom"; // Import router
 import { ToastContainer, toast } from "react-toastify"; // Import toast
