@@ -20,7 +20,7 @@ import { ToastContainer, toast } from "react-toastify"; // Import toast
 import TransactionView from "./TransactionView"; // Import tx view
 import { withRouter } from "react-router-dom"; // Import router
 import QRCode from "qrcode.react";
-import { Close } from "grommet-icons"; // Import icons
+import { Close, Down } from "grommet-icons"; // Import icons
 import QrReader from "react-qr-reader"; // Import qr code reader
 import { sha3_512 } from "js-sha3"; // Import sha3
 import domtoimage from "dom-to-image"; // Import print
@@ -208,7 +208,10 @@ class App extends Component {
                   "Need some SummerCash? Look out for redeemable airdrop QR codes to earn your first coins."
                 ); // Alert
 
-                this.setState({ alreadyPoppedRedeemable: true, hasLoadedTransactions: true }); // Set state
+                this.setState({
+                  alreadyPoppedRedeemable: true,
+                  hasLoadedTransactions: true
+                }); // Set state
               }
             } else {
               this.setState({
@@ -302,6 +305,12 @@ class App extends Component {
             >
               Balance: {this.state.balance} SMC
             </Paragraph>
+          </Box>
+          <Box marign={{ left: "small" }}>
+            <Down
+              onClick={this.props.history.push("/settings")}
+              cursor="pointer"
+            />
           </Box>
         </Box>
         <Heading
