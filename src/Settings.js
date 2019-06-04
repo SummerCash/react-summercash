@@ -1,10 +1,9 @@
 import React, { Component } from "react"; // Import react
 import { theme } from "./SummerTechTheme"; // Import SummerTech theme
 import { withRouter } from "react-router-dom"; // Import router
-import { Grommet, Box, Heading, Button } from "grommet"; // Import Grommet
+import { Grommet, Heading, Button } from "grommet"; // Import Grommet
 import { ToastContainer } from "react-toastify"; // Import toast
 import Cookies from "universal-cookie";
-import { Down } from "grommet-icons";
 
 class Settings extends Component {
   constructor(props) {
