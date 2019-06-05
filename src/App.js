@@ -208,7 +208,10 @@ class App extends Component {
                   "Need some SummerCash? Look out for redeemable airdrop QR codes to earn your first coins."
                 ); // Alert
 
-                this.setState({ alreadyPoppedRedeemable: true, hasLoadedTransactions: true }); // Set state
+                this.setState({
+                  alreadyPoppedRedeemable: true,
+                  hasLoadedTransactions: true
+                }); // Set state
               }
             } else {
               this.setState({
@@ -476,7 +479,13 @@ class App extends Component {
       });
   }
 
-  showRedeem() {
+  async showRedeem() {
+    try {
+      await navigator.mediaDevices.getUserMedia();
+    } catch (err) {
+      this.errorAlert("This feature won't work without camera access!"); // Show error
+    }
+
     return (
       <Media query="(min-width:588px)">
         {matches =>
@@ -1004,7 +1013,13 @@ class App extends Component {
       });
   }
 
-  showQRReader() {
+  async showQRReader() {
+    try {
+      await navigator.mediaDevices.getUserMedia();
+    } catch (err) {
+      this.errorAlert("This feature won't work without camera access!"); // Show error
+    }
+
     return (
       <QrReader
         facingMode="environment"
