@@ -20,7 +20,7 @@ import { ToastContainer, toast } from "react-toastify"; // Import toast
 import TransactionView from "./TransactionView"; // Import tx view
 import { withRouter } from "react-router-dom"; // Import router
 import QRCode from "qrcode.react";
-import { Close } from "grommet-icons"; // Import icons
+import { Close, Down } from "grommet-icons"; // Import icons
 import QrReader from "react-qr-reader"; // Import qr code reader
 import { sha3_512 } from "js-sha3"; // Import sha3
 import domtoimage from "dom-to-image"; // Import print
@@ -305,6 +305,13 @@ class App extends Component {
             >
               Balance: {this.state.balance} SMC
             </Paragraph>
+          </Box>
+          <Box marign={{ left: "large", top: "medium" }} justify="center">
+            <Down
+              onClick={() => this.props.history.push("/settings")}
+              cursor="pointer"
+              size="small"
+            />
           </Box>
         </Box>
         <Heading
