@@ -51,9 +51,9 @@ class Settings extends Component {
   signOut() {
     const cookies = new Cookies(); // Get cookies provider
 
-    cookies.set("username", undefined); // Remove username cookie
-    cookies.set("password", undefined); // Remove passwoord cookie
-    cookies.set("address", undefined); // Remove address cookie
+    cookies.remove("username"); // Remove username cookie
+    cookies.remove("password"); // Remove password cookie
+    cookies.remove("address"); // Remove address cookie
 
     this.props.history.push("/"); // Go to home
   }

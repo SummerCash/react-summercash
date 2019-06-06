@@ -52,16 +52,6 @@ class App extends Component {
     this.printTriggerRef = React.createRef(); // Create ref
     this.qrRef = React.createRef(); // Create ref
 
-    if (
-      cookies.get("username") === undefined ||
-      !cookies.get("username") ||
-      cookies.get("username") === "" ||
-      cookies.get("username") === "not-signed-in"
-    ) {
-      // Check not signed in
-      this.props.history.push("/"); // Go to home
-    }
-
     if (window.isElectron) {
       // Check is electron
       const user = window.ipcRenderer.sendSync("sign_in_req"); // Request user details
